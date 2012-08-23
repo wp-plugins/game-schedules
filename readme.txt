@@ -108,7 +108,7 @@ If you are that popular, why not create one media link on the schedule that goes
 
 == Changelog ==
 
-= 0.1 =
+= 1.0 =
 * Initial release.
 
 == Upgrade Notice ==
