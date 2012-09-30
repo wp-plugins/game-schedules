@@ -4,7 +4,7 @@ Donate link: http://Coming-Soon
 Tags: sports,games,schedule,sports teams,team schedule,countdown timer  
 Requires at least: 3.3.1
 Tested up to: 3.3.1
-Stable tag: 1.0
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -98,6 +98,13 @@ In this version, you have to edit the plugin's stylesheet, mstw-gs-styles.css. I
 = What can I do if I have more than three media links? =
 If you are that popular, why not create one media link on the schedule that goes to a page of all your links? Or, you can hack the plugin code. I've considered a setting for "number of media links" (the JV and Frosh teams typically have none, at least in San Diego), but that's low on my list right now.
 
+= Can I display more than one schedule on a single page by using multiple shortcodes? =
+Yes. As of version 1.1. 
+
+= All my data for a game got "zero'ed out", what happened? =
+Either you (a) used the "Quick Edit" link in the list of all games or (b) you edited a game, updated it and when you exited the game editor, it asked if you really wanted to leave the page because there were unsaved changes. Knowing that you already saved the changes, you clicked on "leave this page". Wrong. I'm looking into this behavior, but in this case you don't know best, just stay on the page and save the game again or (c) you typed in some really bad data for a game. It is particularly sensitive about the date and time. (I know I should improve the error checking. It's on the list!)
+
+
 == Screenshots ==
 
 1. Sample Game Schedule Table (via Shortcode)
@@ -111,6 +118,11 @@ If you are that popular, why not create one media link on the schedule that goes
 = 1.0 =
 * Initial release.
 
+= 1.1 =
+* Expanded the media URL input fields to maxlength 255. (Some media outlets have long URLs.)
+* Corrected bug so that multiple schedules (shortcodes) can be now displayed on one page.
+* Added a custom header for wordpress.org
+
 == Upgrade Notice ==
 
-The current version of Game Schedules requires WordPress 3.2.1 or higher. If you use older version of WordPress, it may work or it may not. Good luck.
+The current version of Game Schedules requires WordPress 3.2.1 or higher. It has been tested up to 3.3.1. If you use older version of WordPress, good luck! If you are using a newer version, please let me know how the plugin works, especially if you encounter problems.
