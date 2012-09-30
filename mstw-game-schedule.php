@@ -34,6 +34,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
  *		... should be mstw_gl_remove_view there)
  *	(2)	Removed GameDayInBerkeley specific changes to countdown shortcode handler
  *
+ * 20120928-MAO:
+ *	(1) Corrected a bug in the shortcode for displaying a schedule [essentially 
+ *		function mstw_gs_build_sched_tab( $sched, $year )] to allow multiple shortcodes
+ *		to be used [multiple schedules to be displayed] on a single page.
+ *
  * ------------------------------------------------------------------------*/
 
 /* ------------------------------------------------------------------------
@@ -354,7 +359,7 @@ function mstw_gs_create_ui( $post ) {
     </tr>
     <tr valign="top">
     	<th scope="row"><label for="mstw_gs_media_url_1" >Media 1 URL:</label></th>
-        <td><input maxlength="60" size="30" name="mstw_gs_media_url_1"
+        <td><input maxlength="255" size="30" name="mstw_gs_media_url_1"
         	value="<?php echo esc_attr( $mstw_gs_media_url_1 ); ?>"/></td>
     </tr>
     <tr valign="top">
@@ -364,7 +369,7 @@ function mstw_gs_create_ui( $post ) {
     </tr>
     <tr valign="top">
     	<th scope="row"><label for="mstw_gs_media_url_2" >Media 2 URL:</label></th>
-        <td><input maxlength="60" size="30" name="mstw_gs_media_url_2"
+        <td><input maxlength="255" size="30" name="mstw_gs_media_url_2"
         	value="<?php echo esc_attr( $mstw_gs_media_url_2 ); ?>"/></td>
     </tr>
     <tr valign="top">
@@ -374,7 +379,7 @@ function mstw_gs_create_ui( $post ) {
     </tr>
     <tr valign="top">
     	<th scope="row"><label for="mstw_gs_media_url_3" >Media 3 URL:</label></th>
-        <td><input maxlength="60" size="30" name="mstw_gs_media_url_3"
+        <td><input maxlength="255" size="30" name="mstw_gs_media_url_3"
         	value="<?php echo esc_attr( $mstw_gs_media_url_3 ); ?>"/></td>
     </tr>
     
@@ -703,19 +708,11 @@ function mstw_gs_build_sched_tab( $sched, $year ) {
     if($posts) {
 		// Make table of posts
 		// Start with the table header
-        $output = ''; ?>
+        $output = '<table class="mstw-gs-table">'; 
+        $output = $output . '<thead class="mstw-gs-table-head"><tr>';
+		$output = $output . '<th>Date</th><th>Opponent</th><th>Location</th><th>Time/Result</th><th>Media</th>';
+        $output = $output . '</tr></thead>';
         
-        <table class="mstw-gs-table">
-        <thead class="mstw-gs-table-head"><tr>
-			<!-- <th>Debug</th> -->
-            <th>Date</th>
-            <th>Opponent</th>
-			<th>Location</th>
-			<th>Time/Result</th>
-			<th>Media</th>		
-		</tr></thead>
-        
-		<?php
 		// Keeps track of even and odd rows. Start with row 1 = odd.
 		$even_and_odd = array('even', 'odd');
 		$row_cnt = 1; 
