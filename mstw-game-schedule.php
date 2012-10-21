@@ -3,15 +3,15 @@
 Plugin Name: Game Schedule
 Plugin URI: http://wordpress.org/extend/plugins/
 Description: The Game Schedule Plugin defines a custom type - Scheduled Games - for use in the MySportTeamWebite framework. Generations a game schedule (html table) using a shortcode.
-Version: 1.1
+Version: 2.0
 Author: Mark O'Donnell
-Author URI:
+Author URI: http://shoalsummitsolutions.com
 */
 
 /*
-Game Shedule (Wordpress Plugin)
+Game Schedule (Wordpress Plugin)
 Copyright (C) 2012 Mark O'Donnell
-Contact me at http://
+Contact me at http://shoalsummitsolutions.com
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -35,9 +35,30 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
  *	(2)	Removed GameDayInBerkeley specific changes to countdown shortcode handler
  *
  * 20120928-MAO:
- *	(1) Corrected a bug in the shortcode for displaying a schedule [essentially 
+ *	(1)	Corrected a bug in the shortcode for displaying a schedule [essentially 
  *		function mstw_gs_build_sched_tab( $sched, $year )] to allow multiple shortcodes
  *		to be used [multiple schedules to be displayed] on a single page.
+ *
+ * 20121003-MAO:
+ *	(1) Began work on adding an opponent link (mstw_gs_opponent_link) that will allow
+ *		the user to link to any URL from the opponent field in the table and/or the 
+ *		opponent field in the widget.
+ *
+ * 20121011-MAO:
+ *	(1)	Began adding localization functions _e() and __().
+ *		Added global variable for the localization domain $mstw_domain = 'mstw-loc-domain';
+ *		Working first on displays to user. Assuming developer/admin can understand English (for now).
+ *		Added action 'mstw_load_localization' 'after_theme_setup' [May need in the widget as well?]
+ *
+ * 20121014-MAO:
+ *	(1) Finished Rev 2.0. 
+ *	(2)	"Year" is not used to define schedules, it is just part of each
+ *		games date now. This is a big deal because schedules can go across years now.
+ *	(3)	Lot's of localization was done, but some challenges remain with date() and with
+ *		the countdown timer (due to the diff function.) I only localized the 'user' side for now,
+ *		the adminstration pages are still English. 
+ *	(4) Opponent_link field was added.
+ *	(5)	See readme for more details.
  *
  * ------------------------------------------------------------------------*/
 
@@ -51,11 +72,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 // This is temporary until we create options (someday)
 	// For the dashboard/metabox
-	$mstw_gs_dtg_format = 'j M'; 
+	$mstw_gs_dtg_format =  "m.d.y"; // 'j M'; 
 	// For the countdown timer; game time with a time
-	$mstw_gs_cdt_time_format = "l, j M g:i a";
+	$mstw_gs_cdt_time_format = "m.d.y H:i"; //"l, j M g:i a";
 	// For the countdown timer; game time with only a game date (no time)
-	$mstw_gs_cdt_tbd_format = "l, j M";
+	$mstw_gs_cdt_tbd_format = "m.d.y";//"l, j M";
 	
 // Months array for <select>/<option> statement in UI
 	$mstw_gs_months = array ( 	'Jan', 'Feb', 'Mar', 'Apr',
@@ -72,7 +93,30 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 	
 // Debug messages - used throughout	
 	$mstw_debug_str = '';
-						  
+	
+//	MSTW localization domain
+	$mstw_domain = 'mstw-loc-domain';
+	
+// ----------------------------------------------------------------
+// Set up localization
+add_action( 'init', 'mstw_load_localization' );
+	
+function mstw_load_localization( ) {
+	global $mstw_domain;
+    load_plugin_textdomain( $mstw_domain, false, dirname( plugin_basename( __FILE__ ) ) . '/lang/' );
+} // end custom_theme_setup
+	
+// ----------------------------------------------------------------
+// Remove Quick Edit Menu	
+add_filter( 'post_row_actions', 'mstw_gs_remove_quick_edit', 10, 2 );
+
+function mstw_gs_remove_quick_edit( $actions, $post ) {
+    if( $post->post_type == 'scheduled_games' ) {
+        unset( $actions['inline hide-if-no-js'] );
+    }
+    return $actions;
+}
+	
 // ----------------------------------------------------------------
 // Deactivate, request upgrade, and exit if WP version is not right
 add_action( 'admin_init', 'mstw_gs_requires_wp_ver' );
@@ -275,6 +319,7 @@ function mstw_gs_create_ui( $post ) {
 	$mstw_gs_unix_dtg = get_post_meta( $post->ID, '_mstw_gs_unix_dtg', true );		// UNIX timestamp date & time
 	
 	$mstw_gs_opponent = get_post_meta( $post->ID, '_mstw_gs_opponent', true );
+	$mstw_gs_opponent_link = get_post_meta( $post->ID, '_mstw_gs_opponent_link', true );
 	$mstw_gs_location = get_post_meta( $post->ID, '_mstw_gs_location', true );
 	$mstw_gs_home_game = get_post_meta( $post->ID, '_mstw_gs_home_game', true );
 	$mstw_gs_game_result = get_post_meta( $post->ID, '_mstw_gs_game_result', true );
@@ -297,7 +342,7 @@ function mstw_gs_create_ui( $post ) {
         	value="<?php echo esc_attr( $mstw_gs_sched_id ); ?>"/></td>
     </tr>
     <tr valign="top">
-    	<th scope="row"><label for="mstw_gs_sched_year" >Schedule Year:</label></th>
+    	<th scope="row"><label for="mstw_gs_sched_year" >Game Year:</label></th>
         <td><input maxlength="4" size="5" name="mstw_gs_sched_year"
         	value="<?php echo esc_attr( $mstw_gs_sched_year ); ?>"/></td>
     </tr>
@@ -307,7 +352,7 @@ function mstw_gs_create_ui( $post ) {
         <td>
         <select name="mstw_gs_game_day">    
 			<?php foreach ( $mstw_gs_days as $label ) {  ?>
-          			<option value="<?php echo $label ?>" <?php selected( $mstw_gs_game_day, $label );?>">
+          			<option value="<?php echo $label ?>" <?php selected( $mstw_gs_game_day, $label );?>>
           				<?php echo $label; ?>
                      </option>              
      		<?php } ?> 
@@ -320,7 +365,7 @@ function mstw_gs_create_ui( $post ) {
         <td>
         <select name="mstw_gs_game_month">    
 			<?php foreach ( $mstw_gs_months as $label ) {  ?>
-          			<option value="<?php echo $label ?>" <?php selected( $mstw_gs_game_month, $label );?>">
+          			<option value="<?php echo $label; ?>" <?php selected( $mstw_gs_game_month, $label );?>>
           				<?php echo $label; ?>
                      </option>              
      		<?php } ?> 
@@ -333,6 +378,13 @@ function mstw_gs_create_ui( $post ) {
         <td><input maxlength="40" size="30" name="mstw_gs_opponent"
         	value="<?php echo esc_attr( $mstw_gs_opponent ); ?>"/></td>
     </tr>
+	
+	<tr valign="top">
+    	<th scope="row"><label for="mstw_gs_opponent_link" >Opponent Link:</label></th>
+        <td><input maxlength="128" size="30" name="mstw_gs_opponent_link"
+        	value="<?php echo esc_attr( $mstw_gs_opponent_link ); ?>"/></td>
+    </tr>
+	
     <tr valign="top">
     	<th scope="row"><label for="mstw_gs_home_game" >Home Game?</label></th>
         <td><input type="checkbox" name="mstw_gs_home_game" value="home" <?php checked( $mstw_gs_home_game, 'home', true )?> /></td>
@@ -384,13 +436,13 @@ function mstw_gs_create_ui( $post ) {
     </tr>
     
     <tr valign="top">
-    	<th scope="row"><label for="mstw_gs_unix_date" >UNIX Date Only:</label></th>
+    	<th scope="row"><label for="mstw_gs_unix_date" >UNIX Date Only (Don't Enter):</label></th>
         <td><input maxlength="60" size="30" name="mstw_gs_unix_date"
         	value="<?php echo date( 'Y-m-d', esc_attr( $mstw_gs_unix_date ) ); ?>"/></td>
     </tr>
     
     <tr valign="top">
-    	<th scope="row"><label for="mstw_gs_unix_dtg" >UNIX Date-Time:</label></th>
+    	<th scope="row"><label for="mstw_gs_unix_dtg" >UNIX Date-Time (Don't Enter):</label></th>
         <td><input maxlength="60" size="30" name="mstw_gs_unix_dtg"
         	value="<?php echo date( 'l, Y-m-d h:i a', esc_attr( $mstw_gs_unix_dtg ) ); ?>"/></td>
     </tr>
@@ -422,7 +474,7 @@ function mstw_gs_save_meta( $post_id ) {
 	update_post_meta( $post_id, '_mstw_gs_sched_id', $mstw_id );
 		
 	// YEAR
-	// If schedule year was not set, default to the current year
+	// If game year was not set, default to the current year
 	// Someday we'll do a better check here, or use a pulldown in the UI
 	$mstw_year = strip_tags( trim( $_POST[ 'mstw_gs_sched_year' ] ) );
 	if ($mstw_year == '') {
@@ -472,6 +524,9 @@ function mstw_gs_save_meta( $post_id ) {
 	update_post_meta( $post_id, '_mstw_gs_opponent', 
 			strip_tags( $_POST['mstw_gs_opponent'] ) );
 			
+	update_post_meta( $post_id, '_mstw_gs_opponent_link', 
+			strip_tags( $_POST['mstw_gs_opponent_link'] ) );
+			
 	update_post_meta( $post_id, '_mstw_gs_location', 
 			strip_tags( $_POST['mstw_gs_location'] ) );
 			
@@ -520,8 +575,10 @@ function mstw_gs_edit_columns( $columns ) {
 		'sched_year' => __( 'Year' ),
 		'game_date' => __( 'Date' ),
 		'opponent' => __( 'Opponent' ),
+		'opponent_link' => __( 'Opponent Link' ),
 		'location' => __( 'Location' ),
-		'time_result' => __( 'Time/Result' )
+		'game_time' => __( 'Time' ),
+		'game_result' => __( 'Result' )
 		/* 'debug' => __('Debug-Remove') */
 	);
 
@@ -536,20 +593,15 @@ add_action( 'manage_scheduled_games_posts_custom_column', 'mstw_gs_manage_column
 function mstw_gs_manage_columns( $column, $post_id ) {
 	global $post;
 	global $mstw_gs_dtg_format;
+	global $mstw_domain; //Important for localization functions!
 	
 	/* echo 'column: ' . $column . " Post ID: " . $post_id; */
 
 	switch( $column ) {
 		/* Debug Column */
 		/*case 'debug' :
-			$debug_str = get_post_meta( $post_id, '_mstw_gs_debug', true );
-			$debug_day = get_post_meta( $post_id, '_mstw_gs_game_day', true );
-			$debug_year = get_post_meta( $post_id, '_mstw_gs_sched_year', true );
-			$debug_dtg = get_post_meta( $post_id, '_mstw_gs_unix_date', true );
-			$debug_home = get_post_meta( $post_id, '_mstw_gs_home_game', true );
-			//echo (	'Home Game: ' . $debug_home . ' //' );
+			$debug_str = "";
 			echo (	$debug_str );	
-				
 			break;
 		*/
 		
@@ -560,9 +612,9 @@ function mstw_gs_manage_columns( $column, $post_id ) {
 			$mstw_gs_sched_year = get_post_meta( $post_id, '_mstw_gs_sched_year', true );
 
 			if ( empty( $mstw_gs_sched_year ) )
-				echo __( 'No Schedule Year' );
+				_e(  'No Game Year', $mstw_domain );
 			else
-				printf( __( '%s' ), $mstw_gs_sched_year );
+				printf( '%s', $mstw_gs_sched_year );
 
 			break;
 			
@@ -573,7 +625,7 @@ function mstw_gs_manage_columns( $column, $post_id ) {
 			$mstw_gs_sched_id = get_post_meta( $post_id, '_mstw_gs_sched_id', true );
 
 			if ( empty( $mstw_gs_sched_id ) )
-				echo __( 'No Schedule Defined' );
+				_e( 'No Schedule Defined', $mstw_domain );
 			else
 				printf( __( '%s' ), $mstw_gs_sched_id );
 
@@ -587,7 +639,7 @@ function mstw_gs_manage_columns( $column, $post_id ) {
 			$mstw_gs_unix_date = get_post_meta( $post_id, '_mstw_gs_unix_date', true );
 
 			if ( empty( $mstw_gs_unix_date ) )
-				echo __( 'No Game Date' );
+				_e( 'No Game Date', $mstw_domain );
 			else
 				echo( date( $mstw_gs_dtg_format, $mstw_gs_unix_date ) );
 
@@ -602,11 +654,25 @@ function mstw_gs_manage_columns( $column, $post_id ) {
 
 
 			if ( empty( $mstw_gs_opponent ) )
-				echo __( 'No Opponent' );
+				_e( 'No Opponent', $mstw_domain );
 			else
 				printf( __( '%s' ), $mstw_gs_opponent );
 
-			break;	
+			break;
+
+		/* If displaying the 'opponent_link' column. */
+		case 'opponent_link' :
+
+			/* Get the post meta. */
+			$mstw_gs_opponent_link = get_post_meta( $post_id, '_mstw_gs_opponent_link', true );
+
+
+			if ( empty( $mstw_gs_opponent_link ) )
+				_e( 'No Opponent Link', $mstw_domain );
+			else
+				printf( __( '%s' ), $mstw_gs_opponent_link );
+
+			break;
 			
 		/* If displaying the 'location' column. */
 		case 'location' :
@@ -615,24 +681,37 @@ function mstw_gs_manage_columns( $column, $post_id ) {
 			$mstw_gs_location = get_post_meta( $post_id, '_mstw_gs_location', true );
 
 			if ( empty( $mstw_gs_location ) )
-				echo __( 'No Location' );
+				_e( 'No Location', $mstw_domain );
 			else
 				printf( __( '%s' ), $mstw_gs_location );
 
 			break;	
 			
-		/* If displaying the 'time_result' column. */
-		case 'time_result' :
+		/* If displaying the 'time' column. */
+		case 'game_time' :
 
 			/* Get the post meta. */
 			$mstw_gs_game_time = get_post_meta( $post_id, '_mstw_gs_game_time', true );
 
 			if ( empty( $mstw_gs_game_time ) )
-				echo __( 'No Game Time.' );
+				_e( 'No Game Time', $mstw_domain );
 			else
 				printf( __( '%s' ), $mstw_gs_game_time );
 
-			break;			
+			break;	
+
+		/* If displaying the 'result' column. */
+		case 'game_result' :
+
+			/* Get the post meta. */
+			$mstw_gs_game_result = get_post_meta( $post_id, '_mstw_gs_game_result', true );
+
+			if ( empty( $mstw_gs_game_result ) )
+				_e( 'No Game Result', $mstw_domain );
+			else
+				printf( __( '%s' ), $mstw_gs_game_result );
+
+			break;
 			
 		/* Just break out of the switch statement for everything else. */
 		default :
@@ -654,7 +733,6 @@ function mstw_gs_remove_the_view( $actions ) {
     return $actions;
 }
 
-
 // --------------------------------------------------------------------------------------
 add_shortcode( 'mstw_gs_table', 'mstw_gs_shortcode_handler' );
 // --------------------------------------------------------------------------------------
@@ -666,10 +744,9 @@ function mstw_gs_shortcode_handler( $atts ){
 	
 	extract( shortcode_atts( array(
 				'sched' => '1',
-				'year' => date("Y"),
 				), $atts ) );
 		
-	$mstw_gs_sched_tab = mstw_gs_build_sched_tab( $sched, $year );
+	$mstw_gs_sched_tab = mstw_gs_build_sched_tab( $sched );
 	
 	return $mstw_gs_sched_tab;
 }
@@ -679,7 +756,8 @@ function mstw_gs_shortcode_handler( $atts ){
 // Builds the Game Locations table as a string (to replace the [shortcode] in a page or post.
 // Loops through the Game Locations Custom posts and formats them into a pretty table.
 // --------------------------------------------------------------------------------------
-function mstw_gs_build_sched_tab( $sched, $year ) {
+function mstw_gs_build_sched_tab( $sched ) {
+	global $mstw_domain;
 	
 	// This will come from an option
 	global $mstw_gs_dtg_format;
@@ -691,11 +769,6 @@ function mstw_gs_build_sched_tab( $sched, $year ) {
 												array(
 													'key' => '_mstw_gs_sched_id',
 													'value' => $sched,
-													'compare' => '='
-												),
-												array(
-													'key' => '_mstw_gs_sched_year',
-													'value' => $year,
 													'compare' => '='
 												)
 											),
@@ -710,7 +783,11 @@ function mstw_gs_build_sched_tab( $sched, $year ) {
 		// Start with the table header
         $output = '<table class="mstw-gs-table">'; 
         $output = $output . '<thead class="mstw-gs-table-head"><tr>';
-		$output = $output . '<th>Date</th><th>Opponent</th><th>Location</th><th>Time/Result</th><th>Media</th>';
+		$output = $output . '<th>'. __( 'Date', $mstw_domain ) . '</th>';
+		$output = $output . '<th>'. __( 'Opponent', $mstw_domain ) . '</th>';
+		$output = $output . '<th>'. __( 'Location', $mstw_domain ) . '</th>';
+		$output = $output . '<th>'. __( 'Time/Result', $mstw_domain ) . '</th>';
+		$output = $output . '<th>'. __( 'Media', $mstw_domain ) . '</th>';
         $output = $output . '</tr></thead>';
         
 		// Keeps track of even and odd rows. Start with row 1 = odd.
@@ -738,7 +815,14 @@ function mstw_gs_build_sched_tab( $sched, $year ) {
 			$row_string = $row_string. $row_td . $new_date_string . '</td>';
 			
 			// column 2: create the opponent entry
-			$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_gs_opponent', true) . '</td>';
+			$mstw_gs_opponent_entry = get_post_meta( $post->ID, '_mstw_gs_opponent', true );
+			
+			// Check to see if you have to add the link
+			if ( ( $mstw_gs_opponent_link = get_post_meta( $post->ID, '_mstw_gs_opponent_link', true ) ) != '' ) {
+				$mstw_gs_opponent_entry = '<a href="' . $mstw_gs_opponent_link . '" target="_blank" >' . $mstw_gs_opponent_entry . '</a>';
+			}
+			
+			$row_string =  $row_string . $row_td . $mstw_gs_opponent_entry . '</td>';
 			
 			// column 3: create the location entry
 			$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_gs_location', true) . '</td>';
@@ -804,7 +888,7 @@ function mstw_gs_build_sched_tab( $sched, $year ) {
 	}
 	else { // No posts were found
 	
-		$output =  '<h3> No Scheduled Games Found. </h3>';
+		$output =  '<h3>' . __( 'No Scheduled Games Found.', $mstw_domain ) . '</h3>';
 		
 	}
 	
@@ -822,12 +906,11 @@ function mstw_gs_countdown_handler( $atts ){
 	
 	extract( shortcode_atts( array(
 				'sched' => '1',
-				'year' => date("Y"),
 				'intro' => 'Time to kickoff:',
-				'current' => date("Y-m-d H:i:s"),
+				'home_only' => false
 				), $atts ) );
 		
-	$mstw_gs_countdown = mstw_gs_build_countdown( $sched, $year, $intro, $current );
+	$mstw_gs_countdown = mstw_gs_build_countdown( $sched, $intro, $home_only );
 	
 	return $mstw_gs_countdown;
 }
@@ -838,31 +921,29 @@ function mstw_gs_countdown_handler( $atts ){
 // Loops through the specified schedule, finds the next game, and builds the countdown.
 //
 // $sched -> schedule ID, defaults to 1
-// $year -> schedule year, defaults to the current year
 // $intro -> text before countdown, defaults "Time to kickoff:" 
 // $current -> FOR DEBUG ONLY. This defaults to the current time, and that's what it should be
+// $home_only -> countdown to home games only, defaults to false (all games)
 // --------------------------------------------------------------------------------------
-function mstw_gs_build_countdown( $sched, $year, $intro, $current ) {
+function mstw_gs_build_countdown( $sched, $intro, $home_only ) {
 	
 	// General debug string used throughout
 	global $mstw_debug_str;
+	
+	// For localization
+	global $mstw_domain;
 	
 	// The format for the next game time; will be an option set in admin someday
 	global $mstw_gs_cdt_time_format;
 	global $mstw_gs_cdt_tbd_format;
 	
-	// First get the games for the specified schedule id and year.
+	// First get all the games for the specified schedule id.
 	$game_posts = get_posts(array( 'numberposts' => -1,
 							  'post_type' => 'scheduled_games',
 							  'meta_query' => array(
 												array(
 													'key' => '_mstw_gs_sched_id',
 													'value' => $sched,
-													'compare' => '='
-												),
-												array(
-													'key' => '_mstw_gs_sched_year',
-													'value' => $year,
 													'compare' => '='
 												)
 											),
@@ -873,72 +954,83 @@ function mstw_gs_build_countdown( $sched, $year, $intro, $current ) {
 							));
 							
 	// Set some local variables
-	$current_dtg = strtotime( $current );  	// Get the current date-time stamp
-	$have_games = false;			// indicates there are no games before the current time
+	$current_dtg = time( );  	// Get the current date-time stamp
+	
+	$have_games = false;	// indicates there are no games after the current time
 	
 	// loop thru the game posts to find the first game in the future
-	foreach($game_posts as $game){
+	foreach( $game_posts as $game ) {
 		// Find first game time after the current time, and (just to be sure) has no result
+				
 		if ( get_post_meta( $game->ID, '_mstw_gs_unix_dtg', true ) > $current_dtg && 
 				get_post_meta( $game->ID, '_mstw_gs_game_result', true ) == '' ) {
-				// 20120821-MAO: Show only home games should be an option.
-				//&& get_post_meta( $game->ID, '_mstw_gs_home_game', true ) == 'home'){
-			// Ding, ding, ding, we have a winner
-			// Grab the data needed and stop looping through the games
-			$have_games = true;
-			$game_date = get_post_meta( $game->ID, '_mstw_gs_unix_date', true );
-			$game_dtg = get_post_meta( $game->ID, '_mstw_gs_unix_dtg', true );
-			$opponent = get_post_meta( $game->ID, '_mstw_gs_opponent', true );
-			$location = get_post_meta( $game->ID, '_mstw_gs_location', true );
-			$game_time = get_post_meta( $game->ID, '_mstw_gs_game_time', true );
-			break; 
+			if ( !$home_only || ( $home_only && get_post_meta( $game->ID, '_mstw_gs_home_game', true ) == 'home' ) ) {
+				// Ding, ding, ding, we have a winner
+				// Grab the data needed and stop looping through the games
+				$have_games = true;
+				$game_date = get_post_meta( $game->ID, '_mstw_gs_unix_date', true );
+				$game_dtg = get_post_meta( $game->ID, '_mstw_gs_unix_dtg', true );
+				$opponent = get_post_meta( $game->ID, '_mstw_gs_opponent', true );
+				$opponent_link = get_post_meta( $game->ID, '_mstw_gs_opponent_link', true );
+				$location = get_post_meta( $game->ID, '_mstw_gs_location', true );
+				$game_time = get_post_meta( $game->ID, '_mstw_gs_game_time', true );
+				break; 
+			}
 		}
 	}
 	
 	// see what was found
 	if ( ! $have_games ) {
 		// No games scheduled after the current time
-		$ret_str = '<span class="mstw-gs-cdt-intro">' . 'No home games found.' . '</span>';
+		if ( $home_only ) {
+			$ret_msg = __( 'No home games found.', $mstw_domain );
+		}
+		else {
+			$ret_msg = __( 'No games found.', $mstw_domain );
+		}
+		$ret_str = '<span class="mstw-gs-cdt-intro">' . $ret_msg . '</span>';
 	}
 	else {
 		// we found a game, so build the countdown display
 		
 		// Game day, date, time; need to handle a TBD time
 		if ( $game_time == 'TBD' or $game_time == 'T.B.D.' or $game_time == 'T.B.A.' or $game_time == 'TBA' ) {
-			$dtg_str = date( $mstw_gs_cdt_tbd_format, $game_date ) . ' Time TBA'; //$game_date is the UNIX timestamp DATE only
+			$dtg_str = mstw_date_loc( $mstw_gs_cdt_tbd_format, $game_date ) . ' Time TBA'; //$game_date is the UNIX timestamp DATE only
 		}
 		else {
-			$dtg_str = date( $mstw_gs_cdt_time_format, $game_dtg ); //get_post_meta( $game->ID, '_mstw_gs_unix_dtg', true ) );  
+			$dtg_str = mstw_date_loc( $mstw_gs_cdt_time_format, $game_dtg ); //get_post_meta( $game->ID, '_mstw_gs_unix_dtg', true ) );  
         }
 		
 		$ret_str = $ret_str . '<span class="mstw-gs-cdt-dtg">' . $dtg_str .  '</span><br/>';
 		
 		// Add the opponent & location
 		// 20120821-MAO: Location display should be an option.
-		$ret_str = $ret_str . '<span class="mstw-gs-cdt-opponent">' . $opponent . ' @ ' . $location .  '</span><br/>';
+		
+		$opponent_entry = $opponent;
+		
+		//Check to see if you have to add the opponent link
+		if ( opponent_link != '' ) {
+			$opponent_entry = '<a href="' . $opponent_link . '" target="_blank" >' . $opponent_entry . '</a>';
+		}
+		
+		$ret_str = $ret_str . '<span class="mstw-gs-cdt-opponent">' . $opponent_entry . ' @ ' . $location .  '</span><br/>';
 		//$ret_str = $ret_str . '<span class="mstw-gs-cdt-opponent">' . $opponent . '</span><br/>';
 		
 		// Add the intro text set in shortcut arg or widget setting
-		$ret_str = $ret_str . '<span class="mstw-gs-cdt-intro">' . $intro . '</span><br/>';
+		$ret_str = $ret_str . '<span class="mstw-gs-cdt-intro">' . $intro .  '</span><br/>';
 		
 		// Add the countdown
 		// argument types need to be set or dateDiff() does not work
 		settype($game_date, 'integer');
 		settype($game_dtg, 'integer');
-		if ( $game_time == 'TBD' or $game_time == 'T.B.D.' ) {
-			$countdown = dateDiff( $game_date, strtotime( $current ) );
+		if ( $game_time == 'TBD' or $game_time == 'T.B.D.' or $game_time == 'T.B.A.' or $game_time == 'TBA' ) {
+			$countdown = dateDiff( $game_date, $current_dtg );
 		}
 		else {
-			$countdown = dateDiff( $game_dtg, strtotime( $current ) );
+			$countdown = dateDiff( $game_dtg, $current_dtg );
 		}
 		
-		$ret_str = $ret_str . '<span class="mstw-gs-cdt-countdown">' . $countdown . '</span>';
-		
-		/* DEBUG*/
-		/* $ret_str = $ret_str . "<br/> Game Date & Time: " . $dtg_str . " Now: " . $current . 
-						'<br/>UNIX DTG:' . $game_dtg . 
-						' / ' . date( $mstw_gs_cdt_time_format, $game_dtg ); 
-		*/
+		$ret_str = $ret_str . '<span class="mstw-gs-cdt-countdown">' . $countdown . '</span>'; 
 		
 	}
 						
@@ -951,6 +1043,20 @@ function mstw_gs_build_countdown( $sched, $year, $intro, $current ) {
 // PHP strtotime compatible strings
 /****************************************************************/
   function dateDiff($time1, $time2, $precision = 4) {
+  
+	// required for localization
+	global $mstw_domain;
+	
+	// $strings is not used in code. It triggers the localization in poedit.
+	$strings = array(   __( 'year', $mstw_domain ), __( 'years', $mstw_domain ), 
+						__( 'month', $mstw_domain ), __( 'months', $mstw_domain ),
+						__( 'week', $mstw_domain ), __( 'weeks', $mstw_domain ),
+						__( 'day', $mstw_domain ), __( 'days', $mstw_domain ),
+						__( 'hour', $mstw_domain ), __( 'hours', $mstw_domain ),
+						__( 'minute', $mstw_domain ), __( 'minutes', $mstw_domain ),
+						__( 'second', $mstw_domain ), __( 'seconds', $mstw_domain ) );
+
+	
     // If not numeric then convert texts to unix timestamps
 	// echo ( 'arg1: ' . $time1 . ' arg2: ' . $time2 . '<br/>' );
     if (!is_int($time1)) {
@@ -969,7 +1075,9 @@ function mstw_gs_build_countdown( $sched, $year, $intro, $current ) {
     }
  
     // Set up intervals and diffs arrays
-    $intervals = array('year','month','day','hour','minute','second');
+    /*$intervals = array( __('year', $mstw_domain ), __('month', $mstw_domain ), __('day', $mstw_domain ), 
+						__('hour', $mstw_domain ), __('minute', $mstw_domain ), __('second', $mstw_domain ) );*/
+	$intervals = array( 'year' , 'month', 'day', 'hour', 'minute', 'second' );
     $diffs = array();
  
     // Loop thru all intervals
@@ -998,19 +1106,32 @@ function mstw_gs_build_countdown( $sched, $year, $intro, $current ) {
       // Add value and interval 
       // if value is bigger than 0
       if ($value > 0) {
-	// Add s if value is not 1
-	if ($value != 1) {
-	  $interval .= "s";
-	}
-	// Add value and interval to times array
-	$times[] = $value . " " . $interval;
-	$count++;
+			// Add s if value is not 1
+			if ($value != 1) {
+				$interval .= "s";
+			}
+			// Add value and interval to times array
+			$times[] = $value . " " . $interval;
+			$count++;
       }
     }
- 
-    // Return string with times
-    return implode(", ", $times);
-  }
+	
+	// Now for the localization - explode the return string
+	// Replace the exploded strings with localizations
+	$debug = "size of times: " . sizeof( $times ) . " times[0]= *" . $times[0] . "*";
+	for ( $i = 0; $i < sizeof( $times ); $i++ ) {
+		// $times_elts should look like "1 month" or "3 days"
+		$times_elts = explode( " ", $times[$i] );
+		// should have $times_elts[] = [1, month] or [3, days]
+		for ( $j = 0; $j < sizeof( $times_elts ); $j++ ) {
+			$times_elts[$j] = __( $times_elts[$j], $mstw_domain );
+		}
+		// This should put us back with "1 mes" or "3 dias"
+		$times[$i] = implode( " ", $times_elts );
+	}
+	// Put the return string back together
+	return implode( ", ", $times );
+}
 
 /* ------------------------------------------------------------------------
  *
@@ -1037,6 +1158,7 @@ function mstw_gs_register_widgets() {
  *
  * mstw_gs_sched_widget
  *	- displays a simple schedule (table) with date and opponent columns
+ *  - does NOT include opponent links (no particular reason other than K.I.S.S.)
  *
  *------------------------------------------------------------------*/
 
@@ -1062,15 +1184,12 @@ class mstw_gs_sched_widget extends WP_Widget {
 		
 		$sched_title = $instance['sched_title'];
 		$sched_id = $instance['sched_id'];
-		$sched_yr = $instance['sched_yr'];
 		
         ?>
         <p>Schedule Title: <input class="widefat" name="<?php echo $this->get_field_name( 'sched_title' ); ?>"  
             					type="text" value="<?php echo esc_attr( $sched_title ); ?>" /></p>
         <p>Schedule ID: <input class="widefat" name="<?php echo $this->get_field_name( 'sched_id' ); ?>"  
         						type="text" value="<?php echo esc_attr( $sched_id ); ?>" /></p>
-        <p>Sched Year: <input class="widefat" name="<?php echo $this->get_field_name( 'sched_yr' ); ?>"
-        						type="text" value="<?php echo esc_attr( $sched_yr ); ?>" /></p>
             
         <?php
     }
@@ -1083,8 +1202,6 @@ class mstw_gs_sched_widget extends WP_Widget {
 		$instance['sched_title'] = strip_tags( $new_instance['sched_title'] );
 
 		$instance['sched_id'] = strip_tags( $new_instance['sched_id'] );
-
-		$instance['sched_yr'] = strip_tags( $new_instance['sched_yr'] );
  
         return $instance;
 		
@@ -1094,6 +1211,9 @@ class mstw_gs_sched_widget extends WP_Widget {
  * displays the widget
  *------------------------------------------------------------------*/	
 	function widget( $args, $instance ) {
+	
+		global $mstw_domain; //Important for localization functions!
+	
 		// $args holds the global theme variables, such as $before_widget
 		extract( $args );
 		
@@ -1103,25 +1223,19 @@ class mstw_gs_sched_widget extends WP_Widget {
 		
 		// Get the parameters for get_posts() below
 		$sched_id = $instance['sched_id'];
-		$sched_yr = $instance['sched_yr'];
 		
 		// show the widget title, if there is one
 		if( !empty( $title ) ) {
-			echo $before_title . $title . $after_title;
+			echo  $before_title . $title . $after_title;
 		}
 		
-		// Get the game posts for $sched_id and $sched_yr
+		// Get the game posts for $sched_id 
 		$posts = get_posts(array( 'numberposts' => -1,
 							  	  'post_type' => 'scheduled_games',
 							  	  'meta_query' => array(
 												array(
 													'key' => '_mstw_gs_sched_id', //**
 													'value' => $sched_id,
-													'compare' => '='
-												),
-												array(
-													'key' => '_mstw_gs_sched_year', //**
-													'value' => $sched_yr,
 													'compare' => '='
 												)
 											),						  
@@ -1139,8 +1253,8 @@ class mstw_gs_sched_widget extends WP_Widget {
         
         	<table class="mstw-gs-sw-tab">
         	<thead class="mstw-gs-sw-tab-head"><tr>
-            	<th>Date</th>
-            	<th>Opponent</th>	
+            	<th><?php _e( 'DATE', $mstw_domain ); ?></th>
+            	<th><?php _e( 'OPPONENT', $mstw_domain ); ?></th>	
 			</tr></thead>
         
 			<?php
@@ -1157,7 +1271,9 @@ class mstw_gs_sched_widget extends WP_Widget {
 					$row_class = $row_class . ' mstw-gs-sw-home';
 			
 				$row_tr = '<tr class="' . $row_class . '">';
+				//$row_tr = '<tr>';
 				$row_td = '<td>'; 
+				//$row_td = '<td class="' . $row_class . '">';
 			
 				// create the row
 				$row_string = $row_tr;		
@@ -1196,7 +1312,7 @@ class mstw_gs_sched_widget extends WP_Widget {
 		}
 		else { // No posts were found
 
-			echo 'No scheduled games found';
+			_e( 'No Scheduled Games Found', $mstw_domain );
 
 		} // End of if ($posts)
 		
@@ -1233,26 +1349,33 @@ class mstw_gs_countdown_widget extends WP_Widget {
  *------------------------------------------------------------------*/
 	
 	function form($instance) {
+	
+		global $mstw_domain; //Important for localization functions!
+	
         $defaults = array( 'cd_title' => 'Countdown', 'cd_test_now' => '',
-							'cd_sched_id' => '1', 'cd_sched_yr' => date('Y'), 'cd_intro_text' => 'Time to kickoff:' ); 
+							'cd_sched_id' => '1', 'cd_intro_text' => 'Time to kickoff:', 'cd_home_only' => '' ); 
 							
         $instance = wp_parse_args( (array) $instance, $defaults );
 		
         $cd_title = $instance['cd_title'];
 		$cd_test_now = $instance['cd_test_now'];
 		$cd_sched_id = $instance['cd_sched_id'];
-		$cd_sched_yr = $instance['cd_sched_yr'];
+		$cd_home_only = $instance['cd_home_only'];
 		$cd_intro_text = $instance['cd_intro_text'];
 		
         ?>
         <p>Countdown Title: <input class="widefat" name="<?php echo $this->get_field_name( 'cd_title' ); ?>"  
             					type="text" value="<?php echo esc_attr( $cd_title ); ?>" /></p>
-        <p>CD Test Now: <input class="widefat" name="<?php echo $this->get_field_name( 'cd_test_now' ); ?>"  
+        <!-- 
+		<p>CD Test Now[MUST be formatted 2012-01-07 18:11:31]: <input class="widefat" name="<?php echo $this->get_field_name( 'cd_test_now' ); ?>"  
             					type="text" value="<?php echo esc_attr( $cd_test_now ); ?>" /></p>
+		-->
         <p>Schedule ID: <input class="widefat" name="<?php echo $this->get_field_name( 'cd_sched_id' ); ?>"  
-        						type="text" value="<?php echo esc_attr( $cd_sched_id ); ?>" /></p>
-        <p>Sched Year: <input class="widefat" name="<?php echo $this->get_field_name( 'cd_sched_yr' ); ?>"
-        						type="text" value="<?php echo esc_attr( $cd_sched_yr ); ?>" /></p>
+        						type="text" value="<?php echo esc_attr( $cd_sched_id ); ?>" /></p> 
+		
+		<p><input class="checkbox" type="checkbox" <?php checked( $instance['cd_home_only'], 'on' ); ?> id="<?php echo $this->get_field_id( 'cd_home_only' ); ?>" name="<?php echo $this->get_field_name( 'cd_home_only' ); ?>" /> 
+		<label for="<?php echo $this->get_field_id( 'cd_home_only' ); ?>">Use home games only?</label></p>
+		
         <p>Countdown Intro Text: <input class="widefat" name="<?php echo $this->get_field_name( 'cd_intro_text' ); ?>"
         						type="text" value="<?php echo esc_attr( $cd_intro_text ); ?>" /></p>
             
@@ -1272,7 +1395,7 @@ class mstw_gs_countdown_widget extends WP_Widget {
 
 		$instance['cd_sched_id'] = strip_tags( $new_instance['cd_sched_id'] );
 		
-		$instance['cd_sched_yr'] = strip_tags( $new_instance['cd_sched_yr'] );
+		$instance['cd_home_only'] = strip_tags( $new_instance['cd_home_only'] );
 		
 		$instance['cd_intro_text'] = strip_tags( $new_instance['cd_intro_text'] );
  
@@ -1296,7 +1419,7 @@ class mstw_gs_countdown_widget extends WP_Widget {
 		// Get the parameters for get_posts() below
 		$cd_test_now = trim( $instance['cd_test_now'] );
 		$cd_sched_id = $instance['cd_sched_id'];
-		$cd_sched_yr = $instance['cd_sched_yr'];
+		$cd_home_only = $instance['cd_home_only'];
 		$cd_intro_text = $instance['cd_intro_text'];
 		
 		if( !empty( $title ) ) {
@@ -1305,7 +1428,7 @@ class mstw_gs_countdown_widget extends WP_Widget {
 		if ( $cd_test_now == '' ) 
 			$cd_test_now = date( "Y-m-d H:i:s" );
 			
-        $cd_str = mstw_gs_build_countdown( $cd_sched_id, $cd_sched_yr, $cd_intro_text, $cd_test_now );
+        $cd_str = mstw_gs_build_countdown( $cd_sched_id, $cd_intro_text,  $cd_home_only );
         
         echo $cd_str;
 		//echo ( "date: " . $cd_test_now );
@@ -1315,4 +1438,96 @@ class mstw_gs_countdown_widget extends WP_Widget {
 	} // end of function widget()
 	
 } // end of class mstw_gs_countdown_widget
+
+/*------------------------------------------------------------------------------------
+ * This is a test modification of the date function (line 997 for example) for use
+ * in localization. If, for example, you wanted to translate the plugin to Croatian,
+ * you would simply update the four arrays at the top of the function. [Someday, I will
+ * do this right using proper WordPress localization with strftime(), locale, etc.]
+--------------------------------------------------------------------------------------*/
+function mstw_date_loc($format, $timestamp = null) {
+
+	global $mstw_domain; //Not used right now
+	
+	//$param_D = array('', 'Lun', 'Mar', 'Mi&eacute;r', 'Jue', 'Vi&eacute;r', 'S&aacute;b', 'Dom');
+	$param_D = array( '', 
+						__( 'Mon', $mstw_domain ), 
+						__( 'Tue', $mstw_domain ), 
+						__( 'Wed', $mstw_domain ), 
+						__( 'Thr', $mstw_domain ), 
+						__( 'Fri', $mstw_domain ), 
+						__( 'Sat', $mstw_domain ), 
+						__( 'Sun', $mstw_domain ) );
+	
+	//$param_l = array('', 'lunes', 'martes', 'mi&eacute;rcoles', 'jueves', 'viernes', 's&aacute;bado', 'domingo');
+	$param_l = array( '', 
+						__( 'Monday', $mstw_domain ), 
+						__( 'Tuesday', $mstw_domain ), 
+						__( 'Wednesday', $mstw_domain ), 
+						__( 'Thursday', $mstw_domain ), 
+						__( 'Friday', $mstw_domain ), 
+						__( 'Saturday', $mstw_domain ), 
+						__( 'Sunday', $mstw_domain ) );
+						
+	//$param_F = array('', 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'Septembre', 'Octobre', 'Novembre', 'D&eacute;cembre');
+	$param_F = array( '', 
+						__( 'January', $mstw_domain ), 
+						__( 'February', $mstw_domain ), 
+						__( 'March', $mstw_domain ), 
+						__( 'April', $mstw_domain ), 
+						__( 'May', $mstw_domain ), 
+						__( 'June', $mstw_domain ),
+						__( 'July', $mstw_domain ),
+						__( 'August', $mstw_domain ),
+						__( 'September', $mstw_domain ),
+						__( 'October', $mstw_domain ),
+						__( 'November', $mstw_domain ),
+						__( 'December', $mstw_domain ) );
+						
+	//$param_M = array('', 'enero', 'feb.', 'marzo', 'abr.', 'mayo', 'jun.', 'jul.', 'agosto', 'sept.', 'oct.', 'nov.', 'dic.');
+	$param_M = array( '', 
+						__( 'Jan', $mstw_domain ), 
+						__( 'Feb', $mstw_domain ), 
+						__( 'Mar', $mstw_domain ), 
+						__( 'Apr', $mstw_domain ), 
+						__( 'May', $mstw_domain ), 
+						__( 'Jun', $mstw_domain ),
+						__( 'Jul', $mstw_domain ),
+						__( 'Aug', $mstw_domain ),
+						__( 'Sep', $mstw_domain ),
+						__( 'Sept', $mstw_domain ),
+						__( 'Oct', $mstw_domain ),
+						__( 'Nov', $mstw_domain ),
+						__( 'Dec', $mstw_domain ) );
+	
+
+	$return = '';
+	
+	if(is_null($timestamp)) { $timestamp = mktime(); }
+	
+	for($i = 0, $len = strlen($format); $i < $len; $i++) {
+		switch($format[$i]) {
+			case '\\' : // double.slashes
+				$i++;
+				$return .= isset($format[$i]) ? $format[$i] : '';
+				break;
+			case 'D' :
+				$return .= $param_D[date('N', $timestamp)];
+				break;
+			case 'l' :
+				$return .= $param_l[date('N', $timestamp)];
+				break;
+			case 'F' :
+				$return .= $param_F[date('n', $timestamp)];
+				break;
+			case 'M' :
+				$return .= $param_M[date('n', $timestamp)];
+				break;
+			default :
+				$return .= date($format[$i], $timestamp);
+				break;
+		}
+	}
+	return $return;
+}
 ?>

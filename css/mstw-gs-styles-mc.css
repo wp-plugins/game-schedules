@@ -63,8 +63,13 @@
 }
 
 /* Set the home links */
-.mstw-gs-home td a,  .mstw-gs-home td a:visited, .mstw-gs-home td a:active, .mstw-gs-home td a:hover {
+.mstw-gs-home td a,  .mstw-gs-home td a:visited {
     font-weight: bold!important;
+}
+
+.mstw-gs-odd td a:hover {
+    text-decoration: underline;
+    color: #c0c0c0;
 }
 
 /* Set the even row attributes */
@@ -77,9 +82,14 @@
 }
 
 /* Set the even links */
-.mstw-gs-even td a,  .mstw-gs-even td a:visited, .mstw-gs-even td a:active, .mstw-gs-even td a:hover {
+.mstw-gs-even td a,  .mstw-gs-even td a:visited {
     text-decoration: underline;
     color: #000;
+}
+
+.mstw-gs-even td a:hover {
+    text-decoration: underline;
+    color: #c0c0c0!important;
 }
 
 /* Set the odd row attributes */
@@ -92,9 +102,14 @@
 }
 
 /* Set the odd links */
-.mstw-gs-odd td a,  .mstw-gs-odd td a:visited, .mstw-gs-odd td a:active, .mstw-gs-odd td a:hover {
+.mstw-gs-odd td a,  .mstw-gs-odd td a:visited {
     text-decoration: underline;
     color: #fff;
+}
+
+.mstw-gs-odd td a:hover {
+    text-decoration: underline;
+    color: #c0c0c0;
 }
 
 /******************************************************/
@@ -125,9 +140,14 @@
 }
 
 /* Set the even links */
-.mstw-gs-sw-even td a,  .mstw-gs-sw-even td a:visited, .mstw-gs-sw-even td a:active, .mstw-gs-sw-even td a:hover {
+.mstw-gs-sw-even td a,  .mstw-gs-sw-even td a:visited {
     text-decoration: underline;
     color: #000064;
+}
+
+.mstw-gs-sw-even td a:hover {
+    text-decoration: underline;
+    color: #c0c0c0!important;
 }
 
 /* Set the odd row attributes */
@@ -141,9 +161,14 @@
 }
 
 /* Set the odd links */
-.mstw-gs-sw-odd td a,  .mstw-gs-sw-odd td a:visited, .mstw-gs-sw-odd td a:active, .mstw-gs-sw-odd td a:hover {
+.mstw-gs-sw-odd td a,  .mstw-gs-sw-odd td a:visited {
     text-decoration: underline;
     color: #000064;
+}
+
+.mstw-gs-sw-odd td a:hover {
+    text-decoration: underline;
+    color: #c0c0c0!important;
 }
 
 /* Set the home row attributes */
@@ -158,8 +183,14 @@
 }
 
 /* Set the home links */
-.mstw-gs-sw-home td a,  .mstw-gs-sw-home td a:visited, .mstw-gs-sw-home td a:active, .mstw-gs-sw-home td a:hover {
+.mstw-gs-sw-home td a,  .mstw-gs-sw-home td a:visited {
     font-weight: bold!important;
+}
+
+.mstw-gs-sw-home td a:hover {
+    color: #c0c0c0!important;
+	font-weight: bold!important;
+	text-decoration: underline!important;
 }
 
 
@@ -174,6 +205,20 @@
 
 .mstw-gs-cdt-opponent {
 	color: #ce2c2a;
+	font-weight: bold;
+	font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+}
+
+.mstw-gs-cdt-opponent a, .mstw-gs-cdt-opponent a:visited {
+	color: #ce2c2a!important;
+	text-decoration: underline; 
+	font-weight: bold;
+	font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+}
+
+.mstw-gs-cd-opponent  a:hover {
+	color: #c0c0c0!important;
+	text-decoration: underline; 
 	font-weight: bold;
 	font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
 }

@@ -1,8 +1,8 @@
 /* Game Schedule [mstw_gs_styles] CSS Document 
  *
- ************************************************************
- *  THIS FILE IS THE DEFAULT FOR THE GAME SCHEDULES PLUGIN  *
- ************************************************************
+ ****************************************************
+ *  THIS FILE IS FOR THE GAMEDAY IN BERKELEY SITE   *
+ ****************************************************
  *  SCHEDULES
  *	For the SHORTCODE, the tables have five 'row types': 
  *	the header row, even rows, odd rows, home games, and away games. 
@@ -28,9 +28,6 @@
  * 20120705-MAO:
  *	Added padding to widget schedule table
  *
- * 20121019-MAO:
- *	Cleaned up for version 2.0 release
- *
  */
  
 /******************************************************/
@@ -45,9 +42,7 @@
 /* Set the table header attributes */
 .mstw-gs-table-head thead,  .mstw-gs-table-head tr, .mstw-gs-table-head th {
     background: #4f81bd!important;
-    color: #fff!important;
-	font-size: 12px;
-	font-weight: bold;
+    color: #ffffff!important;
 	border-spacing: 0px;
     border: 2px solid white;  /* So the border does not appear */
     padding: 2px!important;
@@ -56,18 +51,22 @@
 /* Set the home row attributes */
 .mstw-gs-home tr,  .mstw-gs-home td {
 	font-weight: bold!important;
+	/* 
+	background-color: #b8cce4;
+	border-style: solid; 
+	border-color: #ffffff; 
+	border-width: 2px;
+	*/
 }
 
 /* Set the home links */
 .mstw-gs-home td a,  .mstw-gs-home td a:visited, .mstw-gs-home td a:active, .mstw-gs-home td a:hover {
     font-weight: bold!important;
-	text-decoration: underline;
-	color: #000;
 }
 
 /* Set the even row attributes */
 .mstw-gs-even tr,  .mstw-gs-even td {
-	color: #000;
+	color: #000000;
 	background-color: #b8cce4;
 	border-style: solid; 
 	border-color: #ffffff; 
@@ -75,36 +74,24 @@
 }
 
 /* Set the even links */
-.mstw-gs-even td a,  .mstw-gs-even td a:visited, .mstw-gs-even td a:active {
-    text-decoration: none;
-    color: #4F81BD;
-}
-
-/* Set the even links hover */
-.mstw-gs-even td a:hover {
+.mstw-gs-even td a,  .mstw-gs-even td a:visited, .mstw-gs-even td a:active, .mstw-gs-even td a:hover {
     text-decoration: underline;
-    color: #666;
+    color: #000000;
 }
 
 /* Set the odd row attributes */
 .mstw-gs-odd tr, .mstw-gs-odd td {
-	color: #000;
-	background-color: #DBE5F1;
+	color: #000000;
+	background-color: #dbe5f1;
 	border-style: solid;
 	border-color: #ffffff;
 	border-width: 2px;
 }
 
 /* Set the odd links */
-.mstw-gs-odd td a,  .mstw-gs-odd td a:visited, .mstw-gs-odd td a:active {
-    color: #4F81BD;
-	text-decoration: none;
-}
-
-/* Set the odd links hover */
-.mstw-gs-odd td a:hover {
+.mstw-gs-odd td a,  .mstw-gs-odd td a:visited, .mstw-gs-odd td a:active, .mstw-gs-odd td a:hover {
     text-decoration: underline;
-    color: #666;
+    color: #000000;
 }
 
 /******************************************************/
@@ -117,8 +104,8 @@
 
 /* Set the table header attributes */
 .mstw-gs-sw-tab-head thead,  .mstw-gs-sw-tab-head tr, .mstw-gs-sw-tab-head th {
-    background: #4f81bd!important;
-    color: #fff!important;
+    background: #000064!important;
+    color: #FFCC33!important;
 	border-spacing: 0px;
     border: 2px solid white;  /* So the border does not appear */
     padding: 2px 5px 2px 3px!important;
@@ -126,8 +113,8 @@
 
 /* Set the even row attributes */
 .mstw-gs-sw-even tr,  .mstw-gs-sw-even td {
-	color: #000;
-	background-color: #B8CCE4;
+	color: #000064;
+	background-color: #dbe5f1; /* #b8cce4; Even and odd are the same for GameDayInBerkeley */
 	border-style: solid; 
 	border-color: #ffffff; 
 	border-width: 2px;
@@ -142,8 +129,8 @@
 
 /* Set the odd row attributes */
 .mstw-gs-sw-odd tr, .mstw-gs-sw-odd td {
-	color: #000;
-	background-color: #DBE5F1;
+	color: #000064;
+	background-color: #dbe5f1;
 	border-style: solid;
 	border-color: #ffffff;
 	border-width: 2px;
@@ -159,6 +146,12 @@
 /* Set the home row attributes */
 .mstw-gs-sw-home tr,  .mstw-gs-sw-home td {
 	font-weight: bold!important;
+	background-color: #ffcc33;!important
+	color: #000064;!important;
+	border-style: solid; 
+	border-color: #ffffff; 
+	border-width: 2px;
+	padding: 2px 5px 2px 3px!important;
 }
 
 /* Set the home links */
@@ -171,34 +164,25 @@
 /* Styles for the Countdown Timer shortcode & widget  */
 /******************************************************/
 .mstw-gs-cdt-dtg {
-	color: #000;
+	color: #000064;
 	font-weight: bold;
 	font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
 }
 
 .mstw-gs-cdt-opponent {
-	color: #000;
+	color: #000064;
 	font-weight: bold;
 	font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
 }
 
-.mstw-gs-cdt-opponent a {
-	text-decoration: none;
-    color: #4F81BD;
-}
-
-.mstw-gs-cdt-opponent a:hover {
-	text-decoration: underline;
-    color: #666;
-}
-
 .mstw-gs-cdt-intro {
-	color: #000;
+	color: #000064;
 	font-weight: bold;
 	font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;	
 }
 
 .mstw-gs-cdt-countdown{
-	color: #000;
-	background: #fef600;
+	color: #000064;
+	background-color: #ffcc33;
+	font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
 }

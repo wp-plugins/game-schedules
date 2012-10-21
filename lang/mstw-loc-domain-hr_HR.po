@@ -1,0 +1,330 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: test-my-plugin\n"
+"POT-Creation-Date: 2012-10-14 21:59-0800\n"
+"PO-Revision-Date: 2012-10-18 13:55-0800\n"
+"Last-Translator: Mark O'Donnell <mark@shoalsummitsolutions.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e\n"
+"X-Poedit-Basepath: C:\\Users\\Mark\\Documents\\Shoal Summit Consulting\\Web "
+"Presence\\mstw-game-schedules\\trunk\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: mstw-game-schedule.php:573
+msgid "Title"
+msgstr "Naslov"
+
+#: mstw-game-schedule.php:574
+msgid "Schedule"
+msgstr "Raspored"
+
+#: mstw-game-schedule.php:575
+msgid "Year"
+msgstr "Godina"
+
+#: mstw-game-schedule.php:576 mstw-game-schedule.php:792
+msgid "Date"
+msgstr "Datum"
+
+#: mstw-game-schedule.php:577 mstw-game-schedule.php:793
+msgid "Opponent"
+msgstr "Protivnik"
+
+#: mstw-game-schedule.php:578
+msgid "Opponent Link"
+msgstr "Protivnik Linkova"
+
+#: mstw-game-schedule.php:579 mstw-game-schedule.php:794
+msgid "Location"
+msgstr "Lokacija"
+
+#: mstw-game-schedule.php:580
+msgid "Time"
+msgstr ""
+
+#: mstw-game-schedule.php:581
+msgid "Result"
+msgstr "Rezultat"
+
+#: mstw-game-schedule.php:621
+msgid "No Game Year"
+msgstr ""
+
+#: mstw-game-schedule.php:634
+msgid "No Schedule Defined"
+msgstr ""
+
+#: mstw-game-schedule.php:636 mstw-game-schedule.php:665
+#: mstw-game-schedule.php:679 mstw-game-schedule.php:692
+#: mstw-game-schedule.php:705 mstw-game-schedule.php:718
+#, php-format
+msgid "%s"
+msgstr ""
+
+#: mstw-game-schedule.php:648
+msgid "No Game Date"
+msgstr ""
+
+#: mstw-game-schedule.php:663
+msgid "No Opponent"
+msgstr ""
+
+#: mstw-game-schedule.php:677
+msgid "No Opponent Link"
+msgstr ""
+
+#: mstw-game-schedule.php:690
+msgid "No Location"
+msgstr ""
+
+#: mstw-game-schedule.php:703
+msgid "No Game Time"
+msgstr ""
+
+#: mstw-game-schedule.php:716
+msgid "No Game Result"
+msgstr ""
+
+#: mstw-game-schedule.php:795
+msgid "Time/Result"
+msgstr "Vrijeme/Rezultat"
+
+#: mstw-game-schedule.php:796
+msgid "Media"
+msgstr "Mediji"
+
+#: mstw-game-schedule.php:897
+msgid "No Scheduled Games Found."
+msgstr "Nikakve Zabilježene Utakmice Nisu Pronađene."
+
+#: mstw-game-schedule.php:992
+msgid "No home games found."
+msgstr "Nikakve Zabilježene Utakmice Nisu Pronađene."
+
+#: mstw-game-schedule.php:995
+msgid "No games found."
+msgstr "Nema igre prona&#273;ena"
+
+#: mstw-game-schedule.php:1057
+msgid "year"
+msgstr "godina"
+
+#: mstw-game-schedule.php:1057
+msgid "years"
+msgstr "godina "
+
+#: mstw-game-schedule.php:1058
+msgid "month"
+msgstr "mjesec"
+
+#: mstw-game-schedule.php:1058
+msgid "months"
+msgstr "mjeseci"
+
+#: mstw-game-schedule.php:1059
+msgid "week"
+msgstr "tjedan"
+
+#: mstw-game-schedule.php:1059
+msgid "weeks"
+msgstr "tjedana"
+
+#: mstw-game-schedule.php:1060
+msgid "day"
+msgstr "dan"
+
+#: mstw-game-schedule.php:1060
+msgid "days"
+msgstr "dani"
+
+#: mstw-game-schedule.php:1061
+msgid "hour"
+msgstr "sat"
+
+#: mstw-game-schedule.php:1061
+msgid "hours"
+msgstr "sati"
+
+#: mstw-game-schedule.php:1062
+msgid "minute"
+msgstr "minuta"
+
+#: mstw-game-schedule.php:1062
+msgid "minutes"
+msgstr "minuta "
+
+#: mstw-game-schedule.php:1063
+msgid "second"
+msgstr "sekunda"
+
+#: mstw-game-schedule.php:1063
+msgid "seconds"
+msgstr "sekundi"
+
+#: mstw-game-schedule.php:1272
+msgid "DATE"
+msgstr "DATUM"
+
+#: mstw-game-schedule.php:1273
+msgid "OPPONENT"
+msgstr "PROTIVNIK"
+
+#: mstw-game-schedule.php:1331
+msgid "No Scheduled Games Found"
+msgstr "Nikakve Zabilježene Utakmice Nisu Pronađene"
+
+#: mstw-game-schedule.php:1474
+msgid "Mon"
+msgstr "Pon"
+
+#: mstw-game-schedule.php:1475
+msgid "Tue"
+msgstr "Uto"
+
+#: mstw-game-schedule.php:1476
+msgid "Wed"
+msgstr "Sri"
+
+#: mstw-game-schedule.php:1477
+msgid "Thr"
+msgstr "&#268;et"
+
+#: mstw-game-schedule.php:1478
+msgid "Fri"
+msgstr "Pet"
+
+#: mstw-game-schedule.php:1479
+msgid "Sat"
+msgstr "Sub"
+
+#: mstw-game-schedule.php:1480
+msgid "Sun"
+msgstr "Ned"
+
+#: mstw-game-schedule.php:1484
+msgid "Monday"
+msgstr "Ponedjeljak"
+
+#: mstw-game-schedule.php:1485
+msgid "Tuesday"
+msgstr "Utorak"
+
+#: mstw-game-schedule.php:1486
+msgid "Wednesday"
+msgstr "Srijeda"
+
+#: mstw-game-schedule.php:1487
+msgid "Thursday"
+msgstr "&#268;etvrtak"
+
+#: mstw-game-schedule.php:1488
+msgid "Friday"
+msgstr "Petak"
+
+#: mstw-game-schedule.php:1489
+msgid "Saturday"
+msgstr "Subota"
+
+#: mstw-game-schedule.php:1490
+msgid "Sunday"
+msgstr "Nedjelja"
+
+#: mstw-game-schedule.php:1494
+msgid "January"
+msgstr "Siječanj"
+
+#: mstw-game-schedule.php:1495
+msgid "February"
+msgstr "Veljača"
+
+#: mstw-game-schedule.php:1496
+msgid "March"
+msgstr "Ožujak"
+
+#: mstw-game-schedule.php:1497
+msgid "April"
+msgstr "Travanj"
+
+#: mstw-game-schedule.php:1498 mstw-game-schedule.php:1513
+msgid "May"
+msgstr "Svibanj"
+
+#: mstw-game-schedule.php:1499
+msgid "June"
+msgstr "Lipanj"
+
+#: mstw-game-schedule.php:1500
+msgid "July"
+msgstr "Srpanj"
+
+#: mstw-game-schedule.php:1501
+msgid "August"
+msgstr "Kolovoz"
+
+#: mstw-game-schedule.php:1502
+msgid "September"
+msgstr "Rujan"
+
+#: mstw-game-schedule.php:1503
+msgid "October"
+msgstr "Listopad"
+
+#: mstw-game-schedule.php:1504
+msgid "November"
+msgstr "Studeni"
+
+#: mstw-game-schedule.php:1505
+msgid "December"
+msgstr "Prosinac"
+
+#: mstw-game-schedule.php:1509
+msgid "Jan"
+msgstr "Sij"
+
+#: mstw-game-schedule.php:1510
+msgid "Feb"
+msgstr "Velj"
+
+#: mstw-game-schedule.php:1511
+msgid "Mar"
+msgstr "Ožu"
+
+#: mstw-game-schedule.php:1512
+msgid "Apr"
+msgstr "Tra"
+
+#: mstw-game-schedule.php:1514
+msgid "Jun"
+msgstr "Lip"
+
+#: mstw-game-schedule.php:1515
+msgid "Jul"
+msgstr "Srp"
+
+#: mstw-game-schedule.php:1516
+msgid "Aug"
+msgstr "Kol"
+
+#: mstw-game-schedule.php:1517
+msgid "Sep"
+msgstr "Ruj"
+
+#: mstw-game-schedule.php:1518
+msgid "Sept"
+msgstr "Ruj"
+
+#: mstw-game-schedule.php:1519
+msgid "Oct"
+msgstr "Lis"
+
+#: mstw-game-schedule.php:1520
+msgid "Nov"
+msgstr "Stu"
+
+#: mstw-game-schedule.php:1521
+msgid "Dec"
+msgstr "Pro"
