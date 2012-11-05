@@ -4,7 +4,7 @@ Donate link: http://shoalsummitsolutions.com
 Tags: sports,games,schedule,sports teams,team schedule,countdown timer  
 Requires at least: 3.3.1
 Tested up to: 3.3.1
-Stable tag: 2.0
+Stable tag: 2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,6 +30,7 @@ Use the Edit Game Schedule screen (screenshot-2) to enter the Scheduled Games. T
 * Opponent Link: If you enter a URL in this field, the Opponent field will be linked to the URL provided; maybe the team's website or a story on the game. [Note that these links are available through the schedule shortcode and the countdown timer shortcode and widget. The schedule widget does not support these links.]
 * Home Game? : Check this box if it is a home game. Home games can be highlighted (by color, font, etc.) on the schedules. The default is bold. More importantly, by default away games are shown as "@Opponent" in the countdown timer.
 * Location: In free format text. (This field may be tied to the game locations plugin someday.)
+* Location Link: If you enter a URL in this field, the Location field will be linked to the URL provided; maybe a map to the game. [Note that these links are available through the schedule shortcode and the countdown timer shortcode and widget. The schedule widget does not support these links because it doesn't support a location field.]
 * Game Time: Game times should be formated as "HH:MMpm". For example, "07:30pm". If the time is not recognizable, it will be displayed as typed, but the countdown timer won't work correctly. It may be entered as "T.B.D." or "TBD" or "T.B.A." or "TBA".
 * Game Result: The game result in free form. For example, "27-14", or "W 27-14", or "L 27-14" or simply "WIN".
 * Media Links: Three media links are provided. Initially, this field will be empty. After the game, you may enter up to 3 titles and URLs. E.g., you might enter "ESPN Sports" and "http://espn.go.com/" and the plugin will create the link in the table.
@@ -90,8 +91,38 @@ Yes. The unique schedule id defines each schedule. It is the key argument for sh
 = Can I have schedules for more than one season? =
 Yes. Just use different schedule ID's for different seasons. (See "How many separate schedules can I set up?")
 
-= How do I change the look of the schedule or the countdown timer? =
+= I live in Split, Croatia (or wherever). Does the plugin support other languages? =
+The plugin supports localization as of version 2.0. If you happen to live in Split, you're in luck. The Croatian translation is contained in the /lang directory. (Thanks Jurak!)
+
+= How do I change the look (text colors, background colors, etc.) of the schedule or the countdown timer? =
 In this version you have to edit the plugin's stylesheet, mstw-gs-styles.css. It is located in the game-schedule/css directory. It is short, simple, and well documented. The schedule plugin and the schedule widget have separate sets of styles. The countdown plugin and countdown widget share one set of styles. In the future, I plan to provide options for commonly changed styles on the admin page to control the schedule table and countdown timer styles. 
+
+= How do I change the date-time group formats? Day [Month Year is more convinient in Europe.] =
+Unfortunately, much like the styles described in the previous question, you must edit the code to do this. In this case, go in to the plugin's main file - mstw-game-schedule.php. At the start of the code, you will find the following lines:
+
+>	//Date column of the widget's table
+
+>	$mstw_gs_dtg_format =  'j M y';
+
+>	// For the dashboard/metabox - don't need the year, it's already displayed.
+
+>	$mstw_dash_dtg_format =  'j M'; 
+
+>	// For the countdown timer; game time with a time
+
+>	$mstw_gs_cdt_time_format = "l, j M g:i a";
+
+>	// For the countdown timer; game time with only a game date (no time)
+
+>	$mstw_gs_cdt_tbd_format = "l, j M";
+
+>	//Date column of the widget's table
+
+>	$mstw_gs_sw_dtg_format = 'd M y';  
+
+Refer to the php date() function's formatting options to decipher the codes. (I plan to make these options on the admin page ... someday.) 
+
+**Note however** that the actual entry of the game's time is very sensitive to format and you MUST use the "Americanized" time format exactly as specified when adding or editing a game. 
 
 = What can I do if I have more than three media links? =
 If you are that popular, why not create one media link on the schedule that goes to a page of all your links? Or, you can hack the plugin code. I've considered a setting for "number of media links" (the JV and Frosh teams typically have none, at least in San Diego), but that's low on my list right now.
@@ -104,9 +135,6 @@ Either:
 * You used the "Quick Edit" link in the list of all games (prior to version 2.0). Install version 2.0 or don't do that!
 * You edited a game, updated it, and when you exited the game editor, it asked if you really wanted to leave the page because there were unsaved changes. Knowing that you already saved the changes, you clicked on "leave this page". Wrong! In this case you may not know best, just stay on the page and save the game again.
 * You entered some really bad data for a game. It is particularly sensitive about the time format. (I know I should improve the error checking. It's on the list!)
-
-= I live in Split, Croatia (or wherever). Does the plugin support other languages? =
-The plugin supports localization as of version 2.0. If you happen to live in Split, you're in luck. The Croatian translation is contained in the /lang directory. (Thanks Jurak!)
 
 
 == Screenshots ==
@@ -129,7 +157,6 @@ The plugin supports localization as of version 2.0. If you happen to live in Spl
 
 = 2.0 =
 This version includes some significant upgrades and bug fixes:
-
 * Schedules can now go across multiple years. Schedules are now identified only by the ID, instead of ID and year (as in previous versions). The year field is now simply a part of the game date.
 * Added internationalization for the user interface only, not the admin pages. Provided a default .po file in the /lang directory for any would be translators out there, and a Croatian translation (in the mstw-loc-domain-hr_HR.po file).
 * Added a setting to countdown timer widget and an argument to the countdown timer shortcode that tells the countdown timer to use home games only.
@@ -137,8 +164,14 @@ This version includes some significant upgrades and bug fixes:
 * Removed the "current time" field in the widget and argument in the shortcode. This was used only for testing and is not really needed. (There are other ways to test.)
 * Removed Quick Edit link from the editor. (It broke things and was unnecessary.)
 
+= 2.1 =
+This version includes the following upgrades and bug fixes:
+* Added the option for a link from a game's location field (displayed in the shortcode table and the countdown widget) to a specified URL.
+* Corrected a typo that make the new links on opponent entries not work in every scenario.
+* Fixed several bugs in the stylesheet and how it loads (enqueues).
+
 == Upgrade Notice ==
 
-The current version of Game Schedules requires WordPress 3.2.1 or higher. It has been tested up to 3.3.1. If you use older version of WordPress, good luck! If you are using a newer version, please let me know how the plugin works, especially if you encounter problems.
+The current version of Game Schedules has been tested up to 3.4.2. If you use older version of WordPress, good luck! If you are using a newer version, please let me know how the plugin works, especially if you encounter problems.
 
 Upgrading to this version of Game Schedules should not impact any existing schedules. (But backup your DB before you upgrade, just in case. :)

@@ -3,7 +3,7 @@
 Plugin Name: Game Schedule
 Plugin URI: http://wordpress.org/extend/plugins/
 Description: The Game Schedule Plugin defines a custom type - Scheduled Games - for use in the MySportTeamWebite framework. Generations a game schedule (html table) using a shortcode.
-Version: 2.0
+Version: 2.1
 Author: Mark O'Donnell
 Author URI: http://shoalsummitsolutions.com
 */
@@ -60,6 +60,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
  *	(4) Opponent_link field was added.
  *	(5)	See readme for more details.
  *
+ * 20121103-MAO:
+ *	(1)	Fixed bug with opponent links. 
+ *	(2) Fixed bug with enqueueing stylesheet.
+ *
+ * 20121104-MAO:
+ *	(1) Added location_link field. Links from the location entries of games.
+ *
  * ------------------------------------------------------------------------*/
 
 /* ------------------------------------------------------------------------
@@ -71,12 +78,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 	date_default_timezone_set('America/Los_Angeles');
 
 // This is temporary until we create options (someday)
-	// For the dashboard/metabox
-	$mstw_gs_dtg_format =  "m.d.y"; // 'j M'; 
+	//Date column of the widget's table
+	$mstw_gs_dtg_format =  'j M y';
+	// For the dashboard/metabox - don't need the year, it's already displayed.
+	$mstw_dash_dtg_format =  'j M'; 	
 	// For the countdown timer; game time with a time
-	$mstw_gs_cdt_time_format = "m.d.y H:i"; //"l, j M g:i a";
+	$mstw_gs_cdt_time_format = "l, j M g:i a";
 	// For the countdown timer; game time with only a game date (no time)
-	$mstw_gs_cdt_tbd_format = "m.d.y";//"l, j M";
+	$mstw_gs_cdt_tbd_format = "l, j M";
+	//Date column of the widget's table
+	$mstw_gs_sw_dtg_format = 'd M y'; 
 	
 // Months array for <select>/<option> statement in UI
 	$mstw_gs_months = array ( 	'Jan', 'Feb', 'Mar', 'Apr',
@@ -205,7 +216,8 @@ function mstw_gs_add_options_page( ) {
 }
 
 /* Queue up the necessary CSS */
-add_action( 'wp_head', 'mstw_gs_enqueue_styles' );
+/* add_action( 'wp_head', 'mstw_gs_enqueue_styles' ); */
+add_action( 'wp_enqueue_scripts', 'mstw_gs_enqueue_styles' );
 
 // ------------------------------------------------------------------------------
 // Callback for: add_action( 'wp_head', 'mstw_gs_enqueue_styles' );
@@ -216,18 +228,22 @@ function mstw_gs_enqueue_styles () {
 	
 	/* Find the full path to the css file */
 	$mstw_gs_style_url = plugins_url('/css/mstw-gs-styles.css', __FILE__);
-	$mstw_gs_style_file = WP_PLUGIN_DIR . '/mstw-game-schedule/css/mstw-gs-styles.css';
+	$mstw_gs_style_file = WP_PLUGIN_DIR . '/game-schedules/css/mstw-gs-styles.css';
 	
-	/* If cssfile exists, register & enqueue the style */
+	wp_register_style( 'mstw_gs_style', plugins_url('/css/mstw-gs-styles.css', __FILE__) );
 	
-	if ( file_exists( $mstw_gs_style_file ) ) {
+	//echo 'file url: ' . $mstw_gs_style_url . "\n";
+	//echo 'file name: ' . $mstw_gs_style_file . "\n";
+	
+	/* If stylesheet exists, enqueue the style */
+	if ( file_exists( $mstw_gs_style_file ) ) {	
+		wp_enqueue_style( 'mstw_gs_style' );			
 		
-		//echo 'CSS File ' . $mstw_gs_style_file . ' Exists' . '<br/>';
-		wp_enqueue_style( 'mstw_gs_style', $mstw_gs_style_url );	
-		
-	}
+	} 
+	/*else {
+		echo $mstw_gs_style_file . ' does not exist' . "\n";
+	} */
 
-	//}
 }
 
 
@@ -321,6 +337,7 @@ function mstw_gs_create_ui( $post ) {
 	$mstw_gs_opponent = get_post_meta( $post->ID, '_mstw_gs_opponent', true );
 	$mstw_gs_opponent_link = get_post_meta( $post->ID, '_mstw_gs_opponent_link', true );
 	$mstw_gs_location = get_post_meta( $post->ID, '_mstw_gs_location', true );
+	$mstw_gs_location_link = get_post_meta( $post->ID, '_mstw_gs_location_link', true );
 	$mstw_gs_home_game = get_post_meta( $post->ID, '_mstw_gs_home_game', true );
 	$mstw_gs_game_result = get_post_meta( $post->ID, '_mstw_gs_game_result', true );
 	 
@@ -375,13 +392,13 @@ function mstw_gs_create_ui( $post ) {
   
     <tr valign="top">
     	<th scope="row"><label for="mstw_gs_opponent" >Opponent:</label></th>
-        <td><input maxlength="40" size="30" name="mstw_gs_opponent"
+        <td><input maxlength="64" size="30" name="mstw_gs_opponent"
         	value="<?php echo esc_attr( $mstw_gs_opponent ); ?>"/></td>
     </tr>
 	
 	<tr valign="top">
     	<th scope="row"><label for="mstw_gs_opponent_link" >Opponent Link:</label></th>
-        <td><input maxlength="128" size="30" name="mstw_gs_opponent_link"
+        <td><input maxlength="256" size="30" name="mstw_gs_opponent_link"
         	value="<?php echo esc_attr( $mstw_gs_opponent_link ); ?>"/></td>
     </tr>
 	
@@ -391,47 +408,54 @@ function mstw_gs_create_ui( $post ) {
     </tr>
     <tr valign="top">
     	<th scope="row"><label for="mstw_gs_location" >Location:</label></th>
-        <td><input maxlength="40" size="30" name="mstw_gs_location"
+        <td><input maxlength="64" size="30" name="mstw_gs_location"
         	value="<?php echo esc_attr( $mstw_gs_location ); ?>"/></td>
-    </tr>   
+    </tr> 
+	
+	<tr valign="top">
+    	<th scope="row"><label for="mstw_gs_location_link" >Location Link:</label></th>
+        <td><input maxlength="256" size="30" name="mstw_gs_location_link"
+        	value="<?php echo esc_attr( $mstw_gs_location_link ); ?>"/></td>
+    </tr>
+		
     <tr valign="top">
     	<th scope="row"><label for="mstw_gs_game_time" >Game Time:<br/>Use hh:mm am </label></th>
-        <td><input maxlength="10" size="10" name="mstw_gs_game_time"
+        <td><input maxlength="16" size="10" name="mstw_gs_game_time"
         	value="<?php echo esc_attr( $mstw_gs_game_time ); ?>"/></td>
     </tr>
     <tr valign="top">
     	<th scope="row"><label for="mstw_gs_game_result" >Game Result: </label></th>
-        <td><input maxlength="10" size="10" name="mstw_gs_game_result"
+        <td><input maxlength="16" size="10" name="mstw_gs_game_result"
         	value="<?php echo esc_attr( $mstw_gs_game_result ); ?>"/></td>
     </tr>
     <tr valign="top">
     	<th scope="row"><label for="mstw_gs_media_label_1" >Media 1 Label:</label></th>
-        <td><input maxlength="60" size="30" name="mstw_gs_media_label_1"
+        <td><input maxlength="64" size="30" name="mstw_gs_media_label_1"
         	value="<?php echo esc_attr( $mstw_gs_media_label_1 ); ?>"/></td>
     </tr>
     <tr valign="top">
     	<th scope="row"><label for="mstw_gs_media_url_1" >Media 1 URL:</label></th>
-        <td><input maxlength="255" size="30" name="mstw_gs_media_url_1"
+        <td><input maxlength="256" size="30" name="mstw_gs_media_url_1"
         	value="<?php echo esc_attr( $mstw_gs_media_url_1 ); ?>"/></td>
     </tr>
     <tr valign="top">
     	<th scope="row"><label for="mstw_gs_media_label_2" >Media 2 Label:</label></th>
-        <td><input maxlength="60" size="30" name="mstw_gs_media_label_2"
+        <td><input maxlength="64" size="30" name="mstw_gs_media_label_2"
         	value="<?php echo esc_attr( $mstw_gs_media_label_2 ); ?>"/></td>
     </tr>
     <tr valign="top">
     	<th scope="row"><label for="mstw_gs_media_url_2" >Media 2 URL:</label></th>
-        <td><input maxlength="255" size="30" name="mstw_gs_media_url_2"
+        <td><input maxlength="256" size="30" name="mstw_gs_media_url_2"
         	value="<?php echo esc_attr( $mstw_gs_media_url_2 ); ?>"/></td>
     </tr>
     <tr valign="top">
     	<th scope="row"><label for="mstw_gs_media_label_3" >Media 3 Label:</label></th>
-        <td><input maxlength="60" size="30" name="mstw_gs_media_label_3"
+        <td><input maxlength="64" size="30" name="mstw_gs_media_label_3"
         	value="<?php echo esc_attr( $mstw_gs_media_label_3 ); ?>"/></td>
     </tr>
     <tr valign="top">
     	<th scope="row"><label for="mstw_gs_media_url_3" >Media 3 URL:</label></th>
-        <td><input maxlength="255" size="30" name="mstw_gs_media_url_3"
+        <td><input maxlength="256" size="30" name="mstw_gs_media_url_3"
         	value="<?php echo esc_attr( $mstw_gs_media_url_3 ); ?>"/></td>
     </tr>
     
@@ -530,6 +554,9 @@ function mstw_gs_save_meta( $post_id ) {
 	update_post_meta( $post_id, '_mstw_gs_location', 
 			strip_tags( $_POST['mstw_gs_location'] ) );
 			
+	update_post_meta( $post_id, '_mstw_gs_location_link', 
+			strip_tags( $_POST['mstw_gs_location_link'] ) );		
+			
 	update_post_meta( $post_id, '_mstw_gs_home_game', 
 			strip_tags( $_POST['mstw_gs_home_game'] ) );
 			
@@ -577,6 +604,7 @@ function mstw_gs_edit_columns( $columns ) {
 		'opponent' => __( 'Opponent' ),
 		'opponent_link' => __( 'Opponent Link' ),
 		'location' => __( 'Location' ),
+		'location_link' => __( 'Location Link' ),
 		'game_time' => __( 'Time' ),
 		'game_result' => __( 'Result' )
 		/* 'debug' => __('Debug-Remove') */
@@ -592,7 +620,7 @@ add_action( 'manage_scheduled_games_posts_custom_column', 'mstw_gs_manage_column
 // --------------------------------------------------------------------------------------
 function mstw_gs_manage_columns( $column, $post_id ) {
 	global $post;
-	global $mstw_gs_dtg_format;
+	global $mstw_dash_dtg_format;
 	global $mstw_domain; //Important for localization functions!
 	
 	/* echo 'column: ' . $column . " Post ID: " . $post_id; */
@@ -641,7 +669,7 @@ function mstw_gs_manage_columns( $column, $post_id ) {
 			if ( empty( $mstw_gs_unix_date ) )
 				_e( 'No Game Date', $mstw_domain );
 			else
-				echo( date( $mstw_gs_dtg_format, $mstw_gs_unix_date ) );
+				echo( date( $mstw_dash_dtg_format, $mstw_gs_unix_date ) );
 
 			break;
 		
@@ -670,7 +698,7 @@ function mstw_gs_manage_columns( $column, $post_id ) {
 			if ( empty( $mstw_gs_opponent_link ) )
 				_e( 'No Opponent Link', $mstw_domain );
 			else
-				printf( __( '%s' ), $mstw_gs_opponent_link );
+				printf( '%s', $mstw_gs_opponent_link );
 
 			break;
 			
@@ -687,6 +715,20 @@ function mstw_gs_manage_columns( $column, $post_id ) {
 
 			break;	
 			
+		/* If displaying the 'location_link' column. */
+			case 'location_link' :
+
+			/* Get the post meta. */
+			$mstw_gs_location_link = get_post_meta( $post_id, '_mstw_gs_location_link', true );
+
+
+			if ( empty( $mstw_gs_location_link ) )
+				_e( 'No Location Link', $mstw_domain );
+			else
+				printf( '%s', $mstw_gs_location_link );
+
+			break;
+			
 		/* If displaying the 'time' column. */
 		case 'game_time' :
 
@@ -696,7 +738,7 @@ function mstw_gs_manage_columns( $column, $post_id ) {
 			if ( empty( $mstw_gs_game_time ) )
 				_e( 'No Game Time', $mstw_domain );
 			else
-				printf( __( '%s' ), $mstw_gs_game_time );
+				printf( '%s', $mstw_gs_game_time );
 
 			break;	
 
@@ -825,7 +867,14 @@ function mstw_gs_build_sched_tab( $sched ) {
 			$row_string =  $row_string . $row_td . $mstw_gs_opponent_entry . '</td>';
 			
 			// column 3: create the location entry
-			$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_gs_location', true) . '</td>';
+			$mstw_gs_location_entry = get_post_meta( $post->ID, '_mstw_gs_location', true );
+			
+			// Check to see if you have to add the link
+			if ( ( $mstw_gs_location_link = get_post_meta( $post->ID, '_mstw_gs_location_link', true ) ) != '' ) {
+				$mstw_gs_location_entry = '<a href="' . $mstw_gs_location_link . '" target="_blank" >' . $mstw_gs_location_entry . '</a>';
+			}
+			
+			$row_string =  $row_string . $row_td . $mstw_gs_location_entry . '</td>';
 			
 			// column 4: create the time/results entry
 			if ( get_post_meta( $post->ID, '_mstw_gs_game_result', true) != '' ) {
@@ -973,6 +1022,7 @@ function mstw_gs_build_countdown( $sched, $intro, $home_only ) {
 				$opponent = get_post_meta( $game->ID, '_mstw_gs_opponent', true );
 				$opponent_link = get_post_meta( $game->ID, '_mstw_gs_opponent_link', true );
 				$location = get_post_meta( $game->ID, '_mstw_gs_location', true );
+				$location_link = get_post_meta( $game->ID, '_mstw_gs_location_link', true );
 				$game_time = get_post_meta( $game->ID, '_mstw_gs_game_time', true );
 				break; 
 			}
@@ -1009,11 +1059,18 @@ function mstw_gs_build_countdown( $sched, $intro, $home_only ) {
 		$opponent_entry = $opponent;
 		
 		//Check to see if you have to add the opponent link
-		if ( opponent_link != '' ) {
+		if ( $opponent_link != '' ) {
 			$opponent_entry = '<a href="' . $opponent_link . '" target="_blank" >' . $opponent_entry . '</a>';
 		}
 		
-		$ret_str = $ret_str . '<span class="mstw-gs-cdt-opponent">' . $opponent_entry . ' @ ' . $location .  '</span><br/>';
+		$location_entry = $location;
+		
+		//Check to see if you have to add the opponent link
+		if ( $location_link != '' ) {
+			$location_entry = '<a href="' . $location_link . '" target="_blank" >' . $location_entry . '</a>';
+		}
+		
+		$ret_str = $ret_str . '<span class="mstw-gs-cdt-opponent">' . $opponent_entry . ' @ ' . $location_entry .  '</span><br/>';
 		//$ret_str = $ret_str . '<span class="mstw-gs-cdt-opponent">' . $opponent . '</span><br/>';
 		
 		// Add the intro text set in shortcut arg or widget setting
@@ -1213,6 +1270,7 @@ class mstw_gs_sched_widget extends WP_Widget {
 	function widget( $args, $instance ) {
 	
 		global $mstw_domain; //Important for localization functions!
+		global $mstw_gs_sw_dtg_format; //format for the date column
 	
 		// $args holds the global theme variables, such as $before_widget
 		extract( $args );
@@ -1246,7 +1304,6 @@ class mstw_gs_sched_widget extends WP_Widget {
 	
    	 	// Make table of posts
 		if($posts) {
-			$mstw_gs_sw_dtg_format = 'd M'; //format for the date column
 					
 			// Start with the table header
         	$output = ''; ?>

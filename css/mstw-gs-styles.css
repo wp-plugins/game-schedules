@@ -31,6 +31,9 @@
  * 20121019-MAO:
  *	Cleaned up for version 2.0 release
  *
+ * 20121104-MAO:
+ *	Fixed some problems with 'default' values.
+ *
  */
  
 /******************************************************/
@@ -44,13 +47,13 @@
 
 /* Set the table header attributes */
 .mstw-gs-table-head thead,  .mstw-gs-table-head tr, .mstw-gs-table-head th {
-    background: #4f81bd!important;
-    color: #fff!important;
+    background-color: #4f81bd;
+    color: #fff;
 	font-size: 12px;
 	font-weight: bold;
 	border-spacing: 0px;
     border: 2px solid white;  /* So the border does not appear */
-    padding: 2px!important;
+    padding: 2px;
 }
 
 /* Set the home row attributes */
@@ -117,11 +120,11 @@
 
 /* Set the table header attributes */
 .mstw-gs-sw-tab-head thead,  .mstw-gs-sw-tab-head tr, .mstw-gs-sw-tab-head th {
-    background: #4f81bd!important;
-    color: #fff!important;
+    background: #4f81bd;
+    color: #fff;
 	border-spacing: 0px;
     border: 2px solid white;  /* So the border does not appear */
-    padding: 2px 5px 2px 3px!important;
+    padding: 2px 5px 2px 3px;
 }
 
 /* Set the even row attributes */
@@ -137,7 +140,7 @@
 /* Set the even links */
 .mstw-gs-sw-even td a,  .mstw-gs-sw-even td a:visited, .mstw-gs-sw-even td a:active, .mstw-gs-sw-even td a:hover {
     text-decoration: underline;
-    color: #000064;
+    color: #fff;
 }
 
 /* Set the odd row attributes */
@@ -200,5 +203,5 @@
 
 .mstw-gs-cdt-countdown{
 	color: #000;
-	background: #fef600;
+	background: #d6d666;
 }
