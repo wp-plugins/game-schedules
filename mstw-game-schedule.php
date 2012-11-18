@@ -3,7 +3,7 @@
 Plugin Name: Game Schedule
 Plugin URI: http://wordpress.org/extend/plugins/
 Description: The Game Schedule Plugin defines a custom type - Scheduled Games - for use in the MySportTeamWebite framework. Generations a game schedule (html table) using a shortcode.
-Version: 2.1
+Version: 2.2
 Author: Mark O'Donnell
 Author URI: http://shoalsummitsolutions.com
 */
@@ -67,6 +67,18 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
  * 20121104-MAO:
  *	(1) Added location_link field. Links from the location entries of games.
  *
+ * 20121109-MAO:
+ *	(1) Changed date() to mstw_date_loc() for internationalization in the
+ *		table [shortcode] and widget.
+ *	(2) Removed all remnants of the test current time - cd_test_now.
+ *	(3)	Cleaned up the comments in the mstw_date_loc() function header.
+ *
+ * 20121117-MAO:
+ *	(1) Changed date() to mstw_date_loc() - forgot part of the shortcode.
+ *	(2)	Added $mstw_gs_time_format to support changing the date format on 
+ *		the schedule table [shortcode].
+ *	(3)	Updated the Croatian translation. 
+ *
  * ------------------------------------------------------------------------*/
 
 /* ------------------------------------------------------------------------
@@ -80,14 +92,17 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 // This is temporary until we create options (someday)
 	//Date column of the widget's table
 	$mstw_gs_dtg_format =  'j M y';
-	// For the dashboard/metabox - don't need the year, it's already displayed.
-	$mstw_dash_dtg_format =  'j M'; 	
+	// For the dashboard/metabox.
+	$mstw_dash_dtg_format =  'j M y'; 	
 	// For the countdown timer; game time with a time
 	$mstw_gs_cdt_time_format = "l, j M g:i a";
 	// For the countdown timer; game time with only a game date (no time)
 	$mstw_gs_cdt_tbd_format = "l, j M";
 	//Date column of the widget's table
 	$mstw_gs_sw_dtg_format = 'd M y'; 
+	//Time column for the [shortcode]'s schedule table
+	//$mstw_gs_time_format = "H.i";
+	$mstw_gs_time_format = "g:i a";
 	
 // Months array for <select>/<option> statement in UI
 	$mstw_gs_months = array ( 	'Jan', 'Feb', 'Mar', 'Apr',
@@ -103,7 +118,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 							);
 	
 // Debug messages - used throughout	
-	$mstw_debug_str = '';
+	//$mstw_debug_str = '';
 	
 //	MSTW localization domain
 	$mstw_domain = 'mstw-loc-domain';
@@ -485,7 +500,7 @@ function mstw_gs_save_meta( $post_id ) {
 	date_default_timezone_set('America/Los_Angeles');
 	
 	global $mstw_msg_str;
-	global $mstw_debug_str;
+	//global $mstw_debug_str;
 	
 	//First verify the metadata required by the shortcode is set. If not, set defaults
 	
@@ -528,14 +543,14 @@ function mstw_gs_save_meta( $post_id ) {
 	update_post_meta( $post_id, '_mstw_gs_unix_dtg', $unix_dtg );
 	
 
-	$mstw_debug_str =   'Constructed date string: ' . $date_only_str. '<br/>' . 
+	//$mstw_debug_str =   'Constructed date string: ' . $date_only_str. '<br/>' . 
 						'UNIX date: ' . $unix_date . '<br/>' .
 						'Date(UNIX date): ' . date( 'Y-m-d', $unix_date ) . '<br/>' .
 						'Constructed DTG string: ' . $full_dtg_str. '<br/>' . 
 						'UNIX DTG: ' . $unix_dtg . '<br/>' .
 						'Date(UNIX DTG): ' . date('Y-m-d h:i a', $unix_dtg);
 	
-	update_post_meta( $post_id, '_mstw_gs_debug', $mstw_debug_str );
+	//update_post_meta( $post_id, '_mstw_gs_debug', $mstw_debug_str );
 	
 	
 	// MONTH
@@ -801,8 +816,9 @@ function mstw_gs_shortcode_handler( $atts ){
 function mstw_gs_build_sched_tab( $sched ) {
 	global $mstw_domain;
 	
-	// This will come from an option
+	// These will come from options ... someday
 	global $mstw_gs_dtg_format;
+	global $mstw_gs_time_format;
 	
 	// Get the games posts
 	$posts = get_posts(array( 'numberposts' => -1,
@@ -852,7 +868,9 @@ function mstw_gs_build_sched_tab( $sched ) {
 			$row_string = $row_tr;			
 			
 			// column 1: Build the game date in a specified format			
-			$new_date_string = date( $mstw_gs_dtg_format, get_post_meta( $post->ID, '_mstw_gs_unix_date', true) );
+			$new_date_string = mstw_date_loc( $mstw_gs_dtg_format, get_post_meta( $post->ID, '_mstw_gs_unix_date', true ) );
+			
+			// $new_date_string = date( $mstw_gs_dtg_format, get_post_meta( $post->ID, '_mstw_gs_unix_date', true) );
 			
 			$row_string = $row_string. $row_td . $new_date_string . '</td>';
 			
@@ -881,7 +899,13 @@ function mstw_gs_build_sched_tab( $sched ) {
 				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_gs_game_result', true) . '</td>';
 			}
 			else {	
-				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_gs_game_time', true) . '</td>';
+				//$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_gs_game_time', true) . '</td>';
+				
+				// This line formats the time before adding it to the output string
+				$new_time_string = date( $mstw_gs_time_format, get_post_meta( 	$post->ID, '_mstw_gs_unix_dtg', true ) );
+				
+				$row_string =  $row_string . $row_td . $new_time_string . '</td>';
+				
 			}
 			
 			// column 5: create the media listings in a pretty format // this is just a placeholder, need links
@@ -977,7 +1001,7 @@ function mstw_gs_countdown_handler( $atts ){
 function mstw_gs_build_countdown( $sched, $intro, $home_only ) {
 	
 	// General debug string used throughout
-	global $mstw_debug_str;
+	//global $mstw_debug_str;
 	
 	// For localization
 	global $mstw_domain;
@@ -1336,7 +1360,9 @@ class mstw_gs_sched_widget extends WP_Widget {
 				$row_string = $row_tr;		
 			
 				// column 1: Build the game date in a specified format			
-				$date_string = date( $mstw_gs_sw_dtg_format, get_post_meta( $post->ID, '_mstw_gs_unix_date', true) );
+				$date_string = mstw_date_loc( $mstw_gs_sw_dtg_format, get_post_meta( $post->ID, '_mstw_gs_unix_date', true) );
+				
+				//$date_string = date( $mstw_gs_sw_dtg_format, get_post_meta( $post->ID, '_mstw_gs_unix_date', true) );
 			
 				$row_string = $row_string. $row_td . $date_string . '</td>';
 			
@@ -1409,13 +1435,12 @@ class mstw_gs_countdown_widget extends WP_Widget {
 	
 		global $mstw_domain; //Important for localization functions!
 	
-        $defaults = array( 'cd_title' => 'Countdown', 'cd_test_now' => '',
+        $defaults = array( 'cd_title' => 'Countdown', 
 							'cd_sched_id' => '1', 'cd_intro_text' => 'Time to kickoff:', 'cd_home_only' => '' ); 
 							
         $instance = wp_parse_args( (array) $instance, $defaults );
 		
         $cd_title = $instance['cd_title'];
-		$cd_test_now = $instance['cd_test_now'];
 		$cd_sched_id = $instance['cd_sched_id'];
 		$cd_home_only = $instance['cd_home_only'];
 		$cd_intro_text = $instance['cd_intro_text'];
@@ -1423,10 +1448,7 @@ class mstw_gs_countdown_widget extends WP_Widget {
         ?>
         <p>Countdown Title: <input class="widefat" name="<?php echo $this->get_field_name( 'cd_title' ); ?>"  
             					type="text" value="<?php echo esc_attr( $cd_title ); ?>" /></p>
-        <!-- 
-		<p>CD Test Now[MUST be formatted 2012-01-07 18:11:31]: <input class="widefat" name="<?php echo $this->get_field_name( 'cd_test_now' ); ?>"  
-            					type="text" value="<?php echo esc_attr( $cd_test_now ); ?>" /></p>
-		-->
+        
         <p>Schedule ID: <input class="widefat" name="<?php echo $this->get_field_name( 'cd_sched_id' ); ?>"  
         						type="text" value="<?php echo esc_attr( $cd_sched_id ); ?>" /></p> 
 		
@@ -1447,8 +1469,6 @@ class mstw_gs_countdown_widget extends WP_Widget {
         $instance = $old_instance;
 		
 		$instance['cd_title'] = strip_tags( $new_instance['cd_title'] );
-
-		$instance['cd_test_now'] = strip_tags( $new_instance['cd_test_now'] );
 
 		$instance['cd_sched_id'] = strip_tags( $new_instance['cd_sched_id'] );
 		
@@ -1474,7 +1494,6 @@ class mstw_gs_countdown_widget extends WP_Widget {
 		$title = apply_filters( 'widget_title', $instance['cd_title'] );
 		
 		// Get the parameters for get_posts() below
-		$cd_test_now = trim( $instance['cd_test_now'] );
 		$cd_sched_id = $instance['cd_sched_id'];
 		$cd_home_only = $instance['cd_home_only'];
 		$cd_intro_text = $instance['cd_intro_text'];
@@ -1482,13 +1501,10 @@ class mstw_gs_countdown_widget extends WP_Widget {
 		if( !empty( $title ) ) {
 			echo $before_title . $title . $after_title;
 		}
-		if ( $cd_test_now == '' ) 
-			$cd_test_now = date( "Y-m-d H:i:s" );
 			
         $cd_str = mstw_gs_build_countdown( $cd_sched_id, $cd_intro_text,  $cd_home_only );
         
         echo $cd_str;
-		//echo ( "date: " . $cd_test_now );
 		
 		echo $after_widget;
       	
@@ -1497,14 +1513,15 @@ class mstw_gs_countdown_widget extends WP_Widget {
 } // end of class mstw_gs_countdown_widget
 
 /*------------------------------------------------------------------------------------
- * This is a test modification of the date function (line 997 for example) for use
- * in localization. If, for example, you wanted to translate the plugin to Croatian,
- * you would simply update the four arrays at the top of the function. [Someday, I will
- * do this right using proper WordPress localization with strftime(), locale, etc.]
+ * This is a modification of the date function (line 997 for example) for use
+ * in WP internationalization/localization. Ff you have created a translation the plugin 
+ * and set the WP_LANG variable in the wp-config.php file, this will work (at least for
+ * most date formats). If you don't understand WordPress internationalization, you would
+ * be well advised to read the codex before jumping in to this pool.
 --------------------------------------------------------------------------------------*/
 function mstw_date_loc($format, $timestamp = null) {
 
-	global $mstw_domain; //Not used right now
+	global $mstw_domain;
 	
 	//$param_D = array('', 'Lun', 'Mar', 'Mi&eacute;r', 'Jue', 'Vi&eacute;r', 'S&aacute;b', 'Dom');
 	$param_D = array( '', 
