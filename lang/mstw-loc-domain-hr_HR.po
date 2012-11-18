@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: test-my-plugin\n"
 "POT-Creation-Date: 2012-10-14 21:59-0800\n"
-"PO-Revision-Date: 2012-10-18 13:55-0800\n"
+"PO-Revision-Date: 2012-11-14 11:34+0100\n"
 "Last-Translator: Mark O'Donnell <mark@shoalsummitsolutions.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -139,7 +139,7 @@ msgstr "dan"
 
 #: mstw-game-schedule.php:1060
 msgid "days"
-msgstr "dani"
+msgstr "dana"
 
 #: mstw-game-schedule.php:1061
 msgid "hour"
@@ -163,7 +163,7 @@ msgstr "sekunda"
 
 #: mstw-game-schedule.php:1063
 msgid "seconds"
-msgstr "sekundi"
+msgstr "sekunda"
 
 #: mstw-game-schedule.php:1272
 msgid "DATE"
