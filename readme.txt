@@ -4,7 +4,7 @@ Donate link: http://shoalsummitsolutions.com
 Tags: sports,games,schedule,sports teams,team schedule,countdown timer  
 Requires at least: 3.3.1
 Tested up to: 3.4.2
-Stable tag: 2.2
+Stable tag: 2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -187,6 +187,9 @@ This version includes the following upgrades and bug fixes:
  *	Changed date() to mstw_date_loc() - forgot a column in the shortcode.
  *	Added $mstw_gs_time_format to support changing the date format on the schedule table [shortcode].
  *	Updated the Croatian translation. 
+ 
+= 2.3 = 
+Fixed a bug (related to translation) that was causing dates to drift a month off in the shortcode table display.
 
 == Upgrade Notice ==
 

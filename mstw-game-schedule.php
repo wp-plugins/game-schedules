@@ -3,7 +3,7 @@
 Plugin Name: Game Schedule
 Plugin URI: http://wordpress.org/extend/plugins/
 Description: The Game Schedule Plugin defines a custom type - Scheduled Games - for use in the MySportTeamWebite framework. Generations a game schedule (html table) using a shortcode.
-Version: 2.2
+Version: 2.3
 Author: Mark O'Donnell
 Author URI: http://shoalsummitsolutions.com
 */
@@ -78,6 +78,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
  *	(2)	Added $mstw_gs_time_format to support changing the date format on 
  *		the schedule table [shortcode].
  *	(3)	Updated the Croatian translation. 
+ *
+ * 20121127-MAO:
+ *	(1) Removed an extraneous line that added "Sept" in addition to "Sep"
+ *		in the function mstw_date_loc(). This line was causing strange behavior
+ *		of game dates when users upgraded.
  *
  * ------------------------------------------------------------------------*/
 
@@ -1569,7 +1574,6 @@ function mstw_date_loc($format, $timestamp = null) {
 						__( 'Jul', $mstw_domain ),
 						__( 'Aug', $mstw_domain ),
 						__( 'Sep', $mstw_domain ),
-						__( 'Sept', $mstw_domain ),
 						__( 'Oct', $mstw_domain ),
 						__( 'Nov', $mstw_domain ),
 						__( 'Dec', $mstw_domain ) );
