@@ -1,0 +1,333 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Default Catalog\n"
+"POT-Creation-Date: 2012-12-22 11:45-0800\n"
+"PO-Revision-Date: 2012-12-22 12:09-0800\n"
+"Last-Translator: Mark O'Donnell <mark@shoalsummitsolutions.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: c:\\Users\\Mark\\Documents\\Shoal Summit Consulting\\Web "
+"Presence\\mstw-game-schedules\\trunk\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: mstw-game-schedule.php:620
+msgid "Title"
+msgstr ""
+
+#: mstw-game-schedule.php:621
+msgid "Schedule"
+msgstr "Calendario"
+
+#: mstw-game-schedule.php:622
+msgid "Year"
+msgstr "Año"
+
+#: mstw-game-schedule.php:623 mstw-game-schedule.php:849
+msgid "Date"
+msgstr "Fecha"
+
+#: mstw-game-schedule.php:624 mstw-game-schedule.php:850
+msgid "Opponent"
+msgstr "Rival"
+
+#: mstw-game-schedule.php:625
+msgid "Opponent Link"
+msgstr "Enlace del Rival"
+
+#: mstw-game-schedule.php:626 mstw-game-schedule.php:851
+msgid "Location"
+msgstr "Lugar"
+
+#: mstw-game-schedule.php:627
+msgid "Location Link"
+msgstr "Enlace del Lugar"
+
+#: mstw-game-schedule.php:628
+msgid "Time"
+msgstr "Hora"
+
+#: mstw-game-schedule.php:629
+msgid "Result"
+msgstr "Resultado"
+
+#: mstw-game-schedule.php:663
+msgid "No Game Year"
+msgstr "Ningún partido este año"
+
+#: mstw-game-schedule.php:676
+msgid "No Schedule Defined"
+msgstr "Ningún calendario definido"
+
+#: mstw-game-schedule.php:678 mstw-game-schedule.php:707
+#: mstw-game-schedule.php:734 mstw-game-schedule.php:774
+#, php-format
+msgid "%s"
+msgstr ""
+
+#: mstw-game-schedule.php:690
+msgid "No Game Date"
+msgstr "Ninguna fecha de partido"
+
+#: mstw-game-schedule.php:705
+msgid "No Opponent"
+msgstr "Ningún Rival"
+
+#: mstw-game-schedule.php:719
+msgid "No Opponent Link"
+msgstr "No existe enlace del Rival"
+
+#: mstw-game-schedule.php:732
+msgid "No Location"
+msgstr "No hay localidad"
+
+#: mstw-game-schedule.php:746
+msgid "No Location Link"
+msgstr "No existe enlace de la localidad"
+
+#: mstw-game-schedule.php:759
+msgid "No Game Time"
+msgstr "No hay tiempo del partido"
+
+#: mstw-game-schedule.php:772
+msgid "No Game Result"
+msgstr "No hay resultado del partido"
+
+#: mstw-game-schedule.php:852
+msgid "Time/Result"
+msgstr "Hora/Resultado"
+
+#: mstw-game-schedule.php:853
+msgid "Media"
+msgstr "Medio"
+
+#: mstw-game-schedule.php:969
+msgid "No Scheduled Games Found."
+msgstr "No se ha encontrado ningún calendario de partidos"
+
+#: mstw-game-schedule.php:1065
+msgid "No home games found."
+msgstr "No se ha encontrado partidos en casa"
+
+#: mstw-game-schedule.php:1068
+msgid "No games found."
+msgstr "No se ha encontrado partidos"
+
+#: mstw-game-schedule.php:1137
+msgid "year"
+msgstr "año"
+
+#: mstw-game-schedule.php:1137
+msgid "years"
+msgstr "años"
+
+#: mstw-game-schedule.php:1138
+msgid "month"
+msgstr "mes"
+
+#: mstw-game-schedule.php:1138
+msgid "months"
+msgstr "meses"
+
+#: mstw-game-schedule.php:1139
+msgid "week"
+msgstr "semana"
+
+#: mstw-game-schedule.php:1139
+msgid "weeks"
+msgstr "semanas"
+
+#: mstw-game-schedule.php:1140
+msgid "day"
+msgstr "día"
+
+#: mstw-game-schedule.php:1140
+msgid "days"
+msgstr "días"
+
+#: mstw-game-schedule.php:1141
+msgid "hour"
+msgstr "hora"
+
+#: mstw-game-schedule.php:1141
+msgid "hours"
+msgstr "horas"
+
+#: mstw-game-schedule.php:1142
+msgid "minute"
+msgstr "minuto"
+
+#: mstw-game-schedule.php:1142
+msgid "minutes"
+msgstr "minutos"
+
+#: mstw-game-schedule.php:1143
+msgid "second"
+msgstr "segundo"
+
+#: mstw-game-schedule.php:1143
+msgid "seconds"
+msgstr "segundos"
+
+#: mstw-game-schedule.php:1342
+msgid "DATE"
+msgstr "FECHA"
+
+#: mstw-game-schedule.php:1343
+msgid "OPPONENT"
+msgstr "RIVAL"
+
+#: mstw-game-schedule.php:1403
+msgid "No Scheduled Games Found"
+msgstr "Ningún partido en casa definido"
+
+#: mstw-game-schedule.php:1533
+msgid "Mon"
+msgstr "lun"
+
+#: mstw-game-schedule.php:1534
+msgid "Tue"
+msgstr "mar"
+
+#: mstw-game-schedule.php:1535
+msgid "Wed"
+msgstr "miér"
+
+#: mstw-game-schedule.php:1536
+msgid "Thr"
+msgstr "jue"
+
+#: mstw-game-schedule.php:1537
+msgid "Fri"
+msgstr "vier"
+
+#: mstw-game-schedule.php:1538
+msgid "Sat"
+msgstr "sáb"
+
+#: mstw-game-schedule.php:1539
+msgid "Sun"
+msgstr "dom"
+
+#: mstw-game-schedule.php:1543
+msgid "Monday"
+msgstr "lunes"
+
+#: mstw-game-schedule.php:1544
+msgid "Tuesday"
+msgstr "martes"
+
+#: mstw-game-schedule.php:1545
+msgid "Wednesday"
+msgstr "miércoles"
+
+#: mstw-game-schedule.php:1546
+msgid "Thursday"
+msgstr "jueves"
+
+#: mstw-game-schedule.php:1547
+msgid "Friday"
+msgstr "viernes"
+
+#: mstw-game-schedule.php:1548
+msgid "Saturday"
+msgstr "sábado"
+
+#: mstw-game-schedule.php:1549
+msgid "Sunday"
+msgstr "domingo"
+
+#: mstw-game-schedule.php:1553
+msgid "January"
+msgstr "enero"
+
+#: mstw-game-schedule.php:1554
+msgid "February"
+msgstr "febrero"
+
+#: mstw-game-schedule.php:1555
+msgid "March"
+msgstr "marzo"
+
+#: mstw-game-schedule.php:1556
+msgid "April"
+msgstr "abril"
+
+#: mstw-game-schedule.php:1557 mstw-game-schedule.php:1572
+msgid "May"
+msgstr "mayo"
+
+#: mstw-game-schedule.php:1558
+msgid "June"
+msgstr "junio"
+
+#: mstw-game-schedule.php:1559
+msgid "July"
+msgstr "julio"
+
+#: mstw-game-schedule.php:1560
+msgid "August"
+msgstr "agosto"
+
+#: mstw-game-schedule.php:1561
+msgid "September"
+msgstr "septiembre"
+
+#: mstw-game-schedule.php:1562
+msgid "October"
+msgstr "octubre"
+
+#: mstw-game-schedule.php:1563
+msgid "November"
+msgstr "noviembre"
+
+#: mstw-game-schedule.php:1564
+msgid "December"
+msgstr "diciembre"
+
+#: mstw-game-schedule.php:1568
+msgid "Jan"
+msgstr "ene"
+
+#: mstw-game-schedule.php:1569
+msgid "Feb"
+msgstr "feb"
+
+#: mstw-game-schedule.php:1570
+msgid "Mar"
+msgstr "mar"
+
+#: mstw-game-schedule.php:1571
+msgid "Apr"
+msgstr "abr"
+
+#: mstw-game-schedule.php:1573
+msgid "Jun"
+msgstr "jun"
+
+#: mstw-game-schedule.php:1574
+msgid "Jul"
+msgstr "jul"
+
+#: mstw-game-schedule.php:1575
+msgid "Aug"
+msgstr "ago"
+
+#: mstw-game-schedule.php:1576
+msgid "Sep"
+msgstr "sep"
+
+#: mstw-game-schedule.php:1577
+msgid "Oct"
+msgstr "oct"
+
+#: mstw-game-schedule.php:1578
+msgid "Nov"
+msgstr "nov"
+
+#: mstw-game-schedule.php:1579
+msgid "Dec"
+msgstr "dic"
