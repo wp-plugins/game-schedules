@@ -4,7 +4,7 @@ Donate link: http://shoalsummitsolutions.com
 Tags: sports,games,schedule,sports teams,team schedule,countdown timer  
 Requires at least: 3.3.1
 Tested up to: 3.4.2
-Stable tag: 2.3
+Stable tag: 2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -92,7 +92,7 @@ Yes. The unique schedule id defines each schedule. It is the key argument for sh
 Yes. Just use different schedule ID's for different seasons. (See "Can I set up separate schedules for different teams?")
 
 = I live in Split, Croatia (or wherever). Does the plugin support other languages? =
-The plugin supports localization as of version 2.0. If you happen to live in Split, you're in luck. The Croatian translation is contained in the /lang directory. (Thanks Juraj!)
+The plugin supports localization as of version 2.0. If you happen to live in Split, you're in luck. A Croatian translation is contained in the /lang directory. (Thanks Juraj!) A Spanish translation was added in version 2.4. (Thanks Roberto!)
 
 = How do I change the look (text colors, background colors, etc.) of the schedule or the countdown timer? =
 In this version you have to edit the plugin's stylesheet, mstw-gs-styles.css. It is located in the game-schedule/css directory. It is short, simple, and well documented. The schedule plugin and the schedule widget have separate sets of styles. The countdown plugin and countdown widget share one set of styles. In the future, I plan to provide options for commonly changed styles on the admin page to control the schedule table and countdown timer styles. 
@@ -100,27 +100,27 @@ In this version you have to edit the plugin's stylesheet, mstw-gs-styles.css. It
 = How do I change the date-time group formats? Day [Month Year is more convenient in Europe.] =
 Unfortunately, much like the styles described in the previous question, you must edit the code to do this. In this case, go in to the plugin's main file - mstw-game-schedule.php. At the start of the code, you will find the following lines:
 
->	`//Date column of the widget's table`
+> `//Date column of the widget's table`
 
->	`$mstw_gs_dtg_format =  'j M y';`
+> `$mstw_gs_dtg_format =  'j M y';`
 
->	`// For the dashboard/metabox - don't need the year, it's already displayed.`
+> `// For the dashboard/metabox - don't need the year, it's already displayed.`
 
->	`$mstw_dash_dtg_format =  'j M'; `
+> `$mstw_dash_dtg_format =  'j M'; `
 
->	`// For the countdown timer; game time with a time`
+> `// For the countdown timer; game time with a time`
 
->	`$mstw_gs_cdt_time_format = "l, j M g:i a";`
+> `$mstw_gs_cdt_time_format = "l, j M g:i a";`
 
->	`// For the countdown timer; game time with only a game date (no time)`
+> `// For the countdown timer; game time with only a game date (no time)`
 
->	`$mstw_gs_cdt_tbd_format = "l, j M";`
+> `$mstw_gs_cdt_tbd_format = "l, j M";`
 
->	`//Date column of the widget's table`
+> `//Date column of the widget's table`
 
->	`$mstw_gs_sw_dtg_format = 'd M y'; `
+> `$mstw_gs_sw_dtg_format = 'd M y'; `
 
->	`//Time column for the [shortcode]'s schedule table`
+> `//Time column for the [shortcode]'s schedule table`
 
 >	`$mstw_gs_time_format = "g:i a"; `
 
@@ -129,11 +129,11 @@ Refer to the php date() function's formatting options to decipher the codes. (I 
 **Note however** that the actual entry of the game's time is very sensitive to format and you MUST use the "Americanized" time format exactly as specified when adding or editing a game. 
 
 = I changed the format, but my dates and times (still) are not correct. What's wrong? =
-You may need to set the time zone. The very first excutable file is:
+You may need to set the time zone. The very first excutable line in the file is:
 
 > `date_default_timezone_set('America/Los_Angeles');`
 
-You need to change that to the correct timezone. Google the function and you'll easily find the list of allowable PHP timezones. This is on the "make it an option in the admin page someday" list.
+You need to change that to the correct timezone. *Note* that there are two other places where that line needs to be changed, so search the file for "Los_Angeles". Google the function and you'll easily find the list of allowable PHP timezones. This is on the "make it an option in the admin page someday" list.
 
 = What can I do if I have more than three media links? =
 If you are that popular, why not create one media link on the schedule that goes to a page of all your links? Or, you can hack the plugin code. I've considered a setting for "number of media links" (the JV and Frosh teams typically have none, at least in San Diego), but that's low on my list right now.
@@ -147,6 +147,15 @@ Either:
 * You used the "Quick Edit" link in the list of all games (prior to version 2.0). Install version 2.0 or don't do that!
 * You edited a game, updated it, and when you exited the game editor, it asked if you really wanted to leave the page because there were unsaved changes. Knowing that you already saved the changes, you clicked on "leave this page". Wrong! In this case you may not know best, just stay on the page and save the game again.
 * You entered some really bad data for a game. It is particularly sensitive about the time format. (I know I should improve the error checking. It's on the list!)
+
+= I keep getting weird error messages on the page with the sort code. Something like:  =
+These are caused by bad date-time data. I have tried to prevent these with better error checking in the front end code (in version 2.4). If you see them, you may want to double check that all your game time entries are valid. And, if a time is unknown, you use one of the following strings: TBD, T.B.D., TBA, T.B.A. I will tighten things up in the admin side in the next major release (version 3.0). If everything seems to be working okay except for these annoying error messages, you might want to turn them off on your WordPress site. To do so, edit wp-config.php and add the following lines:
+  
+> `error_reporting(0);`
+
+> `@ini_set(‘display_errors’, 0);`
+
+otherwise Wordpress overwrites the ALERTS set by PHP.INI`
 
 
 == Screenshots ==
@@ -168,7 +177,6 @@ Either:
 * Added a custom header for wordpress.org
 
 = 2.0 =
-This version includes some significant upgrades and bug fixes:
 * Schedules can now go across multiple years. Schedules are now identified only by the ID, instead of ID and year (as in previous versions). The year field is now simply a part of the game date.
 * Added internationalization for the user interface only, not the admin pages. Provided a default .po file in the /lang directory for any would be translators out there, and a Croatian translation (in the mstw-loc-domain-hr_HR.po file).
 * Added a setting to countdown timer widget and an argument to the countdown timer shortcode that tells the countdown timer to use home games only.
@@ -177,22 +185,24 @@ This version includes some significant upgrades and bug fixes:
 * Removed Quick Edit link from the editor. (It broke things and was unnecessary.)
 
 = 2.1 =
-This version includes the following upgrades and bug fixes:
 * Added the option for a link from a game's location field (displayed in the shortcode table and the countdown widget) to a specified URL.
 * Corrected a typo that make the new links on opponent entries not work in every scenario.
 * Fixed several bugs in the stylesheet and how it loads (enqueues).
 
 = 2.2 =
-This version includes the following upgrades and bug fixes:
- *	Changed date() to mstw_date_loc() - forgot a column in the shortcode.
- *	Added $mstw_gs_time_format to support changing the date format on the schedule table [shortcode].
- *	Updated the Croatian translation. 
+* Changed date() to mstw_date_loc() - forgot a column in the shortcode.
+* Added $mstw_gs_time_format to support changing the date format on the schedule table [shortcode].
+* Updated the Croatian translation. 
  
 = 2.3 = 
 Fixed a bug (related to translation) that was causing dates to drift a month off in the shortcode table display.
 
+= 2.4 = 
+* Fixed a bug prevented "TBD dates" from displaying properly (and producing php warnings in some cases).
+* Added a Spanish translation. Thanks to Roberto in Madrid.
+
 == Upgrade Notice ==
 
-The current version of Game Schedules has been tested up to 3.4.2. If you use older version of WordPress, good luck! If you are using a newer version, please let me know how the plugin works, especially if you encounter problems.
+The current version of Game Schedules has been tested up to 3.5. If you use older version of WordPress, good luck! (Much of it was developed on 3.4.x so that should be ok.) If you are using a newer version, please let me know how the plugin works, especially if you encounter problems.
 
 Upgrading to this version of Game Schedules should not impact any existing schedules. (But backup your DB before you upgrade, just in case. :)

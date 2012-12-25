@@ -3,7 +3,7 @@
 Plugin Name: Game Schedule
 Plugin URI: http://wordpress.org/extend/plugins/
 Description: The Game Schedule Plugin defines a custom type - Scheduled Games - for use in the MySportTeamWebite framework. Generations a game schedule (html table) using a shortcode.
-Version: 2.3
+Version: 2.4
 Author: Mark O'Donnell
 Author URI: http://shoalsummitsolutions.com
 */
@@ -83,6 +83,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
  *	(1) Removed an extraneous line that added "Sept" in addition to "Sep"
  *		in the function mstw_date_loc(). This line was causing strange behavior
  *		of game dates when users upgraded.
+ *
+ * 201212023-MAO: 
+ *	(1)	Added error checking to handle TBD game times in function mstw_gs_build_sched_tab()
  *
  * ------------------------------------------------------------------------*/
 
@@ -904,12 +907,20 @@ function mstw_gs_build_sched_tab( $sched ) {
 				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_gs_game_result', true) . '</td>';
 			}
 			else {	
-				//$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_gs_game_time', true) . '</td>';
-				
 				// This line formats the time before adding it to the output string
-				$new_time_string = date( $mstw_gs_time_format, get_post_meta( 	$post->ID, '_mstw_gs_unix_dtg', true ) );
+				$temp_time_str = get_post_meta( $post->ID, '_mstw_gs_game_time', true );
 				
-				$row_string =  $row_string . $row_td . $new_time_string . '</td>';
+				// 201212023-MAO: Added error checking to handle TBD game times
+				if ( $temp_time_str == "TBA" or $temp_time_str == "T.B.A." or $temp_time_str == "TBD" 
+						or $temp_time_str == "T.B.D." or $temp_time_str == "" ) {
+					$new_time_str = $temp_time_str;
+				}
+				// This check could generate a E_WARNING message, which will display unless you turn off warning messages in wp_config
+				else if ( !($new_time_str = date( $mstw_gs_time_format, get_post_meta( $post->ID, '_mstw_gs_unix_dtg', true ) ) ) ) {
+					$new_time_str = $temp_time_str;
+				}
+					
+				$row_string =  $row_string . $row_td . $new_time_str . '</td>';
 				
 			}
 			
