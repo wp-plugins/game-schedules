@@ -34,6 +34,10 @@
  * 20121104-MAO:
  *	Fixed some problems with 'default' values.
  *
+ * 20130318-MAO:
+ *	Moved the HOME row rules below the EVEN and ODD
+ *	row rules so they will take precedence.
+ *
  */
  
 /******************************************************/
@@ -54,18 +58,6 @@
 	border-spacing: 0px;
     border: 2px solid white;  /* So the border does not appear */
     padding: 2px;
-}
-
-/* Set the home row attributes */
-.mstw-gs-home tr,  .mstw-gs-home td {
-	font-weight: bold!important;
-}
-
-/* Set the home links */
-.mstw-gs-home td a,  .mstw-gs-home td a:visited, .mstw-gs-home td a:active, .mstw-gs-home td a:hover {
-    font-weight: bold!important;
-	text-decoration: underline;
-	color: #000;
 }
 
 /* Set the even row attributes */
@@ -108,6 +100,18 @@
 .mstw-gs-odd td a:hover {
     text-decoration: underline;
     color: #666;
+}
+
+/* Set the home row attributes */
+.mstw-gs-home tr,  .mstw-gs-home td {
+	font-weight: bold!important;
+}
+
+/* Set the home links */
+.mstw-gs-home td a,  .mstw-gs-home td a:visited, .mstw-gs-home td a:active, .mstw-gs-home td a:hover {
+    font-weight: bold!important;
+	text-decoration: underline;
+	color: #000;
 }
 
 /******************************************************/
