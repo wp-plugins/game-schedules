@@ -135,8 +135,13 @@ function mstw_gs_add_styles( ) {
 		
 		$mstw_gs_game_time_tba = get_post_meta( $post->ID, '_mstw_gs_game_time_tba', true );  // game time is TBA
 		
-		//$mstw_gs_unix_date = get_post_meta( $post->ID, '_mstw_gs_unix_date', true );	// UNIX timestamp date only
-		$mstw_gs_unix_dtg = get_post_meta( $post->ID, '_mstw_gs_unix_dtg', true );		// UNIX timestamp date & time
+		// UNIX timestamp date & time. Used to generate year, month, and day
+		if ( get_post_meta( $post->ID, '_mstw_gs_unix_dtg', true ) != '' ) {	
+			$mstw_gs_unix_dtg = get_post_meta( $post->ID, '_mstw_gs_unix_dtg', true );
+		}
+		else {
+			$mstw_gs_unix_dtg = current_time( 'timestamp' );
+		}
 		
 		$mstw_gs_opponent = get_post_meta( $post->ID, '_mstw_gs_opponent', true );
 		$mstw_gs_opponent_link = get_post_meta( $post->ID, '_mstw_gs_opponent_link', true );
@@ -166,7 +171,7 @@ function mstw_gs_add_styles( ) {
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_sched_year" >Game Year:</label></th>
 			<td><input maxlength="4" size="5" name="mstw_gs_sched_year"
-				value="<?php echo date( 'Y', esc_attr( $mstw_gs_unix_dtg ) ); ?>"/></td>
+				value="<?php echo date( 'Y', (int)esc_attr( $mstw_gs_unix_dtg ) ); ?>"/></td>
 		</tr>
 		
 		<tr valign="top">
@@ -174,7 +179,7 @@ function mstw_gs_add_styles( ) {
 			<td>
 			<select name="mstw_gs_game_day">    
 				<?php foreach ( $mstw_gs_days as $label ) {  ?>
-						<option value="<?php echo $label ?>" <?php selected( date( 'd', $mstw_gs_unix_dtg ), $label );?>>
+						<option value="<?php echo $label ?>" <?php selected( date( 'd', (int)$mstw_gs_unix_dtg ), $label );?>>
 							<?php echo $label; ?>
 						 </option>              
 				<?php } ?> 
@@ -187,7 +192,7 @@ function mstw_gs_add_styles( ) {
 			<td>
 			<select name="mstw_gs_game_month">    
 				<?php foreach ( $mstw_gs_months as $label ) {  ?>
-						<option value="<?php echo $label; ?>" <?php selected( date( 'm', $mstw_gs_unix_dtg ), $label );?>>
+						<option value="<?php echo $label; ?>" <?php selected( date( 'm', (int)$mstw_gs_unix_dtg ), $label );?>>
 							<?php echo $label; ?>
 						 </option>              
 				<?php } ?> 
@@ -197,8 +202,8 @@ function mstw_gs_add_styles( ) {
 		
 		<!-- New version of time with pull-downs -->
 		<?php
-		$curr_hrs = date( 'H', esc_attr( $mstw_gs_unix_dtg ) );
-		$curr_mins = date( 'i', esc_attr( $mstw_gs_unix_dtg ) );
+		$curr_hrs = date( 'H', (int)esc_attr( $mstw_gs_unix_dtg ) );
+		$curr_mins = date( 'i', (int)esc_attr( $mstw_gs_unix_dtg ) );
 		$curr_tba = $mstw_gs_game_time_tba;
 		if ( $curr_tba == '' ) {
 			$curr_tba = '---';
@@ -337,7 +342,7 @@ function mstw_gs_add_styles( ) {
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_unix_date" >UNIX Date (Info Only):</label></th>
 			<td>
-				<?php echo mstw_date_loc( 'Y-m-d', esc_attr( $mstw_gs_unix_dtg ) );?>
+				<?php echo mstw_date_loc( 'Y-m-d', (int)esc_attr( $mstw_gs_unix_dtg ) );?>
 				<!--<input maxlength="60" size="30" name="mstw_gs_unix_date"
 				value="<?php //echo date( 'Y-m-d', esc_attr( $mstw_gs_unix_date ) ); ?>"/>-->
 			</td>
@@ -346,9 +351,9 @@ function mstw_gs_add_styles( ) {
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_unix_dtg" >UNIX Date-Time (Info Only):</label></th>
 			<td>
-				<?php echo mstw_date_loc( 'Y-m-d H:i', esc_attr( $mstw_gs_unix_dtg ) ); ?>
+				<?php echo mstw_date_loc( 'Y-m-d H:i', (int)esc_attr( $mstw_gs_unix_dtg ) ); ?>
 				<!--<input maxlength="60" size="30" name="mstw_gs_unix_dtg"
-				value="<?php echo date( 'l, Y-m-d h:i a', esc_attr( $mstw_gs_unix_dtg ) ); ?>"/>-->
+				value="<?php echo date( 'l, Y-m-d h:i a', (int)esc_attr( $mstw_gs_unix_dtg ) ); ?>"/>-->
 			</td>
 		</tr>
 		
@@ -366,15 +371,17 @@ function mstw_gs_add_styles( ) {
 		// set the date_default_timezone_set() to the WP (general) setting
 		// mstw_set_wp_default_timezone( );
 		
-		//global $mstw_msg_str;
-		//global $mstw_debug_str;
-		
 		//First verify the metadata required by the shortcode is set. If not, set defaults
 		
 		// SCHEDULE ID
 		// If schedule id was not set, default to 1 :: could happen!
-		$mstw_id = strip_tags( trim( $_POST['mstw_gs_sched_id'] ) );
-		if ( $mstw_id == "" ) {
+		if ( isset( $_POST['mstw_gs_sched_id'] ) ) {
+			$mstw_id = strip_tags( trim( $_POST['mstw_gs_sched_id'] ) );
+			if ( $mstw_id == "" ) {
+				$mstw_id = '1';
+			}
+		}
+		else {  //$_POST['mstw_gs_sched_id'] is not set
 			$mstw_id = '1';
 		}
 		update_post_meta( $post_id, '_mstw_gs_sched_id', $mstw_id );
@@ -772,6 +779,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		$args = array(	'opt_name' => 'mstw_gs_options',
 						'set_name' => 'gs_admin_dtg_fmt',
 						'set_default' => 'Y-m-d',
+						'cdt' => false,
 						);
 						
 		add_settings_field(
@@ -802,6 +810,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		$args = array(	'opt_name' => 'mstw_gs_options',
 						'set_name' => 'gs_tab_shortcode_dtg_format',
 						'set_default' => 'Y m d',
+						'cdt' => false,
 						);
 						
 		add_settings_field(
@@ -832,11 +841,12 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		$args = array(	'opt_name' => 'mstw_gs_options',
 						'set_name' => 'gs_tab_widget_dtg_format',
 						'set_default' => 'j M y',
+						'cdt' => false,
 						);
 						
 		add_settings_field(
 			'mstw_gs_tab_wgt_dtg_fmt',
-			'Schedule Table (widget) Date-Time Format:',
+			'Schedule Table (widget) Date Format:',
 			'mstw_date_format_control',
 			'mstw_gs_settings',
 			'mstw_gs_dtg_format_settings',
@@ -926,6 +936,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
  *	$args['set_name'] (string) setting name  from option array
  *	$args['set_default'] (string) default to use of setting is blank
  *	$args['cdt'] (boolean) true -> this is countdown timer date setting
+ *		true -> use date-time, false -> use date only
  *
  *	return - none. Output is echoed.
  *---------------------------------------------------------------*/
@@ -1048,23 +1059,11 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 												'error');
 						}
 						break;
-					case 'gs_hide_media':
-						$output[$key] = sanitize_text_field( $input[$key] );
-						add_settings_error( 'mstw_gs_' . $key,
-												'mstw_gs_hex_color_error',
-												$key . 'updated ... YEAH!',
-												'updated');
-						break;
-						
+					
 					default:
 						// There should not be user/accidental errors in these fields
 						//case 'gs_hide_media':
-						//$msg = '<p>Key: ' . $key . ' Value: ' . $input[$key] . '</p>';
 						$output[$key] = sanitize_text_field( $input[$key] );
-						//add_settings_error( 'mstw_gs_' . $key,
-						//						'mstw_gs_hex_color_error',
-						//						$msg,
-						//						'updated');
 						break;
 					
 				} // end switch
@@ -1548,56 +1547,4 @@ class MSTW_GS_ImporterPlugin {
         }
     }
 }
-
-//--------------------------------------------------------------------
-// OLD STUFF FROM MSTW-GAME-SCHEDULES
-//--------------------------------------------------------------------
-// Callback for: register_activation_hook(__FILE__, 'mstw_gs_set_defaults')
-// --------------------------------------------------------------------------------------
-// This function runs when the plugin is activated. If there are no options currently set, 
-// or the user has selected the checkbox to reset the options to their defaults,
-// then the options are set/reset. Otherwise the options remain unchanged.
-// --------------------------------------------------------------------------------------
-/*function mstw_gs_set_defaults() {
-	$tmp = get_option('mstw_gs_options');
-    if(($tmp['chk_default_options_db']=='1')||(!is_array($tmp))) {
-		delete_option('mstw_gs_options'); // so we don't have to reset all the 'off' checkboxes too! 
-		$arr = array(	"mstw_gs_hdr_bkgd" => "#000000",
-						"mstw_gs_hdr_text" => "#FFFFFF",
-						"mstw_gs_even_bkgd" => "#DBE5F1",
-						"mstw_gs_even_text" => "#000000",
-						"mstw_gs_odd_bkgd" => "#FFFFFF",
-						"mstw_gs_odd_text" => "#000000",
-						"mstw_gs_brdr_width" => "2",  //px
-						"mstw_gs_brdr_color" => "#F481BD",
-						"mstw_gs_default_opts" => "",
-		);
-		update_option('mstw_gs_options', $arr);
-	}
-}
-
-// --------------------------------------------------------------------------------------
-// Callback for: add_action('admin_init', 'mstw_gs_register_settings' )
-// --------------------------------------------------------------------------------------
-// Registers plugin settings with the WP Setting API. Nothing works unless this happens.
-// --------------------------------------------------------------------------------------
-function mstw_gs_register_settings( ) { //whitelist options
-	register_setting( 'mstw_gs_options_group', 'mstw_gs_options', 'mstw_gs_valid_options' );
-	add_settings_section( 'mstw_gs_main_section', 'Game Locations Table Style', 'mstw_gs_main_section_text', 
-							basename(__FILE__) );
-	add_settings_field( 'mstw_gs_hdr_bkgd', 'Header Background Color', 'mstw_gs_hdr_bkgd_cb', 
-						basename(__FILE__), 'mstw_gs_main_section');
-
-}
-
-// ---------------------------------------------------------------------
-// Callback for: add_action('admin_menu', 'mstw_gs_add_options_page');
-// ---------------------------------------------------------------------
-// Adds a new Settings Page into the plugin menu.
-// ---------------------------------------------------------------------
-function mstw_gs_add_options_page( ) { 
-	add_submenu_page('edit.php?post_type=game_schedule', 'Game Locations Settings', 'Settings',
-					 'edit_posts', basename(__FILE__), 'mstw_gs_render_settings_ui');
-}
-*/
 ?>
