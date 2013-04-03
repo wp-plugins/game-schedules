@@ -165,7 +165,7 @@ function mstw_gs_requires_wp_ver() {
 // --------------------------------------------------------------------------------------
 register_activation_hook(__FILE__, 'mstw_gs_set_defaults');
 register_uninstall_hook(__FILE__, 'mstw_gs_delete_plugin_options');
-add_action('admin_init', 'mstw_gs_register_settings' );
+//add_action('admin_init', 'mstw_gs_register_settings' );
 // add_action('admin_menu', 'mstw_gs_add_options_page'); Code is still in place
 //add_filter( 'plugin_action_links', 'mstw_plugin_action_links', 10, 2 );
 
@@ -301,8 +301,10 @@ function mstw_gs_shortcode_handler( $atts ){
 		
 		// Check the hide_media admin setting.
 		// It is always honored if it's set to hide-media.
-		if ( $options['gs_hide_media'] == 'hide-media' ) {
-			$show_media = false;
+		if ( isset( $options['gs_hide_media'] ) ) {
+			if ( $options['gs_hide_media'] == 'hide-media' ) {
+				$show_media = false;
+			}
 		}
 		$dtg_format = $options['gs_tab_shortcode_dtg_format'];
 		if ( $dtg_format == '' ) {
@@ -385,7 +387,7 @@ function mstw_gs_shortcode_handler( $atts ){
 				$row_string = $row_tr;			
 				
 				// column 1: Build the game date in a specified format			
-				$new_date_string = mstw_date_loc( $dtg_format, get_post_meta( $post->ID, '_mstw_gs_unix_dtg', true ) );
+				$new_date_string = mstw_date_loc( $dtg_format, (int)get_post_meta( $post->ID, '_mstw_gs_unix_dtg', true ) );
 				//$new_date_string = $mstw_gs_dtg_format;
 				
 				//$new_date_string = date( $mstw_gs_dtg_format, get_post_meta( $post->ID, '_mstw_gs_unix_date', true) );
@@ -636,11 +638,11 @@ function mstw_gs_build_countdown( $sched, $intro, $home_only ) {
 		
 		// Game day, date, time; need to handle a TBD time
 		if ( $game_time_tba != '' ) {
-			$dtg_str = mstw_date_loc( $cdt_tbd_format, $game_dtg ) . ' Time ' . $game_time_tba; 
+			$dtg_str = mstw_date_loc( $cdt_tbd_format, (int)$game_dtg ) . ' Time ' . $game_time_tba; 
 			//$game_date is the UNIX timestamp DATE only
 		}
 		else {
-			$dtg_str = mstw_date_loc( $cdt_time_format, $game_dtg ); 
+			$dtg_str = mstw_date_loc( $cdt_time_format, (int)$game_dtg ); 
 			//$game_dtg is the full UNIX timestamp (DATE & TIME)  
         }
 		
@@ -781,9 +783,9 @@ class mstw_gs_sched_widget extends WP_Widget {
         <p>Schedule ID: <input class="widefat" name="<?php echo $this->get_field_name( 'sched_id' ); ?>"  
         						type="text" value="<?php echo esc_attr( $sched_id ); ?>" /></p>
 		<p>The dates below MUST be in the format yyyy-mm-dd hh:mm. (You can omit the hh:mm for 00:00.) Otherwise, you can expect unexpected results.</p>
-		<p>Display Start Date: <input class="widefat" name="<?php echo $this->get_field_name( 'sched_start_date' ); ?>"	type="text" value="<?php echo date('Y-m-d H:i', esc_attr( $sched_start_date ) ); ?>" />
+		<p>Display Start Date: <input class="widefat" name="<?php echo $this->get_field_name( 'sched_start_date' ); ?>"	type="text" value="<?php echo date('Y-m-d H:i', (int)esc_attr( $sched_start_date ) ); ?>" />
 		</p>
-        <p>Display End Date: <input class="widefat" name="<?php echo $this->get_field_name( 'sched_end_date' ); ?>"  type="text" value="<?php echo date('Y-m-d H:i', esc_attr( $sched_end_date ) ); ?>" />
+        <p>Display End Date: <input class="widefat" name="<?php echo $this->get_field_name( 'sched_end_date' ); ?>"  type="text" value="<?php echo date('Y-m-d H:i', (int)esc_attr( $sched_end_date ) ); ?>" />
 		</p>
 		<p>Maximum # of games to show (-1 to show all games): <input class="widefat" name="<?php echo $this->get_field_name( 'sched_max_to_show' ); ?>" type="text" value="<?php echo esc_attr( $sched_max_to_show ); ?>" />
 		</p>
@@ -896,7 +898,7 @@ function widget( $args, $instance ) {
 				$row_string = $row_tr;		
 			
 				// column 1: Build the game date in a specified format			
-				$date_string = mstw_date_loc( $tab_widget_dtg_format, get_post_meta( $post->ID, '_mstw_gs_unix_dtg', true ) );
+				$date_string = mstw_date_loc( $tab_widget_dtg_format, (int)get_post_meta( $post->ID, '_mstw_gs_unix_dtg', true ) );
 			
 				$row_string = $row_string. $row_td . $date_string . '</td>';
 			
@@ -1107,9 +1109,11 @@ function mstw_date_loc($format, $timestamp = null) {
 
 	$return = '';
 	
-	if(is_null($timestamp)) { $timestamp = mktime(); }
+	if ( is_null( $timestamp ) ) { 
+		$timestamp = current_time( 'timestamp' ); 
+	}
 	
-	for($i = 0, $len = strlen($format); $i < $len; $i++) {
+	for( $i = 0, $len = strlen( $format ); $i < $len; $i++ ) {
 		switch($format[$i]) {
 			case '\\' : // double.slashes
 				$i++;
