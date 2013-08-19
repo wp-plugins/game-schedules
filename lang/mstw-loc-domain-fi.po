@@ -1,0 +1,330 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Default Catalog\n"
+"POT-Creation-Date: 2012-10-18 15:23-0800\n"
+"PO-Revision-Date: 2013-08-17 23:49+0200\n"
+"Last-Translator: Lauri Lavanti <laurilavanti@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: c:\\Users\\Mark\\Documents\\Shoal Summit Consulting\\Web "
+"Presence\\mstw-game-schedules\\trunk\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: mstw-game-schedule.php:573
+msgid "Title"
+msgstr "Otsikko"
+
+#: mstw-game-schedule.php:574
+msgid "Schedule"
+msgstr "Aikataulu"
+
+#: mstw-game-schedule.php:575
+msgid "Year"
+msgstr "Vuosi"
+
+#: mstw-game-schedule.php:576 mstw-game-schedule.php:792
+msgid "Date"
+msgstr "Päivämäärä"
+
+#: mstw-game-schedule.php:577 mstw-game-schedule.php:793
+msgid "Opponent"
+msgstr "Vastustaja"
+
+#: mstw-game-schedule.php:578
+msgid "Opponent Link"
+msgstr "Linkki vastustajaan"
+
+#: mstw-game-schedule.php:579 mstw-game-schedule.php:794
+msgid "Location"
+msgstr "Paikka"
+
+#: mstw-game-schedule.php:580
+msgid "Time"
+msgstr "Aika"
+
+#: mstw-game-schedule.php:581
+msgid "Result"
+msgstr "Lopputulos"
+
+#: mstw-game-schedule.php:621
+msgid "No Game Year"
+msgstr "Ei pelivuosi"
+
+#: mstw-game-schedule.php:634
+msgid "No Schedule Defined"
+msgstr "Ei määriteltyä ajankohtaa"
+
+#: mstw-game-schedule.php:636 mstw-game-schedule.php:665
+#: mstw-game-schedule.php:679 mstw-game-schedule.php:692
+#: mstw-game-schedule.php:705 mstw-game-schedule.php:718
+#, php-format
+msgid "%s"
+msgstr "%s"
+
+#: mstw-game-schedule.php:648
+msgid "No Game Date"
+msgstr "Ei peli päivämäärää"
+
+#: mstw-game-schedule.php:663
+msgid "No Opponent"
+msgstr "Ei vastustajaa"
+
+#: mstw-game-schedule.php:677
+msgid "No Opponent Link"
+msgstr "Ei linkkiä vastustajaan"
+
+#: mstw-game-schedule.php:690
+msgid "No Location"
+msgstr "Ei paikkaa"
+
+#: mstw-game-schedule.php:703
+msgid "No Game Time"
+msgstr "Ei pelin aikaa"
+
+#: mstw-game-schedule.php:716
+msgid "No Game Result"
+msgstr "Ei pelin lopputulosta"
+
+#: mstw-game-schedule.php:795
+msgid "Time/Result"
+msgstr "Aika/Lopputulos"
+
+#: mstw-game-schedule.php:796
+msgid "Media"
+msgstr "Media"
+
+#: mstw-game-schedule.php:897
+msgid "No Scheduled Games Found."
+msgstr "Ei löytynyt suunniteltuja pelejä."
+
+#: mstw-game-schedule.php:992
+msgid "No home games found."
+msgstr "Kotipelejä ei löytynyt."
+
+#: mstw-game-schedule.php:995
+msgid "No games found."
+msgstr "Pelejä ei löytynyt."
+
+#: mstw-game-schedule.php:1057
+msgid "year"
+msgstr "vuosi"
+
+#: mstw-game-schedule.php:1057
+msgid "years"
+msgstr "vuodet"
+
+#: mstw-game-schedule.php:1058
+msgid "month"
+msgstr "kuukausi"
+
+#: mstw-game-schedule.php:1058
+msgid "months"
+msgstr "kuukaudet"
+
+#: mstw-game-schedule.php:1059
+msgid "week"
+msgstr "viikko"
+
+#: mstw-game-schedule.php:1059
+msgid "weeks"
+msgstr "viikot"
+
+#: mstw-game-schedule.php:1060
+msgid "day"
+msgstr "päivä"
+
+#: mstw-game-schedule.php:1060
+msgid "days"
+msgstr "päivät"
+
+#: mstw-game-schedule.php:1061
+msgid "hour"
+msgstr "tunti"
+
+#: mstw-game-schedule.php:1061
+msgid "hours"
+msgstr "tunnit"
+
+#: mstw-game-schedule.php:1062
+msgid "minute"
+msgstr "minuutti"
+
+#: mstw-game-schedule.php:1062
+msgid "minutes"
+msgstr "minuutit"
+
+#: mstw-game-schedule.php:1063
+msgid "second"
+msgstr "sekunti"
+
+#: mstw-game-schedule.php:1063
+msgid "seconds"
+msgstr "sekunnit"
+
+#: mstw-game-schedule.php:1272
+msgid "DATE"
+msgstr "PVM"
+
+#: mstw-game-schedule.php:1273
+msgid "OPPONENT"
+msgstr "VASTUSTAJA"
+
+#: mstw-game-schedule.php:1331
+msgid "No Scheduled Games Found"
+msgstr "Suunniteltuja pelejä ei löytynyt."
+
+#: mstw-game-schedule.php:1474
+msgid "Mon"
+msgstr "Ma"
+
+#: mstw-game-schedule.php:1475
+msgid "Tue"
+msgstr "Ti"
+
+#: mstw-game-schedule.php:1476
+msgid "Wed"
+msgstr "Ke"
+
+#: mstw-game-schedule.php:1477
+msgid "Thr"
+msgstr "To"
+
+#: mstw-game-schedule.php:1478
+msgid "Fri"
+msgstr "Pe"
+
+#: mstw-game-schedule.php:1479
+msgid "Sat"
+msgstr "La"
+
+#: mstw-game-schedule.php:1480
+msgid "Sun"
+msgstr "Su"
+
+#: mstw-game-schedule.php:1484
+msgid "Monday"
+msgstr "Maanantai"
+
+#: mstw-game-schedule.php:1485
+msgid "Tuesday"
+msgstr "Tiistai"
+
+#: mstw-game-schedule.php:1486
+msgid "Wednesday"
+msgstr "Keskiviikko"
+
+#: mstw-game-schedule.php:1487
+msgid "Thursday"
+msgstr "Torstai"
+
+#: mstw-game-schedule.php:1488
+msgid "Friday"
+msgstr "Perjantai"
+
+#: mstw-game-schedule.php:1489
+msgid "Saturday"
+msgstr "Lauantai"
+
+#: mstw-game-schedule.php:1490
+msgid "Sunday"
+msgstr "Sunnuntai"
+
+#: mstw-game-schedule.php:1494
+msgid "January"
+msgstr "Tammikuu"
+
+#: mstw-game-schedule.php:1495
+msgid "February"
+msgstr "Helmikuu"
+
+#: mstw-game-schedule.php:1496
+msgid "March"
+msgstr "Maaliskuu"
+
+#: mstw-game-schedule.php:1497
+msgid "April"
+msgstr "Huhtikuu"
+
+#: mstw-game-schedule.php:1498 mstw-game-schedule.php:1513
+msgid "May"
+msgstr "Toukokuu"
+
+#: mstw-game-schedule.php:1499
+msgid "June"
+msgstr "Kesäkuu"
+
+#: mstw-game-schedule.php:1500
+msgid "July"
+msgstr "Heinäkuu"
+
+#: mstw-game-schedule.php:1501
+msgid "August"
+msgstr "Elokuu"
+
+#: mstw-game-schedule.php:1502
+msgid "September"
+msgstr "Syyskuu"
+
+#: mstw-game-schedule.php:1503
+msgid "October"
+msgstr "Lokakuu"
+
+#: mstw-game-schedule.php:1504
+msgid "November"
+msgstr "Marraskuu"
+
+#: mstw-game-schedule.php:1505
+msgid "December"
+msgstr "Joulukuu"
+
+#: mstw-game-schedule.php:1509
+msgid "Jan"
+msgstr "Tam"
+
+#: mstw-game-schedule.php:1510
+msgid "Feb"
+msgstr "Hel"
+
+#: mstw-game-schedule.php:1511
+msgid "Mar"
+msgstr "Maal"
+
+#: mstw-game-schedule.php:1512
+msgid "Apr"
+msgstr "Huh"
+
+#: mstw-game-schedule.php:1514
+msgid "Jun"
+msgstr "Touk"
+
+#: mstw-game-schedule.php:1515
+msgid "Jul"
+msgstr "Kes"
+
+#: mstw-game-schedule.php:1516
+msgid "Aug"
+msgstr "Hein"
+
+#: mstw-game-schedule.php:1517
+msgid "Sep"
+msgstr "Elo"
+
+#: mstw-game-schedule.php:1518
+msgid "Sept"
+msgstr "Syys"
+
+#: mstw-game-schedule.php:1519
+msgid "Oct"
+msgstr "Loka"
+
+#: mstw-game-schedule.php:1520
+msgid "Nov"
+msgstr "Marr"
+
+#: mstw-game-schedule.php:1521
+msgid "Dec"
+msgstr "Joul"
