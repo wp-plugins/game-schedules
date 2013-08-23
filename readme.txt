@@ -124,6 +124,9 @@ otherwise Wordpress overwrites the ALERTS set by PHP.INI`
 
 == Changelog ==
 
+= 3.0.1 =
+* Added MSTW icons to admin menu and screens 
+
 = 3.0 =
 A MAJOR upgrade adding significant functionality requested by users:
 
