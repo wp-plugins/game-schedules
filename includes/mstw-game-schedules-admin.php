@@ -55,7 +55,26 @@ function mstw_gs_add_styles( ) {
 	$just_playing = 'Enqueueing: ' . plugin_dir_url(  ) . 'game-schedules/js/color-settings.js';
   }
 */	
-	
+// Add the custom MSTW icon to CPT pages
+add_action('admin_head', 'mstw_gs_custom_css');
+
+	function mstw_gs_custom_css() { ?>
+		<style type="text/css">
+			#icon-mstw-gs-main-menu.icon32 {
+				background: url('<?php echo plugins_url( '/game-schedules/images/mstw-logo-32x32.png', 'game-schedules' );?>') transparent no-repeat;
+			}
+			#icon-scheduled_games.icon32 {
+				background: url( '<?php echo plugins_url( '/game-schedules/images/mstw-logo-32x32.png', 'game-schedules' );?>') transparent no-repeat;
+			}
+			#icon-edit.icon32-posts-scheduled_games {
+				background: url( '<?php echo plugins_url( '/game-schedules/images/mstw-logo-32x32.png', 'game-schedules' );?>') transparent no-repeat;
+			}
+			#menu-posts-scheduled_games .wp-menu-image {
+				background-image: url('<?php echo plugins_url( '/game-schedules/images/mstw-admin-menu-icon.png', 'game-schedules' );?>') no-repeat 6px -17px !important;
+			}
+			
+		</style>
+	<?php }
 // ----------------------------------------------------------------
 // Remove Quick Edit Menu	
 	add_filter( 'post_row_actions', 'mstw_gs_remove_quick_edit', 10, 2 );
