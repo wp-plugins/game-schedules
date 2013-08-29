@@ -104,6 +104,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
  *		system time as previous.
  *	(2)	Changed the actual countdown time (time to next game) construction
  *		due to some 'anomalies' with the previous version.
+ *
+ * 20130822-MAO: FIXES THROUGHOUT
+ *	Summarized in the readme file - update history. 
+ *
  * ------------------------------------------------------------------------*/
 
 /* ------------------------------------------------------------------------
@@ -165,9 +169,6 @@ function mstw_gs_requires_wp_ver() {
 // --------------------------------------------------------------------------------------
 register_activation_hook(__FILE__, 'mstw_gs_set_defaults');
 register_uninstall_hook(__FILE__, 'mstw_gs_delete_plugin_options');
-//add_action('admin_init', 'mstw_gs_register_settings' );
-// add_action('admin_menu', 'mstw_gs_add_options_page'); Code is still in place
-//add_filter( 'plugin_action_links', 'mstw_plugin_action_links', 10, 2 );
 
 // --------------------------------------------------------------------------------------
 // Callback for: register_uninstall_hook(__FILE__, 'mstw_gs_delete_plugin_options')
@@ -180,7 +181,6 @@ function mstw_gs_delete_plugin_options() {
 }
 
 // --------------------------------------------------------------------------------------
-
 
 /* Queue up the necessary CSS */
 /* add_action( 'wp_head', 'mstw_gs_enqueue_styles' ); */
@@ -210,7 +210,6 @@ function mstw_gs_enqueue_styles () {
 
 }
 
-
 // --------------------------------------------------------------------------------------
 // GAME SCHEDULES CUSTOM POST TYPE STUFF
 // --------------------------------------------------------------------------------------
@@ -232,29 +231,33 @@ add_action( 'init', 'mstw_gs_register_post_type' );
 // --------------------------------------------------------------------------------------
 function mstw_gs_register_post_type() {
 	/* Set up the arguments for the Game Schedules post type */
+	$menu_icon_url = plugins_url( ) . '/game-schedules/images/mstw-admin-menu-icon.png';
+	
 	$args = array(
-    	'public' => true,
-        'query_var' => 'scheduled_games',
-        'rewrite' => array(
-            'slug' => 'scheduled-games',
-            'with_front' => false,
+    	'public' 			=> true,
+		'menu_icon'     	=> $menu_icon_url,
+        'query_var' 		=> 'scheduled_games',
+        'rewrite' 			=> array(
+            'slug' 			=> 'scheduled-games',
+            'with_front' 	=> false,
         ),
-        'supports' => array(
-            'title'
-        ),
-        'labels' => array(
-            'name' => 'Games',
-            'singular_name' => 'Game',
-            'add_new' => 'Add New Game',
-            'add_new_item' => 'Add Game',
-            'edit_item' => 'Edit Game',
-            'new_item' => 'New Game',
-			//'View Game Schedule' needs a custom page template that is of no value.
-			'view_item' => null, 
-            'search_items' => 'Search Games',
-            'not_found' => 'No Games Found',
-            'not_found_in_trash' => 'No Games Found In Trash'
-        	)
+        'supports' 			=> array(
+									'title'
+									),
+        'labels' 			=> array(
+									'name' => __( 'Game Schedules', 'mstw-loc-domain' ),
+									'singular_name' => __( 'Game', 'mstw-loc-domain' ),
+									'all_items' => __( 'All Games', 'mstw-loc-domain' ),
+									'add_new' => __( 'Add New Game', 'mstw-loc-domain' ),
+									'add_new_item' => __( 'Add Game', 'mstw-loc-domain' ),
+									'edit_item' => __( 'Edit Game', 'mstw-loc-domain' ),
+									'new_item' => __( 'New Game', 'mstw-loc-domain' ),
+									//'View Game Schedule' needs a custom page template that is of no value.
+									'view_item' => null, 
+									'search_items' => __( 'Search Games', 'mstw-loc-domain' ),
+									'not_found' => __( 'No Games Found', 'mstw-loc-domain' ),
+									'not_found_in_trash' => __( 'No Games Found In Trash', 'mstw-loc-domain' ),
+									)
 		);
 		
 	register_post_type( 'scheduled_games', $args);

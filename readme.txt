@@ -125,7 +125,9 @@ otherwise Wordpress overwrites the ALERTS set by PHP.INI`
 == Changelog ==
 
 = 3.0.1 =
-* Added MSTW icons to admin menu and screens 
+* Re-organized admin menus and added MSTW icons to admin menus and screens
+* Changed most data fields to be at least 64 characters to support eventual re-purposing and re-labeling of fields.
+* Removed the Edit option from the Bulk Edit actions. Bulk delete remains available. 
 
 = 3.0 =
 A MAJOR upgrade adding significant functionality requested by users:

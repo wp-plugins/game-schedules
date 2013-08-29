@@ -70,7 +70,7 @@ add_action('admin_head', 'mstw_gs_custom_css');
 				background: url( '<?php echo plugins_url( '/game-schedules/images/mstw-logo-32x32.png', 'game-schedules' );?>') transparent no-repeat;
 			}
 			#menu-posts-scheduled_games .wp-menu-image {
-				background-image: url('<?php echo plugins_url( '/game-schedules/images/mstw-admin-menu-icon.png', 'game-schedules' );?>') no-repeat 6px -17px !important;
+				background: url('<?php echo plugins_url( '/game-schedules/images/mstw-admin-menu-icon.png', 'game-schedules' );?>') no-repeat 6px -17px !important;
 			}
 			
 		</style>
@@ -85,6 +85,16 @@ add_action('admin_head', 'mstw_gs_custom_css');
 		}
 		return $actions;
 	}
+	
+	// ----------------------------------------------------------------
+	// Remove Edit from the Bulk Actions pull-down
+	// It has caused problems
+	add_filter( 'bulk_actions-edit-scheduled_games', 'mstw_gs_bulk_actions' );
+
+    function mstw_gs_bulk_actions( $actions ){
+        unset( $actions['edit'] );
+        return $actions;
+    }
 	
 // ----------------------------------------------------------------
 // Create the meta box for the Game Schedules custom post type
@@ -184,7 +194,7 @@ add_action('admin_head', 'mstw_gs_custom_css');
 	   <table class="form-table">
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_sched_id" >Schedule ID:</label></th>
-			<td><input maxlength="32" size="20" name="mstw_gs_sched_id"
+			<td><input maxlength="256" size="30" name="mstw_gs_sched_id"
 				value="<?php echo esc_attr( $mstw_gs_sched_id ); ?>"/></td>
 		</tr>
 		<tr valign="top">
@@ -264,7 +274,7 @@ add_action('admin_head', 'mstw_gs_custom_css');
 	  
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_opponent" >Opponent:</label></th>
-			<td><input maxlength="64" size="30" name="mstw_gs_opponent"
+			<td><input maxlength="256" size="30" name="mstw_gs_opponent"
 				value="<?php echo esc_attr( $mstw_gs_opponent ); ?>"/></td>
 		</tr>
 		
@@ -311,7 +321,7 @@ add_action('admin_head', 'mstw_gs_custom_css');
 		
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_location" >Game Location:</label></th>
-			<td><input maxlength="64" size="30" name="mstw_gs_location"
+			<td><input maxlength="256" size="30" name="mstw_gs_location"
 				value="<?php echo esc_attr( $mstw_gs_location ); ?>"/></td>
 			<td>Note: this setting is not needed if location is selected from Game Locations dropdown AND it will override any selection from the Game Locations dropdown.</td>
 		</tr>
@@ -324,12 +334,12 @@ add_action('admin_head', 'mstw_gs_custom_css');
 			
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_game_result" >Game Result: </label></th>
-			<td><input maxlength="16" size="10" name="mstw_gs_game_result"
+			<td><input maxlength="256" size="30" name="mstw_gs_game_result"
 				value="<?php echo esc_attr( $mstw_gs_game_result ); ?>"/></td>
 		</tr>
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_media_label_1" >Media 1 Label:</label></th>
-			<td><input maxlength="64" size="30" name="mstw_gs_media_label_1"
+			<td><input maxlength="256" size="30" name="mstw_gs_media_label_1"
 				value="<?php echo esc_attr( $mstw_gs_media_label_1 ); ?>"/></td>
 		</tr>
 		<tr valign="top">
@@ -339,7 +349,7 @@ add_action('admin_head', 'mstw_gs_custom_css');
 		</tr>
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_media_label_2" >Media 2 Label:</label></th>
-			<td><input maxlength="64" size="30" name="mstw_gs_media_label_2"
+			<td><input maxlength="256" size="30" name="mstw_gs_media_label_2"
 				value="<?php echo esc_attr( $mstw_gs_media_label_2 ); ?>"/></td>
 		</tr>
 		<tr valign="top">
@@ -349,7 +359,7 @@ add_action('admin_head', 'mstw_gs_custom_css');
 		</tr>
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_media_label_3" >Media 3 Label:</label></th>
-			<td><input maxlength="64" size="30" name="mstw_gs_media_label_3"
+			<td><input maxlength="256" size="30" name="mstw_gs_media_label_3"
 				value="<?php echo esc_attr( $mstw_gs_media_label_3 ); ?>"/></td>
 		</tr>
 		<tr valign="top">
@@ -1174,6 +1184,7 @@ class MSTW_GS_ImporterPlugin {
 		?>
 
 		<div class="wrap">
+			<?php screen_icon(); ?>
 			<h2>Import CSV</h2>
 			<form class="add:the-list: validate" method="post" enctype="multipart/form-data">
 				<!-- Enter the schedule ID via text ... for now -->
