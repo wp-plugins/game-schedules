@@ -107,6 +107,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * 20130822-MAO: FIXES THROUGHOUT
  *	Summarized in the readme file - update history. 
+ * 
+ * 20130912-MAO: STARTING VERSION 3.1 UPGRADE
+ *	- Starting new schedule slider shortcode
  *
  * ------------------------------------------------------------------------*/
 
@@ -693,6 +696,267 @@ function mstw_gs_build_countdown( $sched, $intro, $home_only ) {
 	return $ret_str;
 	
 }
+
+// --------------------------------------------------------------------------------------
+	add_shortcode( 'mstw_gs_slider', 'mstw_gs_slider_handler' );
+// --------------------------------------------------------------------------------------
+// Add the shortcode handler, which will create the Schedule Slider on the user side.
+// Handles the shortcode parameters, if there were any, 
+// then calls mstw_gs_build_slider( ) to create the output
+// --------------------------------------------------------------------------------------
+	function mstw_gs_slider_handler( $atts ){
+	
+		$atts = shortcode_atts( array(
+					'sched' => '1',
+					'show_links' => 1,
+					),
+					$atts );
+		
+		// NEED TO ADD DEFAULTS >>
+		
+		// get the options set in the admin screen
+		$options = get_option( 'mstw_gs_options' );
+		
+		//$output = '<pre>OPTIONS:' . print_r( $options, true ) . '</pre>';
+		//return $output;
+	
+		// and merge them with the defaults
+		//$args = wp_parse_args( $options, mstw_gs_get_defaults( ) );
+		//$output .= '<pre>ARGS:' . print_r( $args, true ) . '</pre>';
+		
+		// then merge the parameters passed to the shortcode with the result									
+		//$attribs = shortcode_atts( $args, $atts );
+		//$output .= '<pre>ATTS:' . print_r( $atts, true ) . '</pre>';
+		//$output .= '<pre>ATTRIBS:' . print_r( $attribs, true ) . '</pre>';
+		
+		//get the schedule slug
+		$sched_slug = $atts['sched'];
+		
+		if ( $sched_slug ==  "" ) {
+			return '<h3>No Schedule Specified </h3>';
+		}
+			
+		// Get the posts
+		$posts = get_posts( array( 	'numberposts' => -1,
+									'post_type' => 'scheduled_games',
+									'meta_query' => array(
+														array(
+															'key' => '_mstw_gs_sched_id',
+															'value' => $sched_slug,
+															'compare' => '='
+														)
+													),
+							  
+									'orderby' => 'meta_value', 
+									'meta_key' => '_mstw_gs_unix_dtg',
+									'order' => 'ASC' 
+									)
+							);	
+					
+		if( $posts ) {
+			// find the next game
+			$next_game_id = mstw_gs_get_next_game( $posts, time( ) );
+			if ($next_game_id > 0 ) {
+				return "<h3>" . __( 'No games later than ', mstw-loc-domain) . $date('Y-m-d H:i:s') . 
+					__( ' found on schedule ', 'mstw-loc-domain' ) . $sched_slug . "</h3>\n";
+			}
+			// determine the first game to show; or the slider offset
+			$next_game_number = 0; // counter: this will be used as an offset, so the first game is 0
+			foreach ( $posts as $post ) {
+				if ( $post->ID == $next_game_id ) {
+					break;  // jump out of the foreach loop before incrementing #next_game_number counter
+				}
+				$next_game_number = $next_game_number + 1;   //increment the next game number
+			}
+			$mstw_gs_slider = mstw_gs_build_slider( $posts, $atts, $next_game_nbr, "2013 Schedule" );
+		} else {
+			return "<h3>" . __( 'No games found on schedule ', 'mstw-loc-domain' ) . $sched_slug . "</h3>\n";
+		}
+		
+		return $mstw_gs_slider;
+	}
+	
+	//================================================================================
+	// MSTW_GS_BUILD_SLIDER
+	//	Does the heavy lifting to build the game schedule slider for the [mstw_gs_slider] shortcode
+	// ARGS:
+	//	$games = an array of game posts
+	//	$atts => the game schedules plug-in display settings and the shortcode arguments combined
+	//	$game_number => the first game to be displayed (slider offset is calculated based on this value)
+	//	$schedule_title_label => the label for the schedule title (defaults to "Schedule")
+	// RETURN:
+	//	an HTML string containing the slider to be displayed
+	//================================================================================
+	function mstw_gs_build_slider( $games, $atts, $game_number, $schedule_title_label ) {
+		// Development placeholders for settings and args
+		
+		$game_number = 4;
+		$show_slider_title = 1;
+		$show_slider_schedule_link = 1;
+		$slider_schedule_link_label = "View Full Schedule";
+		$slider_schedule_link = "http://shoalsummitsolutions.com/dev/schedule-test";
+		
+		$game_block_width = 187;
+		$schedule_slider_width = 3000; //DEFAULT ONLY. CALCULATED BELOW BASED ON THE # OF GAMES
+
+		$nbr_of_games = sizeof( $games );
+		$schedule_slider_width = $nbr_of_games*$game_block_width;
+		$schedule_slider_offset = ($game_number > 0) ? (-1)*($game_number-1)*$game_block_width : 0;
+		
+		$output = '';
+		//$output .= '<p>$nbr_of_games= ' . $nbr_of_games . '</p>';
+		//$output .= '<p>$schedule_slider_width= ' . $schedule_slider_width . '</p>';
+		//return $output;
+		
+		$output .= "<div class='gs-slider-area'>\n";
+		$output .= "<div class='gs-slider gs-one-edge-shadow'>\n";
+		$output .= "<div class='border'>\n";
+		$output .= "<div class='box'>\n";
+			if ( $show_slider_title ) {
+				$output .= "<div class='title'>\n";
+					$output .= $schedule_title_label;
+				$output .= "</div> <!--end .title-->\n";
+			}
+			
+			if ( $show_slider_schedule_link ) {
+				$output .= "<div class='full-schedule-link'>\n";
+					$output .= "<a href='" . $slider_schedule_link . "'>" . $slider_schedule_link_label . "</a>\n";
+				$output .= "</div> <!--end .full-schedule-link-->\n";
+			}
+		$output .= "<div class='gs-clear'></div>\n";
+		$output .= "<div class='gs-divider'></div>\n";
+		
+		$output .= "<div class='content'>\n";
+		$output .= "<div class='schedule-slider' style='width:" . $schedule_slider_width . "px; left:" . $schedule_slider_offset .  "px;'>\n";
+			//$output .= "This is the output from mstw_gs_build_slider( )\n";
+			foreach ( $games as $game ) {
+				$output .= mstw_gs_build_game_block( $game );
+			}
+		$output .= "</div> <!--end .schedule-slider-->\n";
+		
+		// Add the scroll controls - right and left arrows
+		$output .= "<div class='gs-clear'></div>\n";
+		$output .= "<div class='gs-slider-right-arrow'>&rsaquo;</div>\n";
+		$output .= "<div class='gs-slider-left-arrow'>&lsaquo;</div>\n";
+		
+		
+		$output .= "</div> <!--end .content-->\n";
+		
+		$output .= "</div> <!--end .box-->\n";
+		$output .= "</div> <!--end .border-->\n";
+		$output .= "</div> <!--end .gs-slider-->\n";
+		$output .= "</div> <!--end .gs-slider-area-->\n";
+		
+		return $output;
+	}
+	
+	function mstw_gs_build_game_block( $game ) {
+		//THIS WILL COME FROM THE OPTIONS
+		$dtg_format = 'D, M j';
+		$time_format = 'g:i A';
+		
+		$ret = '';
+		$ret .= "<div class='game-block'>\n";
+			$ret .= "<div class='date pad'>\n";
+				$ret .= mstw_date_loc( $dtg_format, (int)get_post_meta( $game->ID, '_mstw_gs_unix_dtg', true ) );
+			$ret .= "</div> <!--end .date-->\n";
+			
+			$ret .= "<div class='opponent pad'>\n";
+				$ret .= "vs " . get_post_meta( $game->ID, '_mstw_gs_opponent', true );
+			$ret .= "</div> <!--end .opponent-->\n";
+			
+			$ret .= "<div class='location pad'>\n";
+				$ret .= "@ " . get_post_meta( $game->ID, '_mstw_gs_location', true );
+			$ret .= "</div> <!--end .location-->\n";
+			
+			$ret .= "<div class='time-result pad'>\n";
+			
+			$game_result = get_post_meta( $game->ID, '_mstw_gs_game_result', true );
+			$game_time_tba = get_post_meta( $game->ID, '_mstw_gs_game_time_tba', true );
+			
+			if ( $game_time_tba != '' ) {
+				$ret .= $game_time_tba;
+			} 
+			else if ( $game_result != '' ) {
+				$ret .= $game_result;
+			}
+			else {
+				$ret .= date( $time_format, get_post_meta( $game->ID, '_mstw_gs_unix_dtg', true ) );
+			}
+				
+			$ret .= "</div> <!--end .time-result-->\n";
+			
+			$ret .= "<div class='links pad'>\n";
+				$ret .= mstw_gs_build_media_links( $game ); //"<a href='http://shoalsummitsolutions.com'>Links Area</a>\n";
+			$ret .= "</div> <!--end .links-->\n";
+			
+		$ret .= "</div> <!--end .game-block-->\n";
+		return $ret;
+	}
+	
+	function mstw_gs_build_media_links( $post ) {
+		$media_links = ''; // return string
+		
+		// testing with label 1 for now
+		$label_1 = trim( get_post_meta( $post->ID, '_mstw_gs_media_label_1', true ) );
+		if (  $label_1 <> '' ) {
+			$url_1 = trim( get_post_meta( $post->ID, '_mstw_gs_media_url_1', true ) );
+			if ( $url_1 <> '' ) {
+				// build the link
+				$media_links .= '<a href="' . $url_1 . '" target="_blank">' . $label_1 . '</a>';
+			}
+			else {
+				// label without the link
+				$media_links .= $label_1; 
+			}
+			
+			if ( ( $label_2 = trim( get_post_meta( $post->ID, '_mstw_gs_media_label_2', true ) ) ) <> '' ) {
+				if ( ( $url_2 = trim( get_post_meta( $post->ID, '_mstw_gs_media_url_2', true ) ) ) <> '' ) {
+					// build the link
+					$media_links .= ' | <a href="' . $url_2 . '" target="_blank">' . $label_2 . '</a>';
+				}
+				else {
+					// label without the link
+					$media_links .= ' | ' . $label_2;
+				}
+			}
+		
+		}
+		
+		//$media_links = 'label_l: ' . $label_1 . ' url_1: ' . $url_1;
+		
+		return $media_links;
+	}
+	
+	//================================================================================
+	// MSTW_GS_GET_NEXT GAME
+	//	Finds the next game AFTER a specified date time group
+	// Args:
+	//	$games = an array of game posts
+	//	dtg => a php time stamp
+	// Return:
+	//	a post ID (>0) if a game was found
+	//	-1 if no game was found with a start DTG after the dtg argument
+	//	-2 if $games is empty
+	//================================================================================
+	function mstw_gs_get_next_game( $games, $dtg ) {
+		$retval = -1; // No game has been found
+		if ( $games ) {
+			// loop thru the game posts to find the first game in the future
+			foreach( $game_posts as $game ) {
+				// Find first game time after the current time, and (just to be sure) has no result		
+				if ( get_post_meta( $game->ID, '_mstw_gs_unix_dtg', true ) > $dtg && 
+						get_post_meta( $game->ID, '_mstw_gs_game_result', true ) == '' ) {
+					// Ding, ding, ding, we have a winner
+					// Grab the data needed and stop looping through the games
+					$retval = $game->ID;
+					break; 	
+				}
+			}
+		} else {  
+			$retval = -2; // The $games array is empty
+		}	
+	}
 
 /*--------------------------------------------------------------------------
  *	Build the string showing the countdown time (in years, months, days,

@@ -22,61 +22,43 @@
 */
 
 
-// ----------------------------------------------------------------
-// Load the mstw-utility-functions if necessary
-	if ( !function_exists( 'mstw_sanitize_hex_color' ) ) {
-		require_once 'mstw-utility-functions.php';
+	// ----------------------------------------------------------------
+	// Load the MSTW Admin Utility Functions if necessary
+	if ( !function_exists( 'mstw_admin_utils_loaded' ) ) {
+			require_once  plugin_dir_path( __FILE__ ) . 'mstw-admin-utils.php';
 	}
-	
-// ----------------------------------------------------------------
-// enqueue the color picker scripts and styles 
-/*$just_playing = 'Just playing';
-add_action( 'admin_enqueue_scripts', 'mstw_gs_add_styles' );	
-function mstw_gs_add_styles( ) {
-    //Access the global $wp_version variable to see which version of WordPress is installed.
-    global $wp_version;
-	global $just_playing;
-    
-    //If the WordPress version is greater than or equal to 3.5, then load the new WordPress color picker.
-    if ( 3.5 <= $wp_version ){
-      //Both the necessary css and javascript have been registered already by WordPress, so all we have to do is load them with their handle.
-      wp_enqueue_style( 'wp-color-picker' );
-      wp_enqueue_script( 'wp-color-picker' );
-    }
-    //If the WordPress version is less than 3.5 load the older farbtasic color picker.
-    else {
-      //As with wp-color-picker the necessary css and javascript have been registered already by WordPress, so all we have to do is load them with their handle.
-      wp_enqueue_style( 'farbtastic' );
-      wp_enqueue_script( 'farbtastic' );
-    }
-    
-    //Load our custom javascript file
-    wp_enqueue_script( 'wp-color-picker-settings', plugin_dir_url( ) . 'game-schedules/js/color-settings.js' );
-	$just_playing = 'Enqueueing: ' . plugin_dir_url(  ) . 'game-schedules/js/color-settings.js';
-  }
-*/	
-// Add the custom MSTW icon to CPT pages
-add_action('admin_head', 'mstw_gs_custom_css');
 
+	// ----------------------------------------------------------------
+	// Load the mstw-utility-functions if necessary
+	//if ( !function_exists( 'mstw_sanitize_hex_color' ) ) {
+	//	require_once 'mstw-utility-functions.php';
+	//}
+	
+	
+	// ----------------------------------------------------------------
+	// Add the custom MSTW icon to CPT pages
+	add_action('admin_head', 'mstw_gs_custom_css');
+	
 	function mstw_gs_custom_css() { ?>
 		<style type="text/css">
 			#icon-mstw-gs-main-menu.icon32 {
-				background: url('<?php echo plugins_url( '/game-schedules/images/mstw-logo-32x32.png', 'game-schedules' );?>') transparent no-repeat;
+				background: url(<?php echo plugins_url( '/game-schedules/images/mstw-logo-32x32.png', 'game-schedules' );?>) transparent no-repeat;
 			}
-			#icon-scheduled_games.icon32 {
-				background: url( '<?php echo plugins_url( '/game-schedules/images/mstw-logo-32x32.png', 'game-schedules' );?>') transparent no-repeat;
+			#icon-scheduled_game.icon32 {
+				background: url(<?php echo plugins_url( '/game-schedules/images/mstw-logo-32x32.png', 'game-schedules' );?>) transparent no-repeat;
 			}
 			#icon-edit.icon32-posts-scheduled_games {
-				background: url( '<?php echo plugins_url( '/game-schedules/images/mstw-logo-32x32.png', 'game-schedules' );?>') transparent no-repeat;
+				background: url(<?php echo plugins_url( '/game-schedules/images/mstw-logo-32x32.png', 'game-schedules' );?>) transparent no-repeat;
 			}
-			#menu-posts-scheduled_games .wp-menu-image {
-				background: url('<?php echo plugins_url( '/game-schedules/images/mstw-admin-menu-icon.png', 'game-schedules' );?>') no-repeat 6px -17px !important;
+			#menu-posts-scheduled_game .wp-menu-image {
+				background-image: url(<?php echo plugins_url( '/game-schedules/images/mstw-admin-menu-icon.png', 'game-schedules' );?>) no-repeat 6px -17px !important;
 			}
 			
 		</style>
 	<?php }
-// ----------------------------------------------------------------
-// Remove Quick Edit Menu	
+		
+	// ----------------------------------------------------------------
+	// Remove Quick Edit Menu	
 	add_filter( 'post_row_actions', 'mstw_gs_remove_quick_edit', 10, 2 );
 
 	function mstw_gs_remove_quick_edit( $actions, $post ) {
@@ -85,10 +67,9 @@ add_action('admin_head', 'mstw_gs_custom_css');
 		}
 		return $actions;
 	}
-	
+
 	// ----------------------------------------------------------------
-	// Remove Edit from the Bulk Actions pull-down
-	// It has caused problems
+	// Remove the Bulk Actions pull-down - Edit only
 	add_filter( 'bulk_actions-edit-scheduled_games', 'mstw_gs_bulk_actions' );
 
     function mstw_gs_bulk_actions( $actions ){
@@ -96,8 +77,8 @@ add_action('admin_head', 'mstw_gs_custom_css');
         return $actions;
     }
 	
-// ----------------------------------------------------------------
-// Create the meta box for the Game Schedules custom post type
+	// ----------------------------------------------------------------
+	// Create the meta box for the Game Schedules custom post type
 	add_action( 'add_meta_boxes', 'mstw_gs_add_meta' );
 
 	function mstw_gs_add_meta () {
@@ -105,9 +86,9 @@ add_action('admin_head', 'mstw_gs_custom_css');
 						'scheduled_games', 'normal', 'high' );
 	}
 
-// ----------------------------------------------------------------
-// Creates the UI form for entering a Game Schedules in the Admin page
-// Callback for: add_meta_box('mstw-gl-meta', 'Game', ... )
+	// ----------------------------------------------------------------
+	// Creates the UI form for entering a Game Schedules in the Admin page
+	// Callback for: add_meta_box('mstw-gl-meta', 'Game', ... )
 
 	function mstw_gs_create_ui( $post ) {
 		// mstw_set_wp_default_timezone( ); Not needed??
@@ -194,7 +175,7 @@ add_action('admin_head', 'mstw_gs_custom_css');
 	   <table class="form-table">
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_sched_id" >Schedule ID:</label></th>
-			<td><input maxlength="256" size="30" name="mstw_gs_sched_id"
+			<td><input maxlength="32" size="20" name="mstw_gs_sched_id"
 				value="<?php echo esc_attr( $mstw_gs_sched_id ); ?>"/></td>
 		</tr>
 		<tr valign="top">
@@ -274,7 +255,7 @@ add_action('admin_head', 'mstw_gs_custom_css');
 	  
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_opponent" >Opponent:</label></th>
-			<td><input maxlength="256" size="30" name="mstw_gs_opponent"
+			<td><input maxlength="64" size="30" name="mstw_gs_opponent"
 				value="<?php echo esc_attr( $mstw_gs_opponent ); ?>"/></td>
 		</tr>
 		
@@ -321,7 +302,7 @@ add_action('admin_head', 'mstw_gs_custom_css');
 		
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_location" >Game Location:</label></th>
-			<td><input maxlength="256" size="30" name="mstw_gs_location"
+			<td><input maxlength="64" size="30" name="mstw_gs_location"
 				value="<?php echo esc_attr( $mstw_gs_location ); ?>"/></td>
 			<td>Note: this setting is not needed if location is selected from Game Locations dropdown AND it will override any selection from the Game Locations dropdown.</td>
 		</tr>
@@ -334,12 +315,12 @@ add_action('admin_head', 'mstw_gs_custom_css');
 			
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_game_result" >Game Result: </label></th>
-			<td><input maxlength="256" size="30" name="mstw_gs_game_result"
+			<td><input maxlength="16" size="10" name="mstw_gs_game_result"
 				value="<?php echo esc_attr( $mstw_gs_game_result ); ?>"/></td>
 		</tr>
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_media_label_1" >Media 1 Label:</label></th>
-			<td><input maxlength="256" size="30" name="mstw_gs_media_label_1"
+			<td><input maxlength="64" size="30" name="mstw_gs_media_label_1"
 				value="<?php echo esc_attr( $mstw_gs_media_label_1 ); ?>"/></td>
 		</tr>
 		<tr valign="top">
@@ -349,7 +330,7 @@ add_action('admin_head', 'mstw_gs_custom_css');
 		</tr>
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_media_label_2" >Media 2 Label:</label></th>
-			<td><input maxlength="256" size="30" name="mstw_gs_media_label_2"
+			<td><input maxlength="64" size="30" name="mstw_gs_media_label_2"
 				value="<?php echo esc_attr( $mstw_gs_media_label_2 ); ?>"/></td>
 		</tr>
 		<tr valign="top">
@@ -359,7 +340,7 @@ add_action('admin_head', 'mstw_gs_custom_css');
 		</tr>
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_media_label_3" >Media 3 Label:</label></th>
-			<td><input maxlength="256" size="30" name="mstw_gs_media_label_3"
+			<td><input maxlength="64" size="30" name="mstw_gs_media_label_3"
 				value="<?php echo esc_attr( $mstw_gs_media_label_3 ); ?>"/></td>
 		</tr>
 		<tr valign="top">
@@ -763,45 +744,57 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 	add_action('admin_init', 'mstw_gs_admin_init');
 	
 	function mstw_gs_admin_init( ) {
+		$options = get_option( 'mstw_gs_options' );
+		//$options - wp_parse_args( $options, mstw_gs_get_defaults( ) );
+		//print_r( $options );
+		
 		register_setting(
 			'mstw_gs_options_group',  	// settings group name
 			'mstw_gs_options',  		// options (array) to validate
 			'mstw_gs_validate_options'  // validation function
 			);
+			
+		// Data Fields (& columns) Settings
+		mstw_gs_data_fields_setup( );
 		
-		// Main Section
+		// Date & Time Format Settings
+		mstw_gs_dtg_format_setup( );
+		
+		// Colors Settings
+	
+	}
+		
+		
+		/*// Main Section
 		add_settings_section(
 			'mstw_gs_main_settings',	// String for use in the 'id' attribute of tags
 			'Game Schedules Settings',	// Title of the section.
 			'mstw_gs_main_inst',		// Callback to display section content
 			'mstw_gs_settings'			// Menu page on which to display this section
 			);
-		
-		// Show/hide media column
-		add_settings_field(
-			'mstw_gs_hide_media',
-			'Hide media column:',
-			'mstw_gs_hide_media_ctrl',
-			'mstw_gs_settings',
-			'mstw_gs_main_settings'
-		);
-		
-		/* Color test
-		add_settings_field(
-			'mstw_gs_color',
-			'A test color:',
-			'mstw_gs_color_ctrl',
-			'mstw_gs_settings',
-			'mstw_gs_main_settings'
-		);
-		*/
-		
-		// DTG format section
+			*/
+			
+		/*// Data Fields (and columns) control section
 		add_settings_section(
-			'mstw_gs_dtg_format_settings',
+			'mstw_gs_data_fields',		// String for use in the 'id' attribute of tags
+			'Data Fields Settings',	// Title of the section.
+			'mstw_gs_data_fields_inst',		// Callback to display section content
+			'mstw_gs_settings'			// Menu page on which to display this section
+			);
+			*/
+	function mstw_gs_dtg_format_setup( ) {
+		// DTG format section
+		// Data fields/columns -- show/hide and labels
+		$display_on_page = 'mstw_gs_settings';
+		$page_section = 'mstw_gs_dtg_format_settings';
+		
+		$options = get_option( 'mstw_gs_options' );
+		
+		add_settings_section(
+			$page_section,
 			'Game Schedules Date-Time Formats',
 			'mstw_gs_date_time_inst',
-			'mstw_gs_settings'
+			$display_on_page
 			);
 			
 		// Date format for admin add/edit game screen
@@ -913,16 +906,195 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 			'mstw_gs_dtg_format_settings',
 			$args
 		);
+
 	}
+	
+	function mstw_gs_data_fields_setup( ) {
+		// Data fields/columns -- show/hide and labels
+		$display_on_page = 'mstw_gs_settings';
+		$page_section = 'mstw_gs_fields_columns_settings';
+		
+		$options = get_option( 'mstw_gs_options' );
+		
+		add_settings_section(
+			$page_section,  //id attribute of tags
+			__( 'Data Field and Table Column Settings', 'mstw-loc-domain' ),	//title of the section
+			'mstw_gs_data_fields_inst',		//callback to fill section with desired output - should echo
+			$display_on_page				//menu page slug on which to display
+		);
+			
+		//time/result, media
+		
+		// Show/hide DATE column
+		$args = array( 	'id' => 'show_date',
+						'name'	=> 'mstw_gs_options[show_date]',
+						'value'	=> $options['show_date'],
+						'label'	=> __( 'Show or hide the Date field/column. (Default: Show)', 'mstw-loc-domain' )
+						//'label' => 'show_number: ' . $options['show_number'] . '::'
+						);
+						
+		add_settings_field(
+			'gs_show_date',
+			__( 'Show Date Column:', 'mstw-loc-domain' ),
+			'mstw_utl_show_hide_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);	
+		
+			
+		// DATE field/column label
+		$args = array( 	'id' => 'date_label',
+						'name'	=> 'mstw_gs_options[date_label]',
+						'value'	=> $options['date_label'],
+						'label'	=> __( 'Set label for date data field or column. (Default: "Date")', 'mstw-loc-domain' )
+						//'label' => 'number_label: ' . $options['number_label'] . '::'
+						);
+						
+		add_settings_field(
+			'gs_date_label',
+			__( 'Date Column Label:', 'mstw-loc-domain' ),
+			'mstw_utl_text_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);
+		
+		// OPPONENT field/column must be shown
+		
+		// OPPONENT field/column label
+		$args = array( 	'id' => 'opponent_label',
+						'name'	=> 'mstw_gs_options[opponent_label]',
+						'value'	=> $options['opponent_label'],
+						'label'	=> __( 'Set label for opponent data field or column. (Default: "Opponent") NOTE: THE OPPONENT FIELD MUST  BE SHOWN.', 'mstw-loc-domain' )
+						//'label' => 'number_label: ' . $options['number_label'] . '::'
+						);
+						
+		add_settings_field(
+			'gs_opponent_label',
+			__( 'Opponent Column Label:', 'mstw-loc-domain' ),
+			'mstw_utl_text_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);
+		
+		// Show/hide LOCATION column
+		$args = array( 	'id' => 'show_location',
+						'name'	=> 'mstw_gs_options[show_location]',
+						'value'	=> $options['show_location'],
+						'label'	=> __( 'Show or hide the Location field/column. (Default: Show)', 'mstw-loc-domain' )
+						//'label' => 'show_number: ' . $options['show_number'] . '::'
+						);
+						
+		add_settings_field(
+			'gs_show_location',
+			__( 'Show Location Column:', 'mstw-loc-domain' ),
+			'mstw_utl_show_hide_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);	
+		
+			
+		// LOCATION field/column label
+		$args = array( 	'id' => 'location_label',
+						'name'	=> 'mstw_gs_options[location_label]',
+						'value'	=> $options['location_label'],
+						'label'	=> __( 'Set label for location data field or column. (Default: "Location")', 'mstw-loc-domain' )
+						//'label' => 'number_label: ' . $options['number_label'] . '::'
+						);
+						
+		add_settings_field(
+			'gs_location_label',
+			__( 'Location Column Label:', 'mstw-loc-domain' ),
+			'mstw_utl_text_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);		
+		
+		// Show/hide TIME/RESULT column
+		$args = array( 	'id' => 'show_time',
+						'name'	=> 'mstw_gs_options[show_time]',
+						'value'	=> $options['show_time'],
+						'label'	=> __( 'Show or hide the Time/Result field or column. (Default: Show)', 'mstw-loc-domain' )
+						//'label' => 'show_number: ' . $options['show_number'] . '::'
+						);
+						
+		add_settings_field(
+			'gs_show_time',
+			__( 'Show Time Column:', 'mstw-loc-domain' ),
+			'mstw_utl_show_hide_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);	
+		
+			
+		// TIME/RESULT field/column label
+		$args = array( 	'id' => 'time_label',
+						'name'	=> 'mstw_gs_options[time_label]',
+						'value'	=> $options['time_label'],
+						'label'	=> __( 'Set label for Time/Result data field or column. (Default: "Time/Result")', 'mstw-loc-domain' )
+						//'label' => 'number_label: ' . $options['number_label'] . '::'
+						);
+						
+		add_settings_field(
+			'gs_time_label',
+			__( 'Time/Result Column Label:', 'mstw-loc-domain' ),
+			'mstw_utl_text_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);
+
+		// Show/hide MEDIA column
+		$args = array( 	'options' => array( 'Hide' => 0,
+											'Show 1' => 1,
+											'Show 2' => 2,
+											'Show 3' => 3,
+											),
+						'id' => 'show_media',
+						'name'	=> 'mstw_gs_options[show_media]',
+						'value'	=> $options['show_media'],
+						'label'	=> __( 'Show a number of media fields (1-3) or hide the Media field or column. (Default: Show all 3)', 'mstw-loc-domain' )
+						);
+						
+		add_settings_field(
+			'gs_show_media',
+			__( 'Show Media Column:', 'mstw-loc-domain' ),
+			'mstw_utl_select_option_ctrl', //'mstw_utl_show_hide_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);	
+		
+		// MEDIA field/column label
+		$args = array( 	'id' => 'media_label',
+						'name'	=> 'mstw_gs_options[media_label]',
+						'value'	=> $options['media_label'],
+						'label'	=> __( 'Set label for Media data field or column. (Default: "Time/Result")', 'mstw-loc-domain' )
+						);
+						
+		add_settings_field(
+			'gs_media_label',
+			__( 'Media Column Label:', 'mstw-loc-domain' ),
+			'mstw_utl_text_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);				
+	
+	} //End of data_fields_setup()
+	
 // ----------------------------------------------------------------	
-// 	Main section instructions and controls	
+// 	Data Fields Section Instructions	
 // ----------------------------------------------------------------	
-	function mstw_gs_main_inst( ) {
-		echo '<p>' . __( 'Enter your display settings. ', 'mstw-loc-domain' ) .'</p>';
-		/* Just in case we add some colors someday
-		'<br/>' . __( 'All color values are in hex, starting with a hash(#), followed by either 3 or 6 hex digits. For example, #123abd or #1a2.', 'mstw-loc-domain' ) .  '</p>';
-		*/
-	}
+	function mstw_gs_data_fields_inst( ) {
+		echo '<p>' . __( 'Enter the default settings for Schedule Table data fields and columns. These settings will apply to the [shortcode] schedules, where they can be overridden by [shortcode] arguments.', 'mstw-loc-domain' ) .  '</p>';
+		echo '<p>' . __('NOTE: THE OPPONENT FIELD MUST BE SHOWN.', 'mstw-loc-domain' ) . '</p>';
+	} //End of data_fields_inst()
 	
 // ----------------------------------------------------------------	
 //	Hide media column
@@ -937,17 +1109,6 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		
 		<?php  
 	} 
-
-	/*function mstw_gs_color_ctrl( ) {
-		global $just_playing;
-	?>
-		<input id="gs_color" name="mstw_gs_options[gs_color]" type="text" value="" />
-		<div id="colorpicker"></div>
-	<?php
-		echo '<p>' . plugin_dir_url( ) . 'game-schedules/js/settings.js' . '</p>';
-		echo '<p>' . $just_playing . '</p>';
-	}
-	*/
 
 // ----------------------------------------------------------------	
 // 	Date-time format section instructions and controls	
@@ -1070,8 +1231,9 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 					case 'sp_main_text_color':
 						
 						// validate the color for proper hex format
-						$sanitized_color = mstw_sanitize_hex_color( $input[$key] );
-						
+						//$sanitized_color = mstw_utl_sanitize_hex_color( $input[$key] ); // {mstw_sanitize_hex_color( $input[$key] );
+						$sanitized_color = $input[$key];
+						//$sanitized_color = $input[$key];
 						// decide what to do - save new setting 
 						// or display error & revert to last setting
 						if ( isset( $sanitized_color ) ) {
@@ -1093,6 +1255,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						// There should not be user/accidental errors in these fields
 						//case 'gs_hide_media':
 						$output[$key] = sanitize_text_field( $input[$key] );
+						//$output[$key] = $input[$key];
 						break;
 					
 				} // end switch
@@ -1184,7 +1347,7 @@ class MSTW_GS_ImporterPlugin {
 		?>
 
 		<div class="wrap">
-			<?php screen_icon(); ?>
+			<?php echo get_screen_icon(); ?>
 			<h2>Import CSV</h2>
 			<form class="add:the-list: validate" method="post" enctype="multipart/form-data">
 				<!-- Enter the schedule ID via text ... for now -->
