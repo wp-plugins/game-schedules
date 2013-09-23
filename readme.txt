@@ -124,16 +124,19 @@ otherwise Wordpress overwrites the ALERTS set by PHP.INI`
 
 == Changelog ==
 
-= 3.0.1 =
-* Re-organized admin menus and added MSTW icons to admin menus and screens
-* Changed most data fields to be at least 64 characters to support eventual re-purposing and re-labeling of fields.
-* Removed the Edit option from the Bulk Edit actions. Bulk delete remains available. 
+= 3.1 =
+* Added a new shortcode, [mstw_gs_slider], which displays a schedule slider
+* Added the ability to show/hide data fields and custom data field labels so they can be re-purposed
+* Made cosmetic improvements to admin menus and screens
+* Completely re-factored the code for both the front and back ends
+* Removed the Edit option from the Bulk Edit actions. Bulk delete remains available
+* Added color controls for schedule tables
+* Added the ability to display the next N games in a schedule to the [shortcode]
 
 = 3.0 =
 A MAJOR upgrade adding significant functionality requested by users:
 
 * Several admin settings pages were added.
-* The weight column can now be hidden by an argument in the [shortcode] or by an admin setting.
 * The number of games displayed in a schedule ([shortcode] or widget can now be set.
 * A date range can now be set for the games displayed in a schdule [shortcode] or widget can now be set.
 * The plugin is now integrated with the Game Locations plugin. Game locations can be entered to game schedules from a pulldown list of locations in the Game Locations plugin. A link to the location in Google Maps is automatically added.

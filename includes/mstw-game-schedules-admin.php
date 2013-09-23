@@ -29,10 +29,10 @@
 	}
 
 	// ----------------------------------------------------------------
-	// Load the mstw-utility-functions if necessary
-	//if ( !function_exists( 'mstw_sanitize_hex_color' ) ) {
-	//	require_once 'mstw-utility-functions.php';
-	//}
+	// Load the MSTW Admin Date-Time Utilities if necessary
+	if ( !function_exists( 'mstw_utl_date_format_ctrl' ) ) {
+		require_once 'mstw-dtg-admin-utils.php';
+	}
 	
 	
 	// ----------------------------------------------------------------
@@ -807,7 +807,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		add_settings_field(
 			'mstw_gs_admin_dtg_fmt',
 			'Admin Table Date Format:',
-			'mstw_date_format_control',
+			'mstw_utl_date_format_ctrl',
 			'mstw_gs_settings',
 			'mstw_gs_dtg_format_settings',
 			$args
@@ -822,7 +822,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		add_settings_field(
 			'mstw_gs_admin_time_fmt',
 			'Admin Table Time Format:',
-			'mstw_time_format_control',
+			'mstw_utl_time_format_ctrl',
 			'mstw_gs_settings',
 			'mstw_gs_dtg_format_settings',
 			$args
@@ -838,7 +838,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		add_settings_field(
 			'mstw_gs_tab_shortcode_dtg_fmt',
 			'Schedule Table [shortcode] Date Format:',
-			'mstw_date_format_control',
+			'mstw_utl_date_format_ctrl',
 			'mstw_gs_settings',
 			'mstw_gs_dtg_format_settings',
 			$args
@@ -853,7 +853,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		add_settings_field(
 			'mstw_gs_tab_shortcode_time_fmt',
 			'Schedule Table [shortcode] Time Format:',
-			'mstw_time_format_control',
+			'mstw_utl_time_format_ctrl',
 			'mstw_gs_settings',
 			'mstw_gs_dtg_format_settings',
 			$args
@@ -869,7 +869,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		add_settings_field(
 			'mstw_gs_tab_wgt_dtg_fmt',
 			'Schedule Table (widget) Date Format:',
-			'mstw_date_format_control',
+			'mstw_utl_date_format_ctrl',
 			'mstw_gs_settings',
 			'mstw_gs_dtg_format_settings',
 			$args
@@ -885,7 +885,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		add_settings_field(
 			'mstw_gs_cdt_time_fmt',
 			'Countdown Timer (widget & [shortcode]) Date & Time Format:',
-			'mstw_date_format_control',
+			'mstw_utl_date_format_ctrl',
 			'mstw_gs_settings',
 			'mstw_gs_dtg_format_settings',
 			$args
@@ -901,7 +901,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		add_settings_field(
 			'mstw_gs_cdt_tbd_fmt',
 			'Countdown Timer (widget & [shortcode]) Date Format (game time is TBA):',
-			'mstw_date_format_control',
+			'mstw_utl_date_format_ctrl',
 			'mstw_gs_settings',
 			'mstw_gs_dtg_format_settings',
 			$args
@@ -1200,7 +1200,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 			echo "<option value='$value' $selected>$key</option>";
 		}
 		
-		echo "</select>" . __( 'Formats for', 'mstw-loc-domain' ) . " 08:00";
+		echo "</select>" . __( 'Formats for eight in the morning', 'mstw-loc-domain' ) . " 08:00";
 		
 	}
 // ----------------------------------------------------------------	

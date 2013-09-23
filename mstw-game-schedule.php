@@ -117,22 +117,18 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 // PLUGIN PREFIX:                                                          
 // 'mstw_gs_'   derived from mysportsteamwebsite game schedule
 // -----------------------------------------------------------------------*/ 
-/*---------------------------------------------------------------
- * Load the mstw-utility-functions if necessary
----------------------------------------------------------------*/
-	//if ( !function_exists( 'mstw_set_wp_default_timezone' ) ) {
-	//	require_once plugin_dir_path( __FILE__) . 'includes/mstw-utility-functions.php';
-	//} 
 
-	// This is important, have to see if it has global scope
-	//mstw_set_wp_default_timezone( );
+// ----------------------------------------------------------------
+// Load the Game Schedules utility functions (once)
 
-	// Get the admin options
-	$options = get_option( 'mstw_gs_options' );
-	
-// Debug messages - used throughout	
-	//$mstw_debug_str = '';
-	
+	if ( !function_exists( 'mstw_gs_utility_fuctions_loaded' ) ) {
+		// we're in wp-admin
+		require_once ( dirname( __FILE__ ) . '/includes/mstw-gs-utility-functions.php' );
+    }
+
+	// Get the admin options - IS THIS NEEDED?
+	//$options = get_option( 'mstw_gs_options' );
+		
 // ----------------------------------------------------------------
 // If an admin, load the admin functions (once)
 	if ( is_admin( ) ) {
