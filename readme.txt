@@ -1,5 +1,5 @@
 === Game Schedules ===
-Contributors: Mark O'Donnell
+Contributors: MarkODonnell
 Donate link: http://shoalsummitsolutions.com
 Tags: sports,games,schedule,sports teams,team schedule,countdown timer  
 Requires at least: 3.3.1
@@ -16,6 +16,16 @@ Manages multiple sports team schedules. Includes shortcodes and widgets to displ
 Welcome to the MSTW Game Schedules Plugin from [Shoal Summit Solutions](http://shoalsummitsolutions.com/).
 
 The MSTW Game Schedules plugin manages multiple sports team schedules including: game dates and times, opponents, locations, results, and links to media (print stories or video on games). It features a countdown timer from the current time to then next game or next home game. Shortcodes and widgets are available to display both the schedule tables and countdown timers.
+
+= NEW IN VERSION 4.0 =
+There are SIX NEW FEATURES in the front and back ends of version 4.0:
+
+* Re-purpose data fields via show/hide and re-label display settings
+* New schedule slider view (via shortcode) [screenshot-8]
+* Supports a complete suite of custom time and date formats via PHP date format strings
+* Supports a new team structure which allows the inclusion of team logos in schedule tables and sliders
+* Color settings admin screen so the colors of displays can be controlled without editing CSS files
+* Display next N games from current date in schedule tables ([shortcode] and widget)
 
 = Front-end features for Website visitors =
 The following features enhance the site user experience:
@@ -121,10 +131,12 @@ otherwise Wordpress overwrites the ALERTS set by PHP.INI`
 5. Countdown Timer & Schedule widget menus
 6. Theme settings screen (admin)
 7. CSV Import screen (admin)
+8. Sample schedule slider (via [mstw_gs_slider] shortcode)
 
 == Changelog ==
 
-= 3.1 =
+= 4.0 =
+A MAJOR UPGRADE with significant new functionality requested by users including:
 * Added a new shortcode, [mstw_gs_slider], which displays a schedule slider
 * Added the ability to show/hide data fields and custom data field labels so they can be re-purposed
 * Made cosmetic improvements to admin menus and screens
@@ -132,6 +144,7 @@ otherwise Wordpress overwrites the ALERTS set by PHP.INI`
 * Removed the Edit option from the Bulk Edit actions. Bulk delete remains available
 * Added color controls for schedule tables
 * Added the ability to display the next N games in a schedule to the [shortcode]
+* Added the ability to enter a custom format for dates and times (based on php date() format strings.
 
 = 3.0 =
 A MAJOR upgrade adding significant functionality requested by users:
