@@ -1,5 +1,5 @@
 === Game Schedules ===
-Contributors: Mark O'Donnell
+Contributors: MarkODonnell
 Donate link: http://shoalsummitsolutions.com
 Tags: sports,games,schedule,sports teams,team schedule,countdown timer  
 Requires at least: 3.3.1
