@@ -192,7 +192,7 @@ add_action( 'wp_enqueue_scripts', 'mstw_gs_enqueue_styles' );
 // ---------------------------------------------------------------------
 function mstw_gs_enqueue_styles () {
 	
-	/* Find the full path to the css file */
+	// Find the full path to the plugin's css file 
 	$mstw_gs_style_url = plugins_url('/css/mstw-gs-styles.css', __FILE__);
 	$mstw_gs_style_file = WP_PLUGIN_DIR . '/game-schedules/css/mstw-gs-styles.css';
 	
@@ -201,12 +201,14 @@ function mstw_gs_enqueue_styles () {
 	//echo 'file url: ' . $mstw_gs_style_url . "\n";
 	//echo 'file name: ' . $mstw_gs_style_file . "\n";
 	
-	/* If stylesheet exists, enqueue the style */
+	// If stylesheet exists, enqueue the style
 	if ( file_exists( $mstw_gs_style_file ) ) {	
 		wp_enqueue_style( 'mstw_gs_style' );			
 		
 	} 
 
+	// Enqueue JS for schedule slider
+	wp_enqueue_script( 'mstw-gs-slider', plugins_url( 'game-schedules/js/gs-slider.js' ), array(), false, true );
 }
 
 // --------------------------------------------------------------------------------------
@@ -270,17 +272,41 @@ add_shortcode( 'mstw_gs_table', 'mstw_gs_shortcode_handler' );
 // then calls mstw_gs_build_loc_tab() to create the output
 // --------------------------------------------------------------------------------------
 function mstw_gs_shortcode_handler( $atts ){
+	// get the options set in the admin display settings screen
+	$options = get_option( 'mstw_gs_options' );
+	$output = '';
+	//$output .= '<pre>OPTIONS:' . print_r( $options, true ) . '</pre>';
 	
-	extract( shortcode_atts( array(
+	// Remove all keys with empty values
+	foreach ( $options as $k=>$v ) {
+		if( $v == '' ) {
+			unset( $options[$k] );
+		}
+	}
+	//$output .= '<pre>FILTERED OPTIONS:' . print_r( $options, true ) . '</pre>';
+	
+	// and merge them with the defaults
+	$args = wp_parse_args( $options, mstw_gs_get_defaults( ) );
+	//$output .= '<pre>DEFAULTS:' . print_r( mstw_gs_get_defaults(), true ) . '</pre>';
+	//$output .= '<pre>ARGS:' . print_r( $args, true ) . '</pre>';
+	//array_filter($options, function($v){return array_filter($v) == array();});
+	//return $output;
+	
+	// then merge the parameters passed to the shortcode with the result									
+	$attribs = shortcode_atts( $args, $atts );
+	//$output .= '<pre>ATTS:' . print_r( $atts, true ) . '</pre>';
+	//$output .= '<pre>ATTRIBS:' . print_r( $attribs, true ) . '</pre>';
+	
+	/*extract( shortcode_atts( array(
 				'sched' => '1',
 				'show_media' => true,
 				'first_dtg' => '1970:01:01 00:00:00',	// first php dtg
 				'last_dtg' => '2038:01:19 00:00:00', 	// last php dtg (roughly)
 				'games_to_show' => -1,
 				),
-				$atts ) );
+				$atts ) );*/
 		
-	$mstw_gs_sched_tab = mstw_gs_build_sched_tab( $sched, $show_media, $first_dtg, $last_dtg, $games_to_show );
+	$mstw_gs_sched_tab = mstw_gs_build_sched_tab( $attribs ); //$sched, $show_media, $first_dtg, $last_dtg, $games_to_show );
 	
 	return $mstw_gs_sched_tab;
 }
@@ -296,41 +322,44 @@ function mstw_gs_shortcode_handler( $atts ){
  *		Format: YYYY-MM-DD HH:MM[:SS] (24-hour clock)
  * $games_to_show -> Max number of games to display - defaults to -1 show all
  *--------------------------------------------------------------------------------------*/
-	function mstw_gs_build_sched_tab( $sched, $show_media, $first_dtg_str, $last_dtg_str, $games_to_show ) {
-		// Get the admin options settings
+	function mstw_gs_build_sched_tab( $args ) { //$sched, $show_media, $first_dtg_str, $last_dtg_str, $games_to_show ) {
+	
+		$output = ''; //This is the return string
 		
+		//Pull the $args array into individual variables
+		extract( $args );
+		
+		// DO WE REALLY NEED THIS?
+		// Get the admin options settings
 		$options = get_option( 'mstw_gs_options' );
 		
-		// Check the hide_media admin setting.
-		// It is always honored if it's set to hide-media.
-		if ( isset( $options['gs_hide_media'] ) ) {
-			if ( $options['gs_hide_media'] == 'hide-media' ) {
-				$show_media = false;
-			}
-		}
-		$dtg_format = $options['gs_tab_shortcode_dtg_format'];
-		if ( $dtg_format == '' ) {
-			$dtg_format = 'Y-m-d';
-		}
-		$time_format = $options['gs_tab_shortcode_time_format'];
-		if ( $time_format == '' ) {
-			$time_format = 'H:i';
-		}
+		
+		$dtg_format = (  $custom_table_date_format == "" ? $table_date_format : $custom_table_date_format );
+		
+		$time_format = ( !empty( $custom_table_time_format )  ? $custom_table_time_format : $table_time_format );
+		
+		//$output .= '<h2>Date format: ' . $dtg_format . '</h2>';
 		
 		// Need to set $first_dtg and $last_dtg by converting strings
-		$first_dtg = strtotime( $first_dtg_str );
-		//echo '<p> first_dtg_str: ' . $first_dtg_str . ' first_dtg_int: ' . $first_dtg. '</p>';
-		//echo '<p> reverse it: ' . date( 'Y m d' , $last_dtg ) . '</p>';
-		if ( $first_dtg <= 0 ) {  //strtotime() failed
-			$first_dtg = 1;
+		// OR convert $first_dtg='now' to current php DTG stamp
+		if ( $first_dtg == 'now' ) {
+			$first_dtg = time( );
+		}
+		else { 
+			$first_dtg = strtotime( $first_dtg );
 		}
 		
-		$last_dtg = strtotime( $last_dtg_str );
+		$first_dtg = ( $first_dtg <= 0 ? 1 : $first_dtg );
+		
+		$last_dtg = strtotime( $last_dtg );
 		//echo '<p> last_dtg_str: ' . $last_dtg_str . ' last_dtg_int: ' . $last_dtg. '</p>';
 		//echo '<p> reverse it: ' . date( 'Y m d' , $last_dtg ) . '</p>';
-		if ( $last_dtg <= 0 ) {  //strtotime() failed
-			$last_dtg = PHP_INT_MAX;
-		}	
+		
+		$last_dtg = ( $last_dtg <= 0 ? PHP_INT_MAX : $last_dtg );
+		
+		//if ( $last_dtg <= 0 ) {  //strtotime() failed
+		//	$last_dtg = PHP_INT_MAX;
+		//}	
 		
 		// Get the games posts
 		$posts = get_posts(array( 'numberposts' => $games_to_show,
@@ -358,23 +387,35 @@ function mstw_gs_shortcode_handler( $atts ){
 		if ( $posts ) {
 			// Make table of posts
 			// Start with the table header
-			$output = '<table class="mstw-gs-table">'; 
-			$output = $output . '<thead class="mstw-gs-table-head"><tr>';
-			$output = $output . '<th>'. __( 'Date', 'mstw-loc-domain' ) . '</th>';
-			$output = $output . '<th>'. __( 'Opponent', 'mstw-loc-domain' ) . '</th>';
-			$output = $output . '<th>'. __( 'Location', 'mstw-loc-domain' ) . '</th>';
-			$output = $output . '<th>'. __( 'Time/Result', 'mstw-loc-domain' ) . '</th>';
-			if ( $show_media ) {
-				$output = $output . '<th>'.  __( 'Media', 'mstw-loc-domain' ) . '</th>';
+			$output .= '<table class="mstw-gs-table">'; 
+			$output .= '<thead class="mstw-gs-table-head"><tr>';
+			if( $show_date ) { 
+				$output .= '<th>'. $date_label . '</th>';
 			}
-			$output = $output . '</tr></thead>';
+			
+			$output .= '<th>'. $opponent_label . '</th>';
+			
+			if( $show_location ) {
+				$output .= '<th>'. $location_label . '</th>';
+			}
+			
+			if( $show_time ) {
+				$output .= '<th>'. $time_label . '</th>';
+			}
+			
+			if ( $show_media > 0 ) { 
+				$output .= '<th>'.  $media_label . '</th>';
+			}
+			
+			$output .= '</tr></thead>';
+			
 			   
 			// Keeps track of even and odd rows. Start with row 1 = odd.
 			$even_and_odd = array('even', 'odd');
 			$row_cnt = 1; 
 		
 			// Loop through the posts and make the rows
-			foreach($posts as $post){
+			foreach( $posts as $post ) {
 				// set up some housekeeping to make styling in the loop easier
 				$is_home_game = get_post_meta($post->ID, '_mstw_gs_home_game', true );
 				$even_or_odd_row = $even_and_odd[$row_cnt]; 
@@ -388,18 +429,19 @@ function mstw_gs_shortcode_handler( $atts ){
 				// create the row
 				$row_string = $row_tr;			
 				
-				// column 1: Build the game date in a specified format			
-				$new_date_string = mstw_date_loc( $dtg_format, (int)get_post_meta( $post->ID, '_mstw_gs_unix_dtg', true ) );
-				//$new_date_string = $mstw_gs_dtg_format;
-				
-				//$new_date_string = date( $mstw_gs_dtg_format, get_post_meta( $post->ID, '_mstw_gs_unix_date', true) );
-				
-				$row_string = $row_string. $row_td . $new_date_string . '</td>';
-				//$row_string = $row_string. $row_td . get_post_meta( $post->ID, '_mstw_gs_unix_date', true ) . '</td>';
+				// column 1: Build the game date in a specified format
+				if ( $show_date ) {
+					$new_date_string = mstw_date_loc( $dtg_format, (int)get_post_meta( $post->ID, '_mstw_gs_unix_dtg', true ) );
+					//$new_date_string = $mstw_gs_dtg_format;
+					
+					//$new_date_string = date( $mstw_gs_dtg_format, get_post_meta( $post->ID, '_mstw_gs_unix_date', true) );
+					
+					$row_string = $row_string. $row_td . $new_date_string . '</td>';
+					//$row_string = $row_string. $row_td . get_post_meta( $post->ID, '_mstw_gs_unix_date', true ) . '</td>';
+				}
 				
 				// column 2: create the opponent entry
 				$mstw_gs_opponent_entry = get_post_meta( $post->ID, '_mstw_gs_opponent', true );
-				
 				// Check to see if you have to add the link
 				if ( ( $mstw_gs_opponent_link = get_post_meta( $post->ID, '_mstw_gs_opponent_link', true ) ) != '' ) {
 					$mstw_gs_opponent_entry = '<a href="' . $mstw_gs_opponent_link . '" target="_blank" >' . $mstw_gs_opponent_entry . '</a>';
@@ -413,71 +455,75 @@ function mstw_gs_shortcode_handler( $atts ){
 				// 2. Then check to see if there's a location from GL Plugin, if so use it 
 				// 3. Finally display 'No Location' 
 				
-				$gl_location = get_post_meta( $post->ID, '_mstw_gs_gl_location', true );
-				$gl_loc_title = get_post_meta( $post->ID, '_mstw_gs_gl_loc_title', true );
-				$location = get_post_meta( $post->ID, '_mstw_gs_location', true );
-				$location_link = get_post_meta( $post->ID, '_mstw_gs_location_link', true );
+				if ( $show_location ) {
+					$gl_location = get_post_meta( $post->ID, '_mstw_gs_gl_location', true );
+					$gl_loc_title = get_post_meta( $post->ID, '_mstw_gs_gl_loc_title', true );
+					$location = get_post_meta( $post->ID, '_mstw_gs_location', true );
+					$location_link = get_post_meta( $post->ID, '_mstw_gs_location_link', true );
+					
+					$location_entry = __( 'None found.', 'mstw-loc-domain' );
 				
-				$location_entry = __( 'None found.', 'mstw-loc-domain' );
-			
-				if ($location != '' ) {  // case 1
-					$location_entry = $location;
-			
-					//Check to see if you have to add the location link
-					if ( $location_link != '' ) {
-						$location_entry = '<a href="' . $location_link . '" target="_blank" >' . $location_entry . '</a>';
+					if ($location != '' ) {  // case 1
+						$location_entry = $location;
+				
+						//Check to see if you have to add the location link
+						if ( $location_link != '' ) {
+							$location_entry = '<a href="' . $location_link . '" target="_blank" >' . $location_entry . '</a>';
+						}
 					}
+					else if ( $gl_location != '' ) { // case 2
+						$custom_url = trim( get_post_meta( $gl_location, '_mstw_gl_custom_url', true) );
+					
+						if ( empty( $custom_url ) ) {  // build the url from the address fields
+							$center_string = get_the_title( $gl_location ). "," .
+								get_post_meta( $gl_location, '_mstw_gl_street', true ) . ', ' .
+								get_post_meta( $gl_location, '_mstw_gl_city', true ) . ', ' .
+								get_post_meta( $gl_location, '_mstw_gl_state', true ) . ', ' . 
+								get_post_meta( $gl_location, '_mstw_gl_zip', true );
+								
+							$location_entry = '<a href="https://maps.google.com?q=' .$center_string . '" target="_blank" >'; 
+						}
+						else {
+							$location_entry = '<a href="' . $custom_url . '" target="_blank">';
+						}
+						$location_entry .= get_the_title( $gl_location ) . '</a>';
+					}
+					
+					$row_string =  $row_string . $row_td . $location_entry . '</td>';
 				}
-				else if ( $gl_location != '' ) { // case 2
-					$custom_url = trim( get_post_meta( $gl_location, '_mstw_gl_custom_url', true) );
-				
-					if ( empty( $custom_url ) ) {  // build the url from the address fields
-						$center_string = get_the_title( $gl_location ). "," .
-							get_post_meta( $gl_location, '_mstw_gl_street', true ) . ', ' .
-							get_post_meta( $gl_location, '_mstw_gl_city', true ) . ', ' .
-							get_post_meta( $gl_location, '_mstw_gl_state', true ) . ', ' . 
-							get_post_meta( $gl_location, '_mstw_gl_zip', true );
-							
-						$location_entry = '<a href="https://maps.google.com?q=' .$center_string . '" target="_blank" >'; 
-					}
-					else {
-						$location_entry = '<a href="' . $custom_url . '" target="_blank">';
-					}
-					$location_entry .= get_the_title( $gl_location ) . '</a>';
-				}
-				
-				$row_string =  $row_string . $row_td . $location_entry . '</td>';
 				
 				// column 4: create the time/results entry
 				// 20120221-MAO: Rewritten to handle new game time entry logic
 				//		and to use time format settings
 				
-				// If there is a game result, stick it in and we're done
-				$game_result = get_post_meta( $post->ID, '_mstw_gs_game_result', true); 
-				if ( $game_result != '' ) {
-					$row_string .=  $row_td . $game_result . '</td>';
-				}
-				else {	
-					// There's no game result, so add a game time
-					// Check if the game time is TBA
-					$time_is_tba = get_post_meta( $post->ID, '_mstw_gs_game_time_tba', true );
-					
-					if ( $time_is_tba != '' ) {	
-						//Time is TBA. Stick it in and we're done
-						$row_string .=  $row_td . $time_is_tba . '</td>';
+				if ( $show_time ) {
+					// If there is a game result, stick it in and we're done
+					$game_result = get_post_meta( $post->ID, '_mstw_gs_game_result', true); 
+					if ( $game_result != '' ) {
+						$row_string .=  $row_td . $game_result . '</td>';
 					}
 					else {	
-						//Time is not TBA. Build the time string from the unix timestamp
-						$unix_dtg = get_post_meta( $post->ID, '_mstw_gs_unix_dtg', true );
-						$time_str = date( $time_format, $unix_dtg );
-						//$row_string .=  $row_td . $unix_dtg . '</td>';
-						$row_string .=  $row_td . $time_str . '</td>';
-					}	
+						// There's no game result, so add a game time
+						// Check if the game time is TBA
+						$time_is_tba = get_post_meta( $post->ID, '_mstw_gs_game_time_tba', true );
+						
+						if ( $time_is_tba != '' ) {	
+							//Time is TBA. Stick it in and we're done
+							$row_string .=  $row_td . $time_is_tba . '</td>';
+						}
+						else {	
+							//Time is not TBA. Build the time string from the unix timestamp
+							$unix_dtg = get_post_meta( $post->ID, '_mstw_gs_unix_dtg', true );
+							$time_str = date( $time_format, $unix_dtg );
+							//$row_string .=  $row_td . $unix_dtg . '</td>';
+							$row_string .=  $row_td . $time_str . '</td>';
+						}	
+					}
 				}
 				
 				// column 5: create the media listings in a pretty format 
 				
-				if ( $show_media ) {
+				if( $show_media > 0 ) { //if ( $show_media ) {
 					$media_links = $row_td . "";
 					
 					$mstw_media_label_1 = trim( get_post_meta($post->ID, '_mstw_gs_media_label_1', true ) );
@@ -493,7 +539,7 @@ function mstw_gs_shortcode_handler( $atts ){
 						$media_links = $media_links . $href;
 						
 						$mstw_media_label_2 = trim( get_post_meta($post->ID, '_mstw_gs_media_label_2', true ) );
-						if ( $mstw_media_label_2 <> "" ) {
+						if ( $show_media > 1 and $mstw_media_label_2 <> "" ) {
 							$mstw_media_url_2 = trim( get_post_meta($post->ID, '_mstw_gs_media_url_2', true ) );
 							if ( $mstw_media_url_2 <> "" ) {
 								// build the link
@@ -505,7 +551,7 @@ function mstw_gs_shortcode_handler( $atts ){
 							$media_links = $media_links . " | " . $href;
 							
 							$mstw_media_label_3 = trim( get_post_meta($post->ID, '_mstw_gs_media_label_3', true ) );
-							if ( $mstw_media_label_3 <> "" ) {
+							if ( $show_media > 2 and $mstw_media_label_3 <> "" ) {
 								$mstw_media_url_3 = trim( get_post_meta($post->ID, '_mstw_gs_media_url_3', true ) );
 								if ( $mstw_media_url_3 <> "" ) {
 									// build the link
@@ -519,7 +565,7 @@ function mstw_gs_shortcode_handler( $atts ){
 						}
 					}
 					
-					$row_string = $row_string . $media_links . '</td>';  //			Should have a </tr> here??
+					$row_string .= $media_links . '</td>';  //			Should have a </tr> here??
 				}
 				
 				$output = $output . $row_string;
@@ -537,7 +583,7 @@ function mstw_gs_shortcode_handler( $atts ){
 		}
 		return $output;
 
-	} /*End function mstw_gs_build_sched_tab*/
+	} //End function mstw_gs_build_sched_tab
 
 // --------------------------------------------------------------------------------------
 add_shortcode( 'mstw_gs_countdown', 'mstw_gs_countdown_handler' );
@@ -633,18 +679,18 @@ function mstw_gs_build_countdown( $sched, $intro, $home_only ) {
 	}
 	else {
 		// we found a game, so build the countdown display
-		$options = get_option('mstw_gs_options');
-		$cdt_time_format = $options['gs_cdt_time_format'];
-		$cdt_tbd_format = $options['gs_cdt_tbd_format'];
+		$options = get_option( 'mstw_gs_options' );
+		$cdt_dtg_format = $options['cdt_dtg_format']; //full date-time group format
+		$cdt_date_format = $options['cdt_date_format']; //date only format
 		
 		
 		// Game day, date, time; need to handle a TBD time
 		if ( $game_time_tba != '' ) {
-			$dtg_str = mstw_date_loc( $cdt_tbd_format, (int)$game_dtg ) . ' Time ' . $game_time_tba; 
+			$dtg_str = mstw_date_loc( $cdt_date_format, (int)$game_dtg ) . ' Time ' . $game_time_tba; 
 			//$game_date is the UNIX timestamp DATE only
 		}
 		else {
-			$dtg_str = mstw_date_loc( $cdt_time_format, (int)$game_dtg ); 
+			$dtg_str = mstw_date_loc( $cdt_dtg_format, (int)$game_dtg ); 
 			//$game_dtg is the full UNIX timestamp (DATE & TIME)  
         }
 		
@@ -700,7 +746,7 @@ function mstw_gs_build_countdown( $sched, $intro, $home_only ) {
 // Handles the shortcode parameters, if there were any, 
 // then calls mstw_gs_build_slider( ) to create the output
 // --------------------------------------------------------------------------------------
-	function mstw_gs_slider_handler( $atts ){
+	function mstw_gs_slider_handler( $atts ) {
 	
 		$atts = shortcode_atts( array(
 					'sched' => '1',
@@ -1029,14 +1075,22 @@ class mstw_gs_sched_widget extends WP_Widget {
 							'sched_id' => '1', 
 							'sched_yr' => date('Y'),
 							'sched_start_date' => 0, 
-							'sched_end_date' => strtotime( '2999-12-31'), 
+							'sched_end_date' => PHP_INT_MAX, //strtotime( '2999-12-31'), 
 							'sched_max_to_show' => -1, 
 							); 
 							
         $instance = wp_parse_args( (array) $instance, $defaults );
 		$sched_title = $instance['sched_title'];
 		$sched_id = $instance['sched_id'];
-		$sched_start_date = $instance['sched_start_date'];
+		
+		//$sched_start_date = $instance['sched_start_date'];
+		if ( $instance['sched_start_date'] == 'now' ) {
+			$sched_start_date = 'now';
+		}
+		else {
+			$sched_start_date = date( 'Y-m-d H:i', (int)esc_attr( $instance['sched_start_date'] ) );
+		}
+		
 		$sched_end_date = $instance['sched_end_date'];
 		$sched_max_to_show = $instance['sched_max_to_show'];
 		
@@ -1046,7 +1100,7 @@ class mstw_gs_sched_widget extends WP_Widget {
         <p>Schedule ID: <input class="widefat" name="<?php echo $this->get_field_name( 'sched_id' ); ?>"  
         						type="text" value="<?php echo esc_attr( $sched_id ); ?>" /></p>
 		<p>The dates below MUST be in the format yyyy-mm-dd hh:mm. (You can omit the hh:mm for 00:00.) Otherwise, you can expect unexpected results.</p>
-		<p>Display Start Date: <input class="widefat" name="<?php echo $this->get_field_name( 'sched_start_date' ); ?>"	type="text" value="<?php echo date('Y-m-d H:i', (int)esc_attr( $sched_start_date ) ); ?>" />
+		<p>Display Start Date: <input class="widefat" name="<?php echo $this->get_field_name( 'sched_start_date' ); ?>"	type="text" value="<?php echo $sched_start_date; ?>" />
 		</p>
         <p>Display End Date: <input class="widefat" name="<?php echo $this->get_field_name( 'sched_end_date' ); ?>"  type="text" value="<?php echo date('Y-m-d H:i', (int)esc_attr( $sched_end_date ) ); ?>" />
 		</p>
@@ -1064,7 +1118,13 @@ class mstw_gs_sched_widget extends WP_Widget {
 
 		$instance['sched_id'] = strip_tags( $new_instance['sched_id'] );
 		
-		$instance['sched_start_date'] = strtotime( strip_tags( $new_instance['sched_start_date'] ) );
+		// 'now' means use the current date
+		if ( $new_instance['sched_start_date'] == 'now' ) {
+			$instance['sched_start_date'] = $new_instance['sched_start_date'];
+		}
+		else {
+			$instance['sched_start_date'] = strtotime( strip_tags( $new_instance['sched_start_date'] ) );
+		}
 		
 		$instance['sched_end_date'] = strtotime( strip_tags( $new_instance['sched_end_date'] ) );
 		
@@ -1096,8 +1156,16 @@ function widget( $args, $instance ) {
 		
 		// Get the parameters for get_posts() below
 		$sched_id = $instance['sched_id'];
-		$first_dtg = $instance['sched_start_date'];
+		
+		if ( $instance['sched_start_date'] == 'now' ) {
+			$first_dtg = time( );
+		}
+		else {
+			$first_dtg = $instance['sched_start_date'];
+		}
+		
 		$last_dtg = $instance['sched_end_date'];
+		
 		$max_to_show = $instance['sched_max_to_show']; 
 		
 		// show the widget title, if there is one

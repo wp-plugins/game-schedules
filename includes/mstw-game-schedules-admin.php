@@ -34,6 +34,15 @@
 		require_once 'mstw-dtg-admin-utils.php';
 	}
 	
+	// ----------------------------------------------------------------	
+	// Add styles and scripts for the color picker. 
+	add_action( 'admin_enqueue_scripts', 'mstw_gs_enqueue_color_picker' );
+	
+	function mstw_gs_enqueue_color_picker( $hook_suffix ) {
+		// Enqueue stylesheet and JS for WP color picker
+		wp_enqueue_style( 'wp-color-picker' );
+		wp_enqueue_script( 'mstw-gs-color-picker', plugins_url( 'game-schedules/js/gs-color-settings.js' ), array( 'wp-color-picker' ), false, true ); 
+	}
 	
 	// ----------------------------------------------------------------
 	// Add the custom MSTW icon to CPT pages
@@ -799,28 +808,44 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 			
 		// Date format for admin add/edit game screen
 		$args = array(	'opt_name' => 'mstw_gs_options',
-						'set_name' => 'gs_admin_dtg_fmt',
+						'set_name' => 'admin_date_format',
 						'set_default' => 'Y-m-d',
 						'cdt' => false,
 						);
 						
 		add_settings_field(
-			'mstw_gs_admin_dtg_fmt',
+			'admin_date_format',
 			'Admin Table Date Format:',
 			'mstw_utl_date_format_ctrl',
 			'mstw_gs_settings',
 			'mstw_gs_dtg_format_settings',
 			$args
+		);
+
+		//Custom date format for admin add/edit game screen
+		$args = array(	'id' => 'custom_admin_date_format',
+						'name'	=> 'mstw_gs_options[custom_admin_date_format]',
+						'value'	=> $options['custom_admin_date_format'],
+						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
+						);
+						
+		add_settings_field(
+			'custom_admin_date_format',
+			'Custom Admin Table Date Format:',
+			'mstw_utl_text_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
 		);	
-		
+
 		// Time format for admin add/edit game screen
 		$args = array(	'opt_name' => 'mstw_gs_options',
-						'set_name' => 'gs_admin_time_fmt',
+						'set_name' => 'admin_time_format',
 						'set_default' => 'H:i',
 						);
 						
 		add_settings_field(
-			'mstw_gs_admin_time_fmt',
+			'admin_time_format',
 			'Admin Table Time Format:',
 			'mstw_utl_time_format_ctrl',
 			'mstw_gs_settings',
@@ -828,15 +853,31 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 			$args
 		);	
 		
+		//Custom time format for admin add/edit game screen
+		$args = array(	'id' => 'custom_admin_time_format',
+						'name'	=> 'mstw_gs_options[custom_admin_time_format]',
+						'value'	=> $options['custom_admin_time_format'],
+						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
+						);
+						
+		add_settings_field(
+			'custom_admin_time_format',
+			'Custom Admin Table Time Format:',
+			'mstw_utl_text_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);	
+		
 		// Date format for schedule table shortcode
 		$args = array(	'opt_name' => 'mstw_gs_options',
-						'set_name' => 'gs_tab_shortcode_dtg_format',
+						'set_name' => 'table_date_format',
 						'set_default' => 'Y m d',
 						'cdt' => false,
 						);
 						
 		add_settings_field(
-			'mstw_gs_tab_shortcode_dtg_fmt',
+			'table_date_format',
 			'Schedule Table [shortcode] Date Format:',
 			'mstw_utl_date_format_ctrl',
 			'mstw_gs_settings',
@@ -844,14 +885,30 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 			$args
 		);
 		
+		//Custom date format for schedule table shortcode
+		$args = array(	'id' => 'custom_table_date_format',
+						'name'	=> 'mstw_gs_options[custom_table_date_format]',
+						'value'	=> $options['custom_table_date_format'],
+						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
+						);
+						
+		add_settings_field(
+			'custom_table_date_format',
+			'Custom Schedule Table [shortcode] Date Format:',
+			'mstw_utl_text_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);	
+		
 		// Time format for schedule table shortcode
 		$args = array(	'opt_name' => 'mstw_gs_options',
-						'set_name' => 'gs_tab_shortcode_time_format',
+						'set_name' => 'table_time_format',
 						'set_default' => 'H:i',
 						);
 						
 		add_settings_field(
-			'mstw_gs_tab_shortcode_time_fmt',
+			'table_time_format',
 			'Schedule Table [shortcode] Time Format:',
 			'mstw_utl_time_format_ctrl',
 			'mstw_gs_settings',
@@ -859,15 +916,31 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 			$args
 		);
 		
+		//Custom time format for schedule table shortcode
+		$args = array(	'id' => 'custom_table_time_format',
+						'name'	=> 'mstw_gs_options[custom_table_time_format]',
+						'value'	=> $options['custom_table_time_format'],
+						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
+						);
+						
+		add_settings_field(
+			'custom_table_time_format',
+			'Custom Schedule Table [shortcode] Time Format:',
+			'mstw_utl_text_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);	
+		
 		// Date format for table widget
 		$args = array(	'opt_name' => 'mstw_gs_options',
-						'set_name' => 'gs_tab_widget_dtg_format',
+						'set_name' => 'table_widget_date_format',
 						'set_default' => 'j M y',
 						'cdt' => false,
 						);
 						
 		add_settings_field(
-			'mstw_gs_tab_wgt_dtg_fmt',
+			'table_widget_date_format',
 			'Schedule Table (widget) Date Format:',
 			'mstw_utl_date_format_ctrl',
 			'mstw_gs_settings',
@@ -875,15 +948,31 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 			$args
 		);
 		
-		// Date format for countdown timer - with time
+		//Custom date format for schedule table widget
+		$args = array(	'id' => 'custom_table_widget_date_format',
+						'name'	=> 'mstw_gs_options[custom_table_widget_date_format]',
+						'value'	=> $options['custom_table_widget_date_format'],
+						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
+						);
+						
+		add_settings_field(
+			'custom_table_widget_date_format',
+			'Custom Schedule Table [shortcode] Date Format:',
+			'mstw_utl_text_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);
+		
+		// DTG format for countdown timer
 		$args = array(	'opt_name' => 'mstw_gs_options',
-						'set_name' => 'gs_cdt_time_format',
+						'set_name' => 'cdt_dtg_format',
 						'set_default' => 'l, j M g:i a',
 						'cdt' => true,
 						);
 						
 		add_settings_field(
-			'mstw_gs_cdt_time_fmt',
+			'cdt_dtg_format',
 			'Countdown Timer (widget & [shortcode]) Date & Time Format:',
 			'mstw_utl_date_format_ctrl',
 			'mstw_gs_settings',
@@ -891,19 +980,115 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 			$args
 		);
 		
+		//Custom DTG format for countdown timer table & widget
+		$args = array(	'id' => 'custom_cdt_dtg_format',
+						'name'	=> 'mstw_gs_options[custom_cdt_dtg_format]',
+						'value'	=> $options['custom_cdt_dtg_format'],
+						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
+						);
+						
+		add_settings_field(
+			'custom_cdt_dtg_format',
+			'Custom Countdown Timer (widget & [shortcode]) Date-Time Format:',
+			'mstw_utl_text_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);	
+		
 		// Date format for countdown timer - with no time [TBA]
 		$args = array(	'opt_name' => 'mstw_gs_options',
-						'set_name' => 'gs_cdt_tbd_format',
+						'set_name' => 'cdt_date_format',
 						'set_default' => 'l, j M',
 						'cdt' => false,
 						);
 						
 		add_settings_field(
-			'mstw_gs_cdt_tbd_fmt',
+			'cdt_date_format',
 			'Countdown Timer (widget & [shortcode]) Date Format (game time is TBA):',
 			'mstw_utl_date_format_ctrl',
 			'mstw_gs_settings',
 			'mstw_gs_dtg_format_settings',
+			$args
+		);
+		
+		//Custom date format for countdown timer
+		$args = array(	'id' => 'custom_cdt_date_format',
+						'name'	=> 'mstw_gs_options[custom_cdt_date_format]',
+						'value'	=> $options['custom_cdt_date_format'],
+						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
+						);
+						
+		add_settings_field(
+			'custom_cdt_date_format',
+			'Custom Countdown Timer (widget & [shortcode]) Date Format:',
+			'mstw_utl_text_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);
+		
+		// Date format schedule slider
+		$args = array(	'opt_name' => 'mstw_gs_options',
+						'set_name' => 'slider_date_format',
+						'set_default' => 'D, j M',
+						'cdt' => false,
+						);
+						
+		add_settings_field(
+			'slider_date_format',
+			'Schedule Slider Date Format:',
+			'mstw_utl_date_format_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);
+		
+		//Custom date format for schedule slider
+		$args = array(	'id' => 'custom_slider_date_format',
+						'name'	=> 'mstw_gs_options[custom_slider_date_format]',
+						'value'	=> $options['custom_slider_date_format'],
+						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
+						);
+						
+		add_settings_field(
+			'custom_slider_date_format',
+			'Custom Schedule Slider Date Format:',
+			'mstw_utl_text_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);
+		
+		// Time format schedule slider
+		$args = array(	'opt_name' => 'mstw_gs_options',
+						'set_name' => 'slider_time_format',
+						'set_default' => 'g:i A',
+						'cdt' => false,
+						);
+						
+		add_settings_field(
+			'slider_time_format',
+			'Schedule Slider Time Format:',
+			'mstw_utl_time_format_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);
+		
+		//Custom date format for schedule slider
+		$args = array(	'id' => 'custom_slider_time_format',
+						'name'	=> 'mstw_gs_options[custom_slider_time_format]',
+						'value'	=> $options['custom_slider_time_format'],
+						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
+						);
+						
+		add_settings_field(
+			'custom_slider_time_format',
+			'Custom Schedule Slider Time Format:',
+			'mstw_utl_text_ctrl',
+			$display_on_page,
+			$page_section,
 			$args
 		);
 
@@ -1116,93 +1301,9 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 
 	function mstw_gs_date_time_inst( ) {
 		echo '<p>' . __( 'Enter the date-time formats for your shortcodes and widgets. ', 'mstw-loc-domain' ) . '</p>';
-	}
-
-/*----------------------------------------------------------------	
- *	Builds date format controls for the admin UI
- *
- * 	Arguments:
- *	$args['opt_name'] (string) name of option (array) 
- *	$args['set_name'] (string) setting name  from option array
- *	$args['set_default'] (string) default to use of setting is blank
- *	$args['cdt'] (boolean) true -> this is countdown timer date setting
- *		true -> use date-time, false -> use date only
- *
- *	return - none. Output is echoed.
- *---------------------------------------------------------------*/
-	function mstw_date_format_control( $args ) {
-		// need the $mstw_date_formats array
-		if ( !isset( $mstw_date_formats ) ) {
-			include 'mstw-date-format-array.php';
-		}
-		
-		$opt_name = $args['opt_name'];
-		$set_name = $args['set_name'];
-		$set_default = $args['set_default'];
-		$cdt = $args['cdt'];
-		
-		if ( $cdt ) {
-			$loop_array = $mstw_cdt_date_time_formats;
-		}
-		else {
-			$loop_array = $mstw_date_formats;
-		}
-		
-		// get option value from the database
-		$options = get_option( $opt_name );
-		if ( ( $dtg_format = $options[$set_name] ) == '' )
-			$dtg_format = $set_default;
-			
-		echo "<select id=$set_name name='mstw_gs_options[$set_name]'>";
-		foreach( $loop_array as $key=>$value ) {
-			//echo '<p> key: ' . $key . ' value: ' . $value .'</p>';
-			$selected = ( $dtg_format == $value ) ? 'selected="selected"' : '';
-			echo "<option value='$value' $selected>$key</option>";
-		}
-		if ( $cdt ) {
-			echo "</select>" . __( 'Formats for', 'mstw-loc-domain' ) . " " . __( '7 April 2013 13:15', 'mstw-loc-domain' );
-		}
-		else {
-			echo "</select>" . __( 'Formats for', 'mstw-loc-domain' ) . " " . __( '7 April 2013', 'mstw-loc-domain' );
-		}
-		
+		echo '<p>' . __( "NOTE that if 'Custom' is selected as the format a valid PHP date() format string must be entered in the corresponding format text field.", 'mstw-loc-domain' ) . '</p>';
 	}
 	
-/*----------------------------------------------------------------	
- *	Builds time format controls for the admin UI
- *
- * 	Arguments:
- *	$args['opt_name'] (string) name of option (array) 
- *	$args['set_name'] (string) setting name  from option array
- *	$args['set_default'] (string) default to use of setting is blank
- *
- *	return - none. Output is echoed.
- *---------------------------------------------------------------*/
-	function mstw_time_format_control( $args ) {
-		// need the $mstw_time_formats array
-		if ( !isset( $mstw_time_formats ) ) {
-			include 'mstw-time-format-array.php';
-		}
-		
-		$opt_name = $args['opt_name'];
-		$set_name = $args['set_name'];
-		$set_default = $args['set_default'];
-		
-		// get option value from the database
-		$options = get_option( $opt_name );
-		if ( ( $time_format = $options[$set_name] ) == '' )
-			$time_format = $set_default;
-			
-		echo "<select id=$set_name name='mstw_gs_options[$set_name]' style='width: 160px' >";
-		foreach( $mstw_time_formats as $key=>$value ) {
-			//echo '<p> key: ' . $key . ' value: ' . $value .'</p>';
-			$selected = ( $time_format == $value ) ? 'selected="selected"' : '';
-			echo "<option value='$value' $selected>$key</option>";
-		}
-		
-		echo "</select>" . __( 'Formats for eight in the morning', 'mstw-loc-domain' ) . " 08:00";
-		
-	}
 // ----------------------------------------------------------------	
 //	Validate user input (we want text only)
  

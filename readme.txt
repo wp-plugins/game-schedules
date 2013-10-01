@@ -143,8 +143,8 @@ A MAJOR UPGRADE with significant new functionality requested by users including:
 * Completely re-factored the code for both the front and back ends
 * Removed the Edit option from the Bulk Edit actions. Bulk delete remains available
 * Added color controls for schedule tables
-* Added the ability to display the next N games in a schedule to the [shortcode]
-* Added the ability to enter a custom format for dates and times (based on php date() format strings.
+* Added the ability to display the next N games in a schedule to the [shortcode] and the widget (by setting the first date-time to 'now'.
+* Added the ability to specify custom formats for dates and times (based on php date() format strings.
 
 = 3.0 =
 A MAJOR upgrade adding significant functionality requested by users:
