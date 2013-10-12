@@ -26,6 +26,7 @@
 				'games_to_show' => -1,
 				
 				//default cdt shortcode arguments
+				'cd_title'			=> __( 'Countdown', 'mstw-loc-domain' ),
 				'home_only' 		=> 0,
 				'intro'				=> __( 'Time to kickoff', 'mstw-loc-domain' ),
 				
@@ -46,23 +47,23 @@
 				
 				//date and time format defaults
 				'admin_date_format' 	=>'Y-m-d',
-				'custom_admin_date_format' => '',
+				//'custom_admin_date_format' => 'Y-m-d',
 				'admin_time_format'		=> 'H:i',
-				'custom_admin_time_format' => '',
-				'table_date_format'		=> 'Y m d',
-				'custom_table_date_format' => '',
+				//'custom_admin_time_format' => 'H:i',
+				'table_date_format'		=> 'j M y',
+				//'custom_table_date_format' => 'j M y',
 				'table_time_format'		=> 'H:i',
-				'custom_table_time_format' => '',
+				//'custom_table_time_format' => 'H:i',
 				'table_widget_date_format' => 'j M y',
-				'custom_table_widget_date_format' => '',
+				//'custom_table_widget_date_format' => 'j M y',
 				'cdt_dtg_format'		=> 'l, j M g:i a',
-				'custom_cdt_dtg_format' => '',
+				//'custom_cdt_dtg_format' => 'l, j M g:i a',
 				'cdt_date_format'		=> 'l, j M',
-				'custom_cdt_date_format' => '',
+				//'custom_cdt_date_format' => 'l, j M',
 				'slider_date_format'	=> 'D, j M',
-				'custom_slider_date_format' => '',
+				//'custom_slider_date_format' => 'D, j M',
 				'slider_time_format'	=> 'g:i A',
-				'custom_slider_time_format' => '',
+				//'custom_slider_time_format' => 'g:i A',
 				);
 				
 		return $defaults;

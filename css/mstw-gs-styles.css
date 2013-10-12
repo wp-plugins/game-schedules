@@ -92,14 +92,17 @@
 	color: #041E42;
 	font-size: 18px;
 	line-height: 20px;
-	padding: 1px 6px 3px 6px;
+	/*padding: 3px 6px 3px 6px;*/
+	padding:6px;
 	float: left;
 }
 
 .gs-slider .full-schedule-link {
 	/*padding-left: 8px;
 	padding-top: 3px;*/
-	padding: 1px 6px 3px 6px;
+	/*padding: 3px 6px 3px 6px;*/
+	padding: 6px;
+	line-height: 20px;
 	color: #041E42;
 	float: left;
 }
@@ -107,9 +110,17 @@
 .gs-slider .full-schedule-link  a {
 	color: #041E42;
 	font-family: 'Oswald',Arial, sans-serif;
-	text-decoration: none;
+	text-decoration: underline;
 	font-weight: bold;
 }
+
+.gs-slider .full-schedule-link  a:hover {
+	text-decoration: none;
+}
+
+/*.gs-divider {
+	margin-bottom: 10px;
+}*/
 
 .gs-slider .content {
 	height: 178px;
@@ -119,8 +130,9 @@
 	background-color: #fff;
 }
 
-.gs-slider .schedule-slider {
+.gs-slider #schedule-slider {
 	/*display: none;  ??  */
+	padding-top: 10px;
 	position: absolute;
 	z-index: 1;
 	left: 0;
@@ -131,7 +143,7 @@
 	/*background-color: #ddd;*/
 }
 
-.gs-slider-right-arrow, .gs-slider-left-arrow {
+#gs-slider-right-arrow, #gs-slider-left-arrow {
 	position: absolute;
 	top: 0;
 	z-index: 1;
@@ -144,15 +156,15 @@
 	color: #666;
 }
 
-.gs-slider-right-arrow {
+#gs-slider-right-arrow {
 	right: 0;
 }
 
-.gs-slider-left-arrow {
+#gs-slider-left-arrow {
 	left: 0;
 }
 
-.gs-slider-left-arrow:hover, .gs-slider-right-arrow:hover {
+#gs-slider-left-arrow:hover, #gs-slider-right-arrow:hover {
 	background-color: #efefef;
 }
 
@@ -172,10 +184,11 @@
 	font-size: 18px;
 	font-family: "Roboto Condensed",Arial;
 	font-weight: bold;
-	height: 45px;
-	line-height: 60px;
+	/*height: 45px;*/
+	/*line-height: 60px;*/
 	border-bottom: 2px solid #F5C517;
 	color: #041E42;
+	margin-bottom: 10px;
 }
 
 .gs-slider .pad {
@@ -185,14 +198,15 @@
 
 .gs-slider .opponent {
 	font-size: 1.3em;
-	height: 29px;
-	line-height: 35px;
+	/*height: 29px;*/
+	/*line-height: 35px;*/
 	color: #041E42;
 }
 
 .gs-slider .location {
 	font-size: 1.0em;
 	line-height: 1.2em;
+	margin-bottom: 10px;
 }
 
 .gs-slider .time-result {
@@ -210,7 +224,7 @@
 .gs-slider .links a {
 	color: #041E42;
 	font-size: 11px;
-	text-decoration: none;
+	text-decoration: underline;
 	line-height: 12px;
 }
  
@@ -245,14 +259,14 @@
 
 /* Set the even links */
 .mstw-gs-even td a,  .mstw-gs-even td a:visited, .mstw-gs-even td a:active {
-    text-decoration: none;
-    color: #4F81BD;
+    text-decoration: underline;
+    /*color: #4F81BD;*/
 }
 
 /* Set the even links hover */
 .mstw-gs-even td a:hover {
-    text-decoration: underline;
-    color: #666;
+    text-decoration: none;
+    /*color: #666;*/
 }
 
 /* Set the odd row attributes */
@@ -266,14 +280,14 @@
 
 /* Set the odd links */
 .mstw-gs-odd td a,  .mstw-gs-odd td a:visited, .mstw-gs-odd td a:active {
-    color: #4F81BD;
-	text-decoration: none;
+    /*color: #4F81BD;*/
+	text-decoration: underline;
 }
 
 /* Set the odd links hover */
 .mstw-gs-odd td a:hover {
-    text-decoration: underline;
-    color: #666;
+    text-decoration: none;
+    /*color: #666;*/
 }
 
 /* Set the home row attributes */
@@ -282,10 +296,14 @@
 }
 
 /* Set the home links */
-.mstw-gs-home td a,  .mstw-gs-home td a:visited, .mstw-gs-home td a:active, .mstw-gs-home td a:hover {
+.mstw-gs-home td a,  .mstw-gs-home td a:visited, .mstw-gs-home td a:active {
     font-weight: bold!important;
 	text-decoration: underline;
-	color: #000;
+}
+
+.mstw-gs-home td a:hover {
+    font-weight: bold!important;
+	text-decoration: none;
 }
 
 /******************************************************/
@@ -364,13 +382,13 @@
 }
 
 .mstw-gs-cdt-opponent a {
-	text-decoration: none;
-    color: #4F81BD;
+	text-decoration: underline;
+    /*color: #4F81BD;*/
 }
 
 .mstw-gs-cdt-opponent a:hover {
-	text-decoration: underline;
-    color: #666;
+	text-decoration: none;
+    /*color: #666;*/
 }
 
 .mstw-gs-cdt-intro {
@@ -382,4 +400,113 @@
 .mstw-gs-cdt-countdown{
 	color: #000;
 	background: #d6d666;
+}
+
+
+/******************************************************/
+/* 49ers Schedule Rules                               */
+/******************************************************/
+
+.mstw-gs-table-head.mstw-gs-table-head_49ers th {
+    background-color: #AA0000;	/*49er red*/
+    color: #C8AA76; 			/*49er gold*/
+	border-color: black;
+}
+
+.mstw-gs-odd.mstw-gs-odd_49ers td {
+    background-color: #C8AA76; 			/*49er gold*/
+    color: #AA0000;				/*49er red*/
+	border-color: black;
+}
+
+.mstw-gs-odd.mstw-gs-odd_49ers td a {
+	color: #AA0000;				/*49er red*/
+	background: none;
+	text-decoration: underline;
+}
+
+.mstw-gs-odd.mstw-gs-odd_49ers td a:hover {
+	text-decoration: none;
+}
+
+.mstw-gs-even.mstw-gs-even_49ers td {
+    background-color: #AA0000;	/*49er red*/
+    color: #C8AA76; 			/*49er gold*/
+	border-color: black;
+}
+
+.mstw-gs-even.mstw-gs-even_49ers td a {
+	color: #C8AA76; 			/*49er gold*/
+	background: none;
+	text-decoration: underline;
+}
+
+.mstw-gs-even.mstw-gs-even_49ers td a:hover {
+	text-decoration: none;
+}
+
+.mstw-gs-table-head_49ers thead,  .mstw-gs-table-head_49ers tr, .mstw-gs-table-head_49ers th {
+    border-color: black;
+}
+
+/* Set the even row attributes */
+.mstw-gs-even_49ers tr,  .mstw-gs-even_49ers td { 
+	border-color: #black; 
+}
+
+.mstw-gs-odd_49ers tr,  .mstw-gs-odd_49ers td { 
+	border-color: #black; 
+}
+
+/*--------------------------------------------------------------
+ *	49ers Schedule Slider
+ *------------------------------------------------------------*/
+ .gs-slider .box.box_49ers {
+	background-color: #AA0000;	/*49er red*/
+	color: #C8AA76; 			/*49er gold*/
+}
+
+.gs-slider .title.title_49ers {
+	color: #C8AA76; 			/*49er gold*/
+}
+
+.gs-slider  .full-schedule-link.full-schedule-link_49ers a {
+	color: #C8AA76; 			/*49er gold*/
+}
+ 
+ .gs-slider-area_49ers {
+	background-color: #AA0000;
+}
+ 
+ .gs-slider #schedule-slider.schedule-slider_49ers {
+	background-color: #AA0000;
+}
+
+.gs-slider .game-block .date.date_49ers {
+	color: white;
+	border-bottom-color: white;
+}
+
+.gs-slider .game-block .opponent.opponent_49ers.pad {
+	color: white;
+}
+
+.gs-slider .game-block .location.location_49ers.pad {
+	color: #C8AA76; 			/*49er gold*/
+}
+
+.gs-slider .game-block .time-result.time-result_49ers.pad {
+	color: white;
+}
+
+.gs-divider.gs-divider_49ers {
+	border-bottom-color: #C8AA76; 			/*49er gold*/
+}
+
+#gs-slider-left-arrow.gs-slider-left-arrow_49ers {
+	color: #C8AA76; 			/*49er gold*/
+}
+
+#gs-slider-right-arrow.gs-slider-right-arrow_49ers {
+	color: #C8AA76; 			/*49er gold*/
 }

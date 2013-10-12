@@ -184,7 +184,7 @@
 	   <table class="form-table">
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_sched_id" >Schedule ID:</label></th>
-			<td><input maxlength="32" size="20" name="mstw_gs_sched_id"
+			<td><input maxlength="64" size="20" name="mstw_gs_sched_id"
 				value="<?php echo esc_attr( $mstw_gs_sched_id ); ?>"/></td>
 		</tr>
 		<tr valign="top">
@@ -442,20 +442,6 @@
 		$full_dtg_str = $date_only_str . ' ' . $mstw_time;
 		$unix_dtg = strtotime( $full_dtg_str );
 		update_post_meta( $post_id, '_mstw_gs_unix_dtg', $unix_dtg );
-		
-
-		/*
-		$mstw_debug_str =   'Constructed date string: ' . $date_only_str. '<br/>' . 
-							'UNIX date: ' . $unix_date . '<br/>' .
-							'Date(UNIX date): ' . date( 'Y-m-d', $unix_date ) . '<br/>' .
-							'Constructed DTG string: ' . $full_dtg_str. '<br/>' . 
-							'UNIX DTG: ' . $unix_dtg . '<br/>' .
-							'Date(UNIX DTG): ' . date('Y-m-d h:i a', $unix_dtg);
-		
-		update_post_meta( $post_id, '_mstw_gs_debug', $mstw_debug_str );
-		*/
-		
-		
 					
 		// Okay, we should be good to update the database
 				
@@ -701,6 +687,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 // ----------------------------------------------------------------
 	add_action( 'admin_menu', 'mstw_gs_add_page' );
 
+	
 	function mstw_gs_add_page( ) {
 		
 		// Decided to add the settings page to the Games menu rather than
@@ -711,6 +698,13 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 							'manage_options', 			// Capability required to see this option.
 							'mstw_gs_settings', 		// Slug name to refer to this menu
 							'mstw_gs_option_page' );	// Callback to output content
+							
+		$page = add_submenu_page( 	'edit.php?post_type=scheduled_games', 
+							'Game Schedule Color Settings', 	//page title
+							'Color Settings', 		//menu title
+							'manage_options', 			// Capability required to see this option.
+							'mstw_gs_colors', 		// Slug name to refer to this menu
+							'mstw_gs_colors_page' );	// Callback to output content
 							
 		// Does the importing work
 		$plugin = new MSTW_GS_ImporterPlugin;
@@ -748,12 +742,33 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 	}
 	
 // ----------------------------------------------------------------	
+// 	Render the option page
+// ----------------------------------------------------------------
+
+	function mstw_gs_colors_page( ) {
+		?>
+		<div class="wrap">
+			<?php screen_icon(); ?>
+			<h2>Game Schedule Color Settings</h2>
+			<?php //settings_errors(); ?>
+			<form action="options.php" method="post">
+				<?php settings_fields( 'mstw_gs_options_group' ); ?>
+				<?php do_settings_sections( 'mstw_gs_colors' ); ?>
+				<p>
+				<input name="Submit" type="submit" class="button-primary" value="Save Changes" />
+				</p>
+			</form>
+		</div>
+		<?php
+	}
+
+// ----------------------------------------------------------------	
 // 	Register and define the settings
 // ----------------------------------------------------------------
 	add_action('admin_init', 'mstw_gs_admin_init');
 	
 	function mstw_gs_admin_init( ) {
-		$options = get_option( 'mstw_gs_options' );
+		//$options = get_option( 'mstw_gs_options' );
 		//$options - wp_parse_args( $options, mstw_gs_get_defaults( ) );
 		//print_r( $options );
 		
@@ -770,27 +785,335 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		mstw_gs_dtg_format_setup( );
 		
 		// Colors Settings
+		mstw_gs_colors_setup( );
 	
 	}
+	
+// ----------------------------------------------------------------	
+// 	Colors settings page setup	
+// ----------------------------------------------------------------		
+	function mstw_gs_colors_setup( ) {
+		// DTG format section
+		// Data fields/columns -- show/hide and labels
+		//$display_on_page = 'mstw_gs_colors';
+		//$page_section = 'mstw_gs_colors_main';
 		
+		//$options = get_option( 'mstw_gs_options' );
 		
-		/*// Main Section
-		add_settings_section(
-			'mstw_gs_main_settings',	// String for use in the 'id' attribute of tags
-			'Game Schedules Settings',	// Title of the section.
-			'mstw_gs_main_inst',		// Callback to display section content
-			'mstw_gs_settings'			// Menu page on which to display this section
-			);
-			*/
+		mstw_gs_table_colors_section_setup( );
+		
+		mstw_gs_cdt_colors_section_setup( );
+		
+		mstw_gs_slider_colors_section_setup( );	
 			
-		/*// Data Fields (and columns) control section
+	}
+	
+/ ----------------------------------------------------------------	
+// 	Slider colors section setup	
+// ----------------------------------------------------------------	
+	function mstw_gs_slider_colors_section_setup( ) {
+		
+		$display_on_page = 'mstw_gs_colors';
+		$page_section = 'mstw_gs_slider_colors';
+		
+		$options = get_option( 'mstw_gs_options' );
+		
 		add_settings_section(
-			'mstw_gs_data_fields',		// String for use in the 'id' attribute of tags
-			'Data Fields Settings',	// Title of the section.
-			'mstw_gs_data_fields_inst',		// Callback to display section content
-			'mstw_gs_settings'			// Menu page on which to display this section
+			$page_section,
+			'Schedule Slider Colors',
+			'mstw_gs_colors_slider_inst',
+			$display_on_page
+			);	
+	}
+	
+// ----------------------------------------------------------------	
+// 	Table (shortcode and widget) colors section setup	
+// ----------------------------------------------------------------
+	function mstw_gs_table_colors_section_setup( ) {
+	
+		$display_on_page = 'mstw_gs_colors';
+		$page_section = 'mstw_gs_table_colors';
+		
+		$options = get_option( 'mstw_gs_options' );
+		
+		add_settings_section(
+			$page_section,
+			'Schedule Table Colors',
+			'mstw_gs_colors_table_inst',
+			$display_on_page
 			);
-			*/
+	
+		// Header background color
+		$args = array( 	'id' => 'gs_tbl_hdr_bkgd_color',
+						'name' => 'mstw_gs_options[gs_tbl_hdr_bkgd_color]',
+						'value' => $options['gs_tbl_hdr_bkgd_color'],
+						'label' => ''
+					 );
+					 
+		add_settings_field(
+			'gs_tbl_hdr_bkgd_color',
+			__( 'Header Background Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);
+		
+		// Header text color
+		$args = array( 	'id' => 'gs_tbl_hdr_text_color',
+						'name' => 'mstw_gs_options[gs_tbl_hdr_text_color]',
+						'value' => $options['gs_tbl_hdr_text_color'],
+						'label' => ''
+					 );
+					 
+		add_settings_field(
+			'gs_tbl_hdr_text_color',
+			__( 'Header Text Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);
+		
+		// Odd row background color
+		$args = array( 	'id' => 'gs_tbl_odd_bkgd_color',
+						'name' => 'mstw_gs_options[gs_tbl_odd_bkgd_color]',
+						'value' => $options['gs_tbl_odd_bkgd_color'],
+						'label' => ''
+					 );
+					 
+		add_settings_field(
+			'gs_tbl_odd_bkgd_color',
+			__( 'Odd Row Background Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);
+		
+		// Odd row text color
+		$args = array( 	'id' => 'gs_tbl_odd_text_color',
+						'name' => 'mstw_gs_options[gs_tbl_odd_text_color]',
+						'value' => $options['gs_tbl_odd_text_color'],
+						'label' => ''
+					 );
+					 
+		add_settings_field(
+			'gs_tbl_odd_text_color',
+			__( 'Odd Row Text Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);
+		
+		// Even row background color
+		$args = array( 	'id' => 'gs_tbl_even_bkgd_color',
+						'name' => 'mstw_gs_options[gs_tbl_even_bkgd_color]',
+						'value' => $options['gs_tbl_even_bkgd_color'],
+						'label' => ''
+					 );
+					 
+		add_settings_field(
+			'gs_tbl_even_bkgd_color',
+			__( 'Even Row Background Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);
+		
+		// Even row text color
+		$args = array( 	'id' => 'gs_tbl_even_text_color',
+						'name' => 'mstw_gs_options[gs_tbl_even_text_color]',
+						'value' => $options['gs_tbl_even_text_color'],
+						'label' => ''
+					 );
+					 
+		add_settings_field(
+			'gs_tbl_even_text_color',
+			__( 'Even Row Text Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);
+		
+		// Home game (row) background color
+		$args = array( 	'id' => 'gs_tbl_home_bkgd_color',
+						'name' => 'mstw_gs_options[gs_tbl_home_bkgd_color]',
+						'value' => $options['gs_tbl_home_bkgd_color'],
+						'label' => ''
+					 );
+					 
+		add_settings_field(
+			'gs_tbl_home_bkgd_color',
+			__( 'Home Game (Row) Background Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);
+		
+		// Home game (row) text color
+		$args = array( 	'id' => 'gs_tbl_home_text_color',
+						'name' => 'mstw_gs_options[gs_tbl_home_text_color]',
+						'value' => $options['gs_tbl_home_text_color'],
+						'label' => ''
+					 );
+					 
+		add_settings_field(
+			'gs_tbl_home_text_color',
+			__( 'Home Game (Row) Text Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);
+	
+	}
+	
+// ----------------------------------------------------------------	
+// 	Colors table section instructions	
+// ----------------------------------------------------------------	
+	function mstw_gs_colors_table_inst( ) {
+		echo '<p>' . __( "Enter the default colors for your Schedule Table shortcodes and widgets. NOTE: These settings will override the default colors in the plugin's stylsheet." , 'mstw-loc-domain' ) . '</p>';
+	}
+	
+// ----------------------------------------------------------------	
+// 	CDT (shortcode and widget) colors section setup	
+// ----------------------------------------------------------------	
+	
+	function mstw_gs_cdt_colors_section_setup( ) {
+	
+		$display_on_page = 'mstw_gs_colors';
+		$page_section = 'mstw_gs_cdt_colors';
+		
+		$options = get_option( 'mstw_gs_options' );
+		
+		add_settings_section(
+			$page_section,
+			'Countdown Timer Colors',
+			'mstw_gs_colors_cdt_inst',
+			$display_on_page
+		);
+			
+		// Game time text color
+		$args = array( 	'id' => 'gs_cdt_game_time_color',
+						'name' => 'mstw_gs_options[gs_cdt_game_time_color]',
+						'value' => $options['gs_cdt_game_time_color'],
+						'label' => ''
+					 );					 
+		add_settings_field(
+			'gs_cdt_game_time_color',
+			__( 'Game Time Text Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);
+		
+		// Opponent text color
+		$args = array( 	'id' => 'gs_cdt_opponent_color',
+						'name' => 'mstw_gs_options[gs_cdt_opponent_color]',
+						'value' => $options['gs_cdt_opponent_color'],
+						'label' => ''
+					 );					 
+		add_settings_field(
+			'gs_cdt_opponent_color',
+			__( 'Opponent Text Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);
+		
+		// Location text color
+		$args = array( 	'id' => 'gs_cdt_location_color',
+						'name' => 'mstw_gs_options[gs_cdt_location_color]',
+						'value' => $options['gs_cdt_location_color'],
+						'label' => ''
+					 );				 
+		add_settings_field(
+			'gs_cdt_location_color',
+			__( 'Location Text Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);
+		
+		// Intro text color
+		$args = array( 	'id' => 'gs_cdt_intro_color',
+						'name' => 'mstw_gs_options[gs_cdt_intro_color]',
+						'value' => $options['gs_cdt_intro_color'],
+						'label' => ''
+					 );				 
+		add_settings_field(
+			'gs_cdt_intro_color',
+			__( 'Intro Text Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);
+		
+		// Countdown text color
+		$args = array( 	'id' => 'gs_cdt_countdown_color',
+						'name' => 'mstw_gs_options[gs_cdt_countdown_color]',
+						'value' => $options['gs_cdt_countdown_color'],
+						'label' => ''
+					 );
+		add_settings_field(
+			'gs_cdt_countdown_color',
+			__( 'Countdown Text Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);
+		
+		// Countdown background color
+		$args = array( 	'id' => 'gs_cdt_countdown_bkgd_color',
+						'name' => 'mstw_gs_options[gs_cdt_countdown_bkgd_color]',
+						'value' => $options['gs_cdt_countdown_bkgd_color'],
+						'label' => ''
+					 );
+		add_settings_field(
+			'gs_cdt_countdown_bkgd_color',
+			__( 'Countdown Background Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);
+	}
+	
+// ----------------------------------------------------------------	
+// 	Colors CDT section instructions	
+// ----------------------------------------------------------------	
+	function mstw_gs_colors_cdt_inst( ) {
+		echo '<p>' . __( "Enter the default colors for your countdown timer shortcodes and widgets. NOTE: These settings will override the default colors in the plugin's stylsheet.", 'mstw-loc-domain' ) . '</p>';
+	}
+	
+// ----------------------------------------------------------------	
+// 	Colors Slider section instructions	
+// ----------------------------------------------------------------	
+	function mstw_gs_colors_slider_inst( ) {
+		echo '<p>' . __( "Enter the default colors for your Schedule Slider shortcodes and widgets. NOTE: These settings will override the default colors in the plugin's stylsheet.", 'mstw-loc-domain' ) . '</p>';
+		echo '<p>
+		SLIDER<br>
+		Slider blook bkgd<br>
+		Slider header text<br>
+		Slider header divider<br>
+		Slider date text<br>
+		Slider opponent text<br>
+		Slider location text<br>
+		Slider date text<br>
+		Slider links text<br>
+		</p>';
+	}
+	
 	function mstw_gs_dtg_format_setup( ) {
 		// DTG format section
 		// Data fields/columns -- show/hide and labels
@@ -801,7 +1124,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		
 		add_settings_section(
 			$page_section,
-			'Game Schedules Date-Time Formats',
+			__( 'Date and Time Formats', 'mstw-loc-domain' ),
 			'mstw_gs_date_time_inst',
 			$display_on_page
 			);
@@ -811,11 +1134,10 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'set_name' => 'admin_date_format',
 						'set_default' => 'Y-m-d',
 						'cdt' => false,
-						);
-						
+						);						
 		add_settings_field(
 			'admin_date_format',
-			'Admin Table Date Format:',
+			__( 'Admin Table Date Format:', 'mstw-loc-domain' ),
 			'mstw_utl_date_format_ctrl',
 			'mstw_gs_settings',
 			'mstw_gs_dtg_format_settings',
@@ -827,11 +1149,10 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'name'	=> 'mstw_gs_options[custom_admin_date_format]',
 						'value'	=> $options['custom_admin_date_format'],
 						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
-						);
-						
+						);						
 		add_settings_field(
 			'custom_admin_date_format',
-			'Custom Admin Table Date Format:',
+			__( 'Custom Admin Table Date Format:', 'mstw-loc-domain' ),
 			'mstw_utl_text_ctrl',
 			$display_on_page,
 			$page_section,
@@ -842,11 +1163,10 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		$args = array(	'opt_name' => 'mstw_gs_options',
 						'set_name' => 'admin_time_format',
 						'set_default' => 'H:i',
-						);
-						
+						);						
 		add_settings_field(
 			'admin_time_format',
-			'Admin Table Time Format:',
+			__( 'Admin Table Time Format:', 'mstw-loc-domain' ),
 			'mstw_utl_time_format_ctrl',
 			'mstw_gs_settings',
 			'mstw_gs_dtg_format_settings',
@@ -858,11 +1178,10 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'name'	=> 'mstw_gs_options[custom_admin_time_format]',
 						'value'	=> $options['custom_admin_time_format'],
 						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
-						);
-						
+						);						
 		add_settings_field(
 			'custom_admin_time_format',
-			'Custom Admin Table Time Format:',
+			__( 'Custom Admin Table Time Format:', 'mstw-loc-domain' ),
 			'mstw_utl_text_ctrl',
 			$display_on_page,
 			$page_section,
@@ -874,11 +1193,10 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'set_name' => 'table_date_format',
 						'set_default' => 'Y m d',
 						'cdt' => false,
-						);
-						
+						);						
 		add_settings_field(
 			'table_date_format',
-			'Schedule Table [shortcode] Date Format:',
+			__( 'Schedule Table [shortcode] Date Format:', 'mstw-loc-domain' ),
 			'mstw_utl_date_format_ctrl',
 			'mstw_gs_settings',
 			'mstw_gs_dtg_format_settings',
@@ -890,11 +1208,10 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'name'	=> 'mstw_gs_options[custom_table_date_format]',
 						'value'	=> $options['custom_table_date_format'],
 						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
-						);
-						
+						);						
 		add_settings_field(
 			'custom_table_date_format',
-			'Custom Schedule Table [shortcode] Date Format:',
+			__( 'Custom Schedule Table [shortcode] Date Format:', 'mstw-loc-domain' ),
 			'mstw_utl_text_ctrl',
 			$display_on_page,
 			$page_section,
@@ -905,11 +1222,10 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		$args = array(	'opt_name' => 'mstw_gs_options',
 						'set_name' => 'table_time_format',
 						'set_default' => 'H:i',
-						);
-						
+						);						
 		add_settings_field(
 			'table_time_format',
-			'Schedule Table [shortcode] Time Format:',
+			__( 'Schedule Table [shortcode] Time Format:', 'mstw-loc-domain' ),
 			'mstw_utl_time_format_ctrl',
 			'mstw_gs_settings',
 			'mstw_gs_dtg_format_settings',
@@ -921,11 +1237,10 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'name'	=> 'mstw_gs_options[custom_table_time_format]',
 						'value'	=> $options['custom_table_time_format'],
 						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
-						);
-						
+						);						
 		add_settings_field(
 			'custom_table_time_format',
-			'Custom Schedule Table [shortcode] Time Format:',
+			__( 'Custom Schedule Table [shortcode] Time Format:', 'mstw-loc-domain' ),
 			'mstw_utl_text_ctrl',
 			$display_on_page,
 			$page_section,
@@ -937,11 +1252,10 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'set_name' => 'table_widget_date_format',
 						'set_default' => 'j M y',
 						'cdt' => false,
-						);
-						
+						);						
 		add_settings_field(
 			'table_widget_date_format',
-			'Schedule Table (widget) Date Format:',
+			__( 'Schedule Table (widget) Date Format:', 'mstw-loc-domain' ),
 			'mstw_utl_date_format_ctrl',
 			'mstw_gs_settings',
 			'mstw_gs_dtg_format_settings',
@@ -953,11 +1267,10 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'name'	=> 'mstw_gs_options[custom_table_widget_date_format]',
 						'value'	=> $options['custom_table_widget_date_format'],
 						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
-						);
-						
+						);						
 		add_settings_field(
 			'custom_table_widget_date_format',
-			'Custom Schedule Table [shortcode] Date Format:',
+			__( 'Custom Schedule Table (widget) Date Format:', 'mstw-loc-domain' ),
 			'mstw_utl_text_ctrl',
 			$display_on_page,
 			$page_section,
@@ -969,11 +1282,10 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'set_name' => 'cdt_dtg_format',
 						'set_default' => 'l, j M g:i a',
 						'cdt' => true,
-						);
-						
+						);			
 		add_settings_field(
 			'cdt_dtg_format',
-			'Countdown Timer (widget & [shortcode]) Date & Time Format:',
+			__( 'Countdown Timer (widget & [shortcode]) Date & Time Format:', 'mstw-loc-domain' ),
 			'mstw_utl_date_format_ctrl',
 			'mstw_gs_settings',
 			'mstw_gs_dtg_format_settings',
@@ -985,11 +1297,10 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'name'	=> 'mstw_gs_options[custom_cdt_dtg_format]',
 						'value'	=> $options['custom_cdt_dtg_format'],
 						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
-						);
-						
+						);						
 		add_settings_field(
 			'custom_cdt_dtg_format',
-			'Custom Countdown Timer (widget & [shortcode]) Date-Time Format:',
+			__( 'Custom Countdown Timer (widget & [shortcode]) Date-Time Format:', 'mstw-loc-domain' ),
 			'mstw_utl_text_ctrl',
 			$display_on_page,
 			$page_section,
@@ -1001,11 +1312,10 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'set_name' => 'cdt_date_format',
 						'set_default' => 'l, j M',
 						'cdt' => false,
-						);
-						
+						);						
 		add_settings_field(
 			'cdt_date_format',
-			'Countdown Timer (widget & [shortcode]) Date Format (game time is TBA):',
+			__( 'Countdown Timer (widget & [shortcode]) Date Format (game time is TBA):', 'mstw-loc-domain' ),
 			'mstw_utl_date_format_ctrl',
 			'mstw_gs_settings',
 			'mstw_gs_dtg_format_settings',
@@ -1017,11 +1327,10 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'name'	=> 'mstw_gs_options[custom_cdt_date_format]',
 						'value'	=> $options['custom_cdt_date_format'],
 						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
-						);
-						
+						);						
 		add_settings_field(
 			'custom_cdt_date_format',
-			'Custom Countdown Timer (widget & [shortcode]) Date Format:',
+			__( 'Custom Countdown Timer (widget & [shortcode]) Date Format:', 'mstw-loc-domain' ),
 			'mstw_utl_text_ctrl',
 			$display_on_page,
 			$page_section,
@@ -1033,11 +1342,10 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'set_name' => 'slider_date_format',
 						'set_default' => 'D, j M',
 						'cdt' => false,
-						);
-						
+						);						
 		add_settings_field(
 			'slider_date_format',
-			'Schedule Slider Date Format:',
+			__( 'Schedule Slider Date Format:', 'mstw-loc-domain' ),
 			'mstw_utl_date_format_ctrl',
 			$display_on_page,
 			$page_section,
@@ -1049,11 +1357,10 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'name'	=> 'mstw_gs_options[custom_slider_date_format]',
 						'value'	=> $options['custom_slider_date_format'],
 						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
-						);
-						
+						);						
 		add_settings_field(
 			'custom_slider_date_format',
-			'Custom Schedule Slider Date Format:',
+			__( 'Custom Schedule Slider Date Format:', 'mstw-loc-domain' ),
 			'mstw_utl_text_ctrl',
 			$display_on_page,
 			$page_section,
@@ -1065,11 +1372,10 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'set_name' => 'slider_time_format',
 						'set_default' => 'g:i A',
 						'cdt' => false,
-						);
-						
+						);						
 		add_settings_field(
 			'slider_time_format',
-			'Schedule Slider Time Format:',
+			__( 'Schedule Slider Time Format:', 'mstw-loc-domain' ),
 			'mstw_utl_time_format_ctrl',
 			$display_on_page,
 			$page_section,
@@ -1081,11 +1387,10 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'name'	=> 'mstw_gs_options[custom_slider_time_format]',
 						'value'	=> $options['custom_slider_time_format'],
 						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
-						);
-						
+						);						
 		add_settings_field(
 			'custom_slider_time_format',
-			'Custom Schedule Slider Time Format:',
+			__( 'Custom Schedule Slider Time Format:', 'mstw-loc-domain' ),
 			'mstw_utl_text_ctrl',
 			$display_on_page,
 			$page_section,
@@ -1094,6 +1399,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 
 	}
 	
+
 	function mstw_gs_data_fields_setup( ) {
 		// Data fields/columns -- show/hide and labels
 		$display_on_page = 'mstw_gs_settings';
@@ -1116,8 +1422,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'value'	=> $options['show_date'],
 						'label'	=> __( 'Show or hide the Date field/column. (Default: Show)', 'mstw-loc-domain' )
 						//'label' => 'show_number: ' . $options['show_number'] . '::'
-						);
-						
+						);						
 		add_settings_field(
 			'gs_show_date',
 			__( 'Show Date Column:', 'mstw-loc-domain' ),
@@ -1134,8 +1439,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'value'	=> $options['date_label'],
 						'label'	=> __( 'Set label for date data field or column. (Default: "Date")', 'mstw-loc-domain' )
 						//'label' => 'number_label: ' . $options['number_label'] . '::'
-						);
-						
+						);						
 		add_settings_field(
 			'gs_date_label',
 			__( 'Date Column Label:', 'mstw-loc-domain' ),
@@ -1153,8 +1457,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'value'	=> $options['opponent_label'],
 						'label'	=> __( 'Set label for opponent data field or column. (Default: "Opponent") NOTE: THE OPPONENT FIELD MUST  BE SHOWN.', 'mstw-loc-domain' )
 						//'label' => 'number_label: ' . $options['number_label'] . '::'
-						);
-						
+						);						
 		add_settings_field(
 			'gs_opponent_label',
 			__( 'Opponent Column Label:', 'mstw-loc-domain' ),
@@ -1170,8 +1473,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'value'	=> $options['show_location'],
 						'label'	=> __( 'Show or hide the Location field/column. (Default: Show)', 'mstw-loc-domain' )
 						//'label' => 'show_number: ' . $options['show_number'] . '::'
-						);
-						
+						);						
 		add_settings_field(
 			'gs_show_location',
 			__( 'Show Location Column:', 'mstw-loc-domain' ),
@@ -1188,8 +1490,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'value'	=> $options['location_label'],
 						'label'	=> __( 'Set label for location data field or column. (Default: "Location")', 'mstw-loc-domain' )
 						//'label' => 'number_label: ' . $options['number_label'] . '::'
-						);
-						
+						);						
 		add_settings_field(
 			'gs_location_label',
 			__( 'Location Column Label:', 'mstw-loc-domain' ),
@@ -1205,8 +1506,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'value'	=> $options['show_time'],
 						'label'	=> __( 'Show or hide the Time/Result field or column. (Default: Show)', 'mstw-loc-domain' )
 						//'label' => 'show_number: ' . $options['show_number'] . '::'
-						);
-						
+						);						
 		add_settings_field(
 			'gs_show_time',
 			__( 'Show Time Column:', 'mstw-loc-domain' ),
@@ -1223,8 +1523,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'value'	=> $options['time_label'],
 						'label'	=> __( 'Set label for Time/Result data field or column. (Default: "Time/Result")', 'mstw-loc-domain' )
 						//'label' => 'number_label: ' . $options['number_label'] . '::'
-						);
-						
+						);						
 		add_settings_field(
 			'gs_time_label',
 			__( 'Time/Result Column Label:', 'mstw-loc-domain' ),
@@ -1244,8 +1543,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'name'	=> 'mstw_gs_options[show_media]',
 						'value'	=> $options['show_media'],
 						'label'	=> __( 'Show a number of media fields (1-3) or hide the Media field or column. (Default: Show all 3)', 'mstw-loc-domain' )
-						);
-						
+						);						
 		add_settings_field(
 			'gs_show_media',
 			__( 'Show Media Column:', 'mstw-loc-domain' ),
@@ -1260,8 +1558,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 						'name'	=> 'mstw_gs_options[media_label]',
 						'value'	=> $options['media_label'],
 						'label'	=> __( 'Set label for Media data field or column. (Default: "Time/Result")', 'mstw-loc-domain' )
-						);
-						
+						);						
 		add_settings_field(
 			'gs_media_label',
 			__( 'Media Column Label:', 'mstw-loc-domain' ),
@@ -1280,20 +1577,6 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		echo '<p>' . __( 'Enter the default settings for Schedule Table data fields and columns. These settings will apply to the [shortcode] schedules, where they can be overridden by [shortcode] arguments.', 'mstw-loc-domain' ) .  '</p>';
 		echo '<p>' . __('NOTE: THE OPPONENT FIELD MUST BE SHOWN.', 'mstw-loc-domain' ) . '</p>';
 	} //End of data_fields_inst()
-	
-// ----------------------------------------------------------------	
-//	Hide media column
-	function mstw_gs_hide_media_ctrl( ) {
-		
-		$options = get_option( 'mstw_gs_options' );
-		?>
-		<p>
-		<input type="checkbox" id="gs_hide_media" name="mstw_gs_options[gs_hide_media]" value="hide-media" <?php checked( "hide-media", $options['gs_hide_media'], true ) ?> />  
-		<label for='gs_hide_media'> Check to hide media column in ALL schedule tables.</label>
-		</p>
-		
-		<?php  
-	} 
 
 // ----------------------------------------------------------------	
 // 	Date-time format section instructions and controls	
@@ -1455,7 +1738,7 @@ class MSTW_GS_ImporterPlugin {
 				<table>				
 					<tr>  <!-- Team ID input field -->
 						<td><label for="opt_sched_id">Select a team/schedule (ID) to input:</label></td>
-						<td><input size="8" name="csv_importer_sched_id" id="opt_sched_id" type="text" value="<?php echo esc_attr( $opt_sched_id ); ?>"/></td>
+						<td><input size="20" name="csv_importer_sched_id" id="opt_sched_id" type="text" value="<?php echo esc_attr( $opt_sched_id ); ?>"/></td>
 						<td><strong>Use an existing team ID or a new one. Team ID will be created if it does not exist.</strong></td>
 					</tr>
 					<tr>  <!-- CSV file selection field -->

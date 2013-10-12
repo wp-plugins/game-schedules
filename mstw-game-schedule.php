@@ -163,6 +163,128 @@ function mstw_gs_requires_wp_ver() {
 	}
 }
 
+// ----------------------------------------------------------------
+// Need the admin utils for convenience
+// ----------------------------------------------------------------
+	if ( !function_exists( 'mstw_admin_utils_loaded' ) ) {
+		// we're in wp-admin
+		require_once ( dirname( __FILE__ ) . '/includes/mstw-admin-utils.php' );
+    }
+
+// ----------------------------------------------------------------
+// Add the CSS code from the settings/options to the header
+// ----------------------------------------------------------------
+	add_filter( 'wp_head', 'mstw_gs_add_css');
+		
+	function mstw_gs_add_css( ) {
+		
+		//$options = get_option( 'mstw_gs_options' );
+		$colors = get_option( 'mstw_gs_color_options' );
+		
+		echo '<style type="text/css">';
+		
+		// SCHEDULE TABLES
+		echo ".mstw-gs-table-head th, .mstw-gs-sw-tab-head th { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_tbl_hdr_text_color', 'color' );
+			echo mstw_utl_build_css_rule( $colors, 'gs_tbl_hdr_bkgd_color', 'background-color' );
+			echo mstw_utl_build_css_rule( $colors, 'gs_tbl_border_color', 'border-color' );
+		echo "} \n";
+		
+		echo ".mstw-gs-odd tr, .mstw-gs-odd td, .mstw-gs-odd td a, .mstw-gs-sw-odd td { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_tbl_odd_text_color', 'color' );
+			echo mstw_utl_build_css_rule( $colors, 'gs_tbl_odd_bkgd_color', 'background-color' );
+			echo mstw_utl_build_css_rule( $colors, 'gs_tbl_border_color', 'border-color' );
+		echo "} \n";
+		
+		echo ".mstw-gs-even tr, .mstw-gs-even td, .mstw-gs-even td a, .mstw-gs-sw-even td { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_tbl_even_text_color', 'color' );
+			echo mstw_utl_build_css_rule( $colors, 'gs_tbl_even_bkgd_color', 'background-color' );
+			echo mstw_utl_build_css_rule( $colors, 'gs_tbl_border_color', 'border-color' );
+		echo "} \n";
+				
+		echo ".mstw-gs-even.mstw-gs-home td, .mstw-gs-odd.mstw-gs-home td { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_tbl_home_text_color', 'color' );
+			echo mstw_utl_build_css_rule( $colors, 'gs_tbl_home_bkgd_color', 'background-color' );
+		echo "} \n";
+		
+		echo ".mstw-gs-odd.mstw-gs-home td a, .mstw-gs-even.mstw-gs-home td a { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_tbl_home_text_color', 'color' );
+		echo "} \n";
+		
+		// COUNTDOWN TIMER
+		echo ".mstw-gs-cdt-dtg { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_cdt_game_time_color', 'color' );
+		echo "} \n";
+		
+		echo ".mstw-gs-cdt-opponent { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_cdt_location_color', 'color' );
+		echo "} \n";
+		
+		echo ".mstw-gs-cdt-opponent a { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_cdt_opponent_color', 'color' );
+		echo "} \n";
+		
+		echo ".mstw-gs-cdt-intro { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_cdt_intro_color', 'color' );
+		echo "} \n";
+		
+		echo ".mstw-gs-cdt-countdown { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_cdt_countdown_color', 'color' );
+			echo mstw_utl_build_css_rule( $colors, 'gs_cdt_countdown_bkgd_color', 'background-color' );
+		echo "} \n";
+		
+		
+		
+		// SCHEDULE SLIDER
+		echo ".gs-slider .title, .gs-slider .full-schedule-link { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_sldr_hdr_text_color', 'color' );
+		echo "} \n";
+		
+		echo ".gs-slider .full-schedule-link a { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_sldr_hdr_text_color', 'color' );
+		echo "} \n";
+		
+		echo ".gs-slider .box { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_sldr_hdr_bkgd_color', 'background-color' );
+		echo "} \n";
+		
+		echo ".gs-divider { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_sldr_hdr_divider_color', 'border-bottom-color' );
+		echo "} \n";
+		
+		echo ".gs-slider #schedule-slider { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_sldr_game_block_bkgd_color', 'background-color' );
+		echo "} \n";
+		
+		echo ".gs-slider .game-block .date { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_sldr_game_date_color', 'color' );
+			echo mstw_utl_build_css_rule( $colors, 'gs_sldr_game_date_color', 'border-bottom-color' );
+		echo "} \n";
+		
+		echo ".gs-slider .game-block .opponent { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_sldr_game_opponent_color', 'color' );
+		echo "} \n";
+		
+		echo ".gs-slider .game-block .location { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_sldr_game_location_color', 'color' );
+		echo "} \n";
+
+		echo ".gs-slider .game-block .time-result { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_sldr_game_time_color', 'color' );
+		echo "} \n";
+		
+		echo ".gs-slider .game-block .links, .gs-slider .game-block .links a  { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_sldr_game_links_color', 'color' );
+		echo "} \n";
+		
+		echo "#gs-slider-right-arrow, #gs-slider-left-arrow { \n";
+			echo mstw_utl_build_css_rule( $colors, 'gs_sldr_game_location_color', 'color' );
+		echo "} \n";
+
+		echo '</style>';	
+	}
+
+
 // --------------------------------------------------------------------------------------
 // Set-up Action and Filter Hooks for the Settings on the admin side
 // --------------------------------------------------------------------------------------
@@ -208,32 +330,26 @@ function mstw_gs_enqueue_styles () {
 	} 
 
 	// Enqueue JS for schedule slider
-	wp_enqueue_script( 'mstw-gs-slider', plugins_url( 'game-schedules/js/gs-slider.js' ), array(), false, true );
+	// Register the script like this for a plugin:  
+    //wp_register_script( 'gs-slider-script', plugins_url( '/js/gs-slide-slider.js', __FILE__ ) );
+	wp_enqueue_script( 'gs-slider', plugins_url( 'game-schedules/js/gs-slider.js' ), array('jquery'), false, true );
+	//wp_enqueue_script( 'gs-slider', plugins_url( 'game-schedules/js/gs-slider.js' ) );
+	//wp_enqueue_script( 'gs-slider-script' );
 }
 
 // --------------------------------------------------------------------------------------
 // GAME SCHEDULES CUSTOM POST TYPE STUFF
 // --------------------------------------------------------------------------------------
-// Set-up Action Hooks & Filters for the Game Locations custom post type
-// ACTIONS
-// 		'init'											mstw_gs_register_post_type
-//		'add_metaboxes'									mstw_gs_add_meta
-//		'save_posts'									mstw_gs_save_meta
-//		'manage_game_schedule_posts_custom_column'		mstw_gs_manage_columns
-
-// FILTERS
-// 		'manage_edit-game_schedule_columns'				mstw_gs_edit_columns
-//		'post_row_actions'								mstw_gs_remove_the_view
-//		
-// --------------------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------------------
-add_action( 'init', 'mstw_gs_register_post_type' );
+add_action( 'init', 'mstw_gs_register_post_types' );
 // --------------------------------------------------------------------------------------
-function mstw_gs_register_post_type() {
+function mstw_gs_register_post_types() {
 	/* Set up the arguments for the Game Schedules post type */
 	$menu_icon_url = plugins_url( ) . '/game-schedules/images/mstw-admin-menu-icon.png';
 	
+	//------------------------------------------------------------------------------------
+	// register scheduled_games post type
 	$args = array(
     	'public' 			=> true,
 		'menu_icon'     	=> $menu_icon_url,
@@ -262,6 +378,38 @@ function mstw_gs_register_post_type() {
 		);
 		
 	register_post_type( 'scheduled_games', $args);
+	
+	//------------------------------------------------------------------------------------
+	// register mstw_gs_teams post type
+	
+	$args = array(
+    	'public' 			=> true,
+		'menu_icon'     	=> $menu_icon_url,
+        'query_var' 		=> 'mstw_gs_teams',
+        'rewrite' 			=> array(
+            'slug' 			=> 'mstw-gs-teams',
+            'with_front' 	=> false,
+        ),
+        'supports' 			=> array(
+									'title'
+									),
+        'labels' 			=> array(
+									'name' => __( 'MSTW GS Teams', 'mstw-loc-domain' ),
+									'singular_name' => __( 'Team', 'mstw-loc-domain' ),
+									'all_items' => __( 'All Teams', 'mstw-loc-domain' ),
+									'add_new' => __( 'Add New Team', 'mstw-loc-domain' ),
+									'add_new_item' => __( 'Add Team', 'mstw-loc-domain' ),
+									'edit_item' => __( 'Edit Team', 'mstw-loc-domain' ),
+									'new_item' => __( 'New Team', 'mstw-loc-domain' ),
+									//'View Game Schedule' needs a custom page template that is of no value.
+									'view_item' => null, 
+									'search_items' => __( 'Search Teams', 'mstw-loc-domain' ),
+									'not_found' => __( 'No Teams Found', 'mstw-loc-domain' ),
+									'not_found_in_trash' => __( 'No Teams Found In Trash', 'mstw-loc-domain' ),
+									)
+		);
+		
+	register_post_type( 'mstw_gs_teams', $args);
 }
 
 // --------------------------------------------------------------------------------------
@@ -283,7 +431,15 @@ function mstw_gs_shortcode_handler( $atts ){
 			unset( $options[$k] );
 		}
 	}
-	//$output .= '<pre>FILTERED OPTIONS:' . print_r( $options, true ) . '</pre>';
+	
+	//$atts = shortcode_atts( array(
+	//				'sched' => '1',
+	//				'games_to_show' => '-1',
+	//				),
+	//				$atts );
+	
+	
+	//$output .= '<pre>SC ARGS:' . print_r( $atts, true ) . '</pre>';
 	
 	// and merge them with the defaults
 	$args = wp_parse_args( $options, mstw_gs_get_defaults( ) );
@@ -296,6 +452,7 @@ function mstw_gs_shortcode_handler( $atts ){
 	$attribs = shortcode_atts( $args, $atts );
 	//$output .= '<pre>ATTS:' . print_r( $atts, true ) . '</pre>';
 	//$output .= '<pre>ATTRIBS:' . print_r( $attribs, true ) . '</pre>';
+	//return $output;
 	
 	/*extract( shortcode_atts( array(
 				'sched' => '1',
@@ -308,7 +465,7 @@ function mstw_gs_shortcode_handler( $atts ){
 		
 	$mstw_gs_sched_tab = mstw_gs_build_sched_tab( $attribs ); //$sched, $show_media, $first_dtg, $last_dtg, $games_to_show );
 	
-	return $mstw_gs_sched_tab;
+	return $output . $mstw_gs_sched_tab;
 }
 
 /*--------------------------------------------------------------------------------------
@@ -329,14 +486,29 @@ function mstw_gs_shortcode_handler( $atts ){
 		//Pull the $args array into individual variables
 		extract( $args );
 		
+		$scheds = explode( ',', $sched );
+		
+		if ( $scheds[0] == '' ) {
+			return '<h3>' . __( 'No schedule specified.', 'mstw-loc-domain' ) . '</h3>';
+		}
+		
 		// DO WE REALLY NEED THIS?
 		// Get the admin options settings
-		$options = get_option( 'mstw_gs_options' );
+		//$options = get_option( 'mstw_gs_options' );
 		
+		//$output .= '<pre>mstw_gs_build_tab: $args:' . print_r( $args, true ) . '</pre>';
+		//$output .= '<pre>ATTRIBS:' . print_r( $attribs, true ) . '</pre>';
+		//return $output;
 		
-		$dtg_format = (  $custom_table_date_format == "" ? $table_date_format : $custom_table_date_format );
+		//full date format 
+		$dtg_format = ( $table_date_format == 'custom' ? $custom_table_date_format : $table_date_format );
+		//$dtg_format = ( $options['table_date_format'] == 'custom' ? $options['custom_table_date_format'] : $options['table_date_format'] );
+		//$cdt_dtg_format = $options['cdt_dtg_format']; 
 		
-		$time_format = ( !empty( $custom_table_time_format )  ? $custom_table_time_format : $table_time_format );
+		//time format
+		$time_format = ( $table_time_format == 'custom' ? $custom_table_time_format : $table_time_format );
+		//$time_format = ( $options['table_time_format'] == 'custom' ? $options['custom_table_time_format'] : $options['table_time_format'] );
+		//$cdt_date_format = $options['cdt_date_format'];
 		
 		//$output .= '<h2>Date format: ' . $dtg_format . '</h2>';
 		
@@ -348,7 +520,7 @@ function mstw_gs_shortcode_handler( $atts ){
 		else { 
 			$first_dtg = strtotime( $first_dtg );
 		}
-		
+				
 		$first_dtg = ( $first_dtg <= 0 ? 1 : $first_dtg );
 		
 		$last_dtg = strtotime( $last_dtg );
@@ -368,8 +540,8 @@ function mstw_gs_shortcode_handler( $atts ){
 													'relation' => 'AND',
 													array(
 														'key' => '_mstw_gs_sched_id',
-														'value' => $sched,
-														'compare' => '='
+														'value' => $scheds,
+														'compare' => 'IN',
 													),
 													array(
 														'key' => '_mstw_gs_unix_dtg',
@@ -388,7 +560,7 @@ function mstw_gs_shortcode_handler( $atts ){
 			// Make table of posts
 			// Start with the table header
 			$output .= '<table class="mstw-gs-table">'; 
-			$output .= '<thead class="mstw-gs-table-head"><tr>';
+			$output .= "<thead class='mstw-gs-table-head mstw-gs-table-head_" . $scheds[0] . "'><tr>";
 			if( $show_date ) { 
 				$output .= '<th>'. $date_label . '</th>';
 			}
@@ -417,14 +589,17 @@ function mstw_gs_shortcode_handler( $atts ){
 			// Loop through the posts and make the rows
 			foreach( $posts as $post ) {
 				// set up some housekeeping to make styling in the loop easier
-				$is_home_game = get_post_meta($post->ID, '_mstw_gs_home_game', true );
+				
 				$even_or_odd_row = $even_and_odd[$row_cnt]; 
 				$row_class = 'mstw-gs-' . $even_or_odd_row;
+				$row_class .= ' ' . $row_class . '_' . $scheds[0];
+				
+				$is_home_game = get_post_meta($post->ID, '_mstw_gs_home_game', true );
 				if ( $is_home_game == 'home' ) 
-					$row_class = $row_class . ' mstw-gs-home';
+					$row_class .= ' mstw-gs-home';
 				
 				$row_tr = '<tr class="' . $row_class . '">';
-				$row_td = '<td>'; 
+				$row_td = '<td class="' . $row_class . '">'; 
 				
 				// create the row
 				$row_string = $row_tr;			
@@ -577,10 +752,9 @@ function mstw_gs_shortcode_handler( $atts ){
 			$output = $output . '</table>';
 		}
 		else { // No posts were found
-		
-			$output =  '<h3>' . __( 'No Scheduled Games Found.', 'mstw-loc-domain' ) . '</h3>';
-			
+			$output =  '<h3>' . __( 'No scheduled games found for ', 'mstw-loc-domain' ) .$scheds[0] . '.</h3>';	
 		}
+		
 		return $output;
 
 	} //End function mstw_gs_build_sched_tab
@@ -592,14 +766,35 @@ add_shortcode( 'mstw_gs_countdown', 'mstw_gs_countdown_handler' );
 // which creates the countdown timer display/output
 // --------------------------------------------------------------------------------------
 function mstw_gs_countdown_handler( $atts ){
+
+	//$output .= '<pre>ATTS:' . print_r( $atts, true ) . '</pre>';
 	
+	// get the options set in the admin screen
+	$options = get_option( 'mstw_gs_options' );
+	//$output = '<pre>OPTIONS:' . print_r( $options, true ) . '</pre>';
+	
+	// and merge them with the defaults
+	$args = wp_parse_args( $options, mstw_gs_get_defaults( ) );
+	//$output .= '<pre>ARGS (options+defaults): ' . print_r( $args, true ) . '</pre>';
+	
+	// then merge the parameters passed to the shortcode with the result									
+	$attribs = shortcode_atts( $args, $atts );
+	//$output .= '<pre>ARGS:' . print_r( $args, true ) . '</pre>';
+	
+	//$output .= '<pre>ATTRIBS (args+atts): ' . print_r( $attribs, true ) . '</pre>';
+	
+	//return $output;
+	
+	/*
 	extract( shortcode_atts( array(
 				'sched' => '1',
 				'intro' => 'Time to kickoff:',
 				'home_only' => false,
 				), $atts ) );
+	*/
 		
-	$mstw_gs_countdown = mstw_gs_build_countdown( $sched, $intro, $home_only );
+	//$mstw_gs_countdown = mstw_gs_build_countdown( $sched, $intro, $home_only );
+	$mstw_gs_countdown = mstw_gs_build_countdown( $attribs  );
 	
 	return $mstw_gs_countdown;
 }
@@ -613,12 +808,13 @@ function mstw_gs_countdown_handler( $atts ){
 // $intro -> text before countdown, defaults "Time to kickoff:" 
 // $home_only -> countdown to home games only, defaults to false (all games)
 // --------------------------------------------------------------------------------------
-function mstw_gs_build_countdown( $sched, $intro, $home_only ) {
+function mstw_gs_build_countdown( $attribs ) { //$sched, $intro, $home_only ) {
 	
-	// General debug string used throughout
-	//global $mstw_debug_str;
+	// For legacy compatibility
+	$sched = $attribs['sched'];
+	$intro = $attribs['intro'];
+	$home_only = $attribs['home_only'];
 	
-	//$ret_str = "<p><strong>Current WP DTG: </strong>" . date("D M d, Y G:i a") . '<strong> Zone: </strong>' . get_option('timezone_string') . '</p>';
 	$ret_str = '';
 	
 	// First get all the games for the specified schedule id.
@@ -680,8 +876,14 @@ function mstw_gs_build_countdown( $sched, $intro, $home_only ) {
 	else {
 		// we found a game, so build the countdown display
 		$options = get_option( 'mstw_gs_options' );
-		$cdt_dtg_format = $options['cdt_dtg_format']; //full date-time group format
-		$cdt_date_format = $options['cdt_date_format']; //date only format
+		
+		//full date-time group format 
+		$cdt_dtg_format = ( $options['cdt_dtg_format'] == 'custom' ? $options['custom_cdt_dtg_format'] : $options['cdt_dtg_format'] );
+		//$cdt_dtg_format = $options['cdt_dtg_format']; 
+		
+		//date only format
+		$cdt_date_format = ( $options['cdt_date_format'] == 'custom' ? $options['custom_cdt_date_format'] : $options['cdt_date_format'] );
+		//$cdt_date_format = $options['cdt_date_format']; 
 		
 		
 		// Game day, date, time; need to handle a TBD time
@@ -694,7 +896,7 @@ function mstw_gs_build_countdown( $sched, $intro, $home_only ) {
 			//$game_dtg is the full UNIX timestamp (DATE & TIME)  
         }
 		
-		$ret_str .= '<span class="mstw-gs-cdt-dtg">' . $dtg_str .  '</span><br/>';
+		$ret_str .= '<span class="mstw-gs-cdt-dtg">' . $dtg_str . '</span><br/>';
 		
 		// Add the opponent & location
 		// 20120821-MAO: Location display should be an option.
@@ -748,11 +950,13 @@ function mstw_gs_build_countdown( $sched, $intro, $home_only ) {
 // --------------------------------------------------------------------------------------
 	function mstw_gs_slider_handler( $atts ) {
 	
-		$atts = shortcode_atts( array(
-					'sched' => '1',
-					'show_links' => 1,
-					),
-					$atts );
+		//return '<p>' . print_r( $atts, true );
+	
+		//$atts = shortcode_atts( array(
+		//			'sched' => '1',
+		//			'show_links' => 1,
+		//			),
+		//			$atts );
 		
 		// NEED TO ADD DEFAULTS >>
 		
@@ -777,6 +981,13 @@ function mstw_gs_build_countdown( $sched, $intro, $home_only ) {
 		if ( $sched_slug ==  "" ) {
 			return '<h3>No Schedule Specified </h3>';
 		}
+		
+		$sched_slugs = explode( ',', $atts['sched'] );
+		//return '<pre>' . print_r($sched_slugs) . '</pre>';
+		
+		if ( $sched_slugs[0] ==  "" ) {
+			return '<h3>No Schedule Specified </h3>';
+		}
 			
 		// Get the posts
 		$posts = get_posts( array( 	'numberposts' => -1,
@@ -784,8 +995,8 @@ function mstw_gs_build_countdown( $sched, $intro, $home_only ) {
 									'meta_query' => array(
 														array(
 															'key' => '_mstw_gs_sched_id',
-															'value' => $sched_slug,
-															'compare' => '='
+															'value' => $sched_slugs,
+															'compare' => 'IN'
 														)
 													),
 							  
@@ -793,24 +1004,27 @@ function mstw_gs_build_countdown( $sched, $intro, $home_only ) {
 									'meta_key' => '_mstw_gs_unix_dtg',
 									'order' => 'ASC' 
 									)
-							);	
+							);						
 					
 		if( $posts ) {
 			// find the next game
-			$next_game_id = mstw_gs_get_next_game( $posts, time( ) );
-			if ($next_game_id > 0 ) {
-				return "<h3>" . __( 'No games later than ', mstw-loc-domain) . $date('Y-m-d H:i:s') . 
+			$next_game = mstw_gs_get_next_game( $posts, current_time( 'timestamp' ) );
+			
+			//$next_game_id = $next_game['next_game_id'];
+			
+			extract( $next_game, EXTR_OVERWRITE );
+			
+			if ( $next_game_id < 0 ) {
+			//return '<h3>NEXT GAME ID: ' . $next_game_id . '</h3>';
+				return "<h3>" . __( 'No games later than ', mstw-loc-domain) . date( 'Y-m-d H:i:s', current_time( 'timestamp' ) ) . 
 					__( ' found on schedule ', 'mstw-loc-domain' ) . $sched_slug . "</h3>\n";
 			}
+			//return '<h3>NEXT GAME ID: ' . $next_game_id . ' NEXT GAME DTG: ' . $next_game_dtg . ' NEXT GAME NUMBER: ' . $next_game_number . ' NEXT GAME OPPONENT: ' . $next_game_opponent . '</h3>';
 			// determine the first game to show; or the slider offset
-			$next_game_number = 0; // counter: this will be used as an offset, so the first game is 0
-			foreach ( $posts as $post ) {
-				if ( $post->ID == $next_game_id ) {
-					break;  // jump out of the foreach loop before incrementing #next_game_number counter
-				}
-				$next_game_number = $next_game_number + 1;   //increment the next game number
-			}
-			$mstw_gs_slider = mstw_gs_build_slider( $posts, $atts, $next_game_nbr, "2013 Schedule" );
+			//$next_game_number = 0; // counter: this will be used as an offset, so the first game is 0
+			//return '<h3>NEXT GAME ID: ' . $next_game_id . '</h3>';	
+			
+			$mstw_gs_slider = mstw_gs_build_slider( $posts, $atts, $next_game_number+1 ); //, "2013 Schedule" );
 		} else {
 			return "<h3>" . __( 'No games found on schedule ', 'mstw-loc-domain' ) . $sched_slug . "</h3>\n";
 		}
@@ -829,58 +1043,92 @@ function mstw_gs_build_countdown( $sched, $intro, $home_only ) {
 	// RETURN:
 	//	an HTML string containing the slider to be displayed
 	//================================================================================
-	function mstw_gs_build_slider( $games, $atts, $game_number, $schedule_title_label ) {
+	function mstw_gs_build_slider( $games, $atts, $game_number ) { // $schedule_title_label ) {
+	
+	    //return '<p>' . print_r( $atts, true );
+	
 		// Development placeholders for settings and args
+		//$game_number = 5;
 		
-		$game_number = 4;
-		$show_slider_title = 1;
-		$show_slider_schedule_link = 1;
-		$slider_schedule_link_label = "View Full Schedule";
-		$slider_schedule_link = "http://shoalsummitsolutions.com/dev/schedule-test";
+		$sched_ids = explode( ',', $atts['sched'] );
+		
+		//return '<p>' . print_r( $sched_ids, true ) . '</p>';
+		
+		$css_tag = '_' . $sched_ids[0];
+		
+		$slider_title = $atts['title'];
+		( $slider_title == '' ? $show_slider_title = 0 : $show_slider_title = 1 );
+		
+		//$show_slider_schedule_link = 1;
+		
+		if ( $atts['link'] == ''  or $atts['link_label'] == '' ) {
+			$show_slider_schedule_link = 0;
+		}
+		else {
+			$show_slider_schedule_link = 1;
+			$slider_link = $atts['link'];
+			$slider_link_label = $atts['link_label'];
+		}
+		
+		//return '<p>' . print_r( $atts, true );
 		
 		$game_block_width = 187;
 		$schedule_slider_width = 3000; //DEFAULT ONLY. CALCULATED BELOW BASED ON THE # OF GAMES
+		$schedule_view_width = 584; //DEFAULT. CALCULATED BELOW BASED ON GAMES_TO_VIEW
 
 		$nbr_of_games = sizeof( $games );
 		$schedule_slider_width = $nbr_of_games*$game_block_width;
-		$schedule_slider_offset = ($game_number > 0) ? (-1)*($game_number-1)*$game_block_width : 0;
+		$schedule_slider_offset = ($game_number > 0 ? (-1)*($game_number-1)*$game_block_width : 0);
+		
+		( $atts['games_to_show'] == '' ? $games_to_show = 3 : $games_to_show = $atts['games_to_show'] );
+		$slider_view_width = $games_to_show*$game_block_width+10;
 		
 		$output = '';
-		//$output .= '<p>$nbr_of_games= ' . $nbr_of_games . '</p>';
-		//$output .= '<p>$schedule_slider_width= ' . $schedule_slider_width . '</p>';
-		//return $output;
 		
-		$output .= "<div class='gs-slider-area'>\n";
-		$output .= "<div class='gs-slider gs-one-edge-shadow'>\n";
-		$output .= "<div class='border'>\n";
-		$output .= "<div class='box'>\n";
+		/*
+		$output .= '<p>Total Games: ' . $nbr_of_games . '</p>';
+		$output .= '<p>Next Game: ' . $game_number . '</p>';
+		$output .= '<p>Slider Offset: ' . $schedule_slider_offset . '</p>';
+		$output .= '<p>Slider Width= ' . $schedule_slider_width . '</p>';
+		return $output;
+		*/
+		
+		$output .= "<div class='gs-slider-area gs-slider-area" . $css_tag . "' style='width: " . $slider_view_width . "px'>\n";
+		$output .= "<div class='gs-slider gs-one-edge-shadow gs-one-edge-shadow" . $css_tag . "'>\n";
+		$output .= "<div class='border border" . $css_tag . "'>\n";
+		$output .= "<div class='box box" . $css_tag . "'>\n";
 			if ( $show_slider_title ) {
-				$output .= "<div class='title'>\n";
-					$output .= $schedule_title_label;
+				$output .= "<div class='title title" . $css_tag . "'>\n";
+					$output .= $slider_title;
 				$output .= "</div> <!--end .title-->\n";
+			
+				if ( $show_slider_schedule_link ) {
+					$output .= "<div class='full-schedule-link full-schedule-link" . $css_tag . "'>\n";
+						$output .= "<a href='" . $slider_link . "' target='_blank' >" . $slider_link_label . "</a>\n";
+					$output .= "</div> <!--end .full-schedule-link-->\n";
+				}
+				
+				$output .= "<div class='gs-clear'></div>\n";
+				$output .= "<div class='gs-divider gs-divider" . $css_tag . "'></div>\n";
 			}
 			
-			if ( $show_slider_schedule_link ) {
-				$output .= "<div class='full-schedule-link'>\n";
-					$output .= "<a href='" . $slider_schedule_link . "'>" . $slider_schedule_link_label . "</a>\n";
-				$output .= "</div> <!--end .full-schedule-link-->\n";
-			}
-		$output .= "<div class='gs-clear'></div>\n";
-		$output .= "<div class='gs-divider'></div>\n";
+		
 		
 		$output .= "<div class='content'>\n";
-		$output .= "<div class='schedule-slider' style='width:" . $schedule_slider_width . "px; left:" . $schedule_slider_offset .  "px;'>\n";
+		$output .= "<div id='schedule-slider' class='schedule-slider" . $css_tag . "' style='width:" . $schedule_slider_width . "px; left:" . $schedule_slider_offset .  "px; position:absolute;'>\n";
+		
+		//$output .= "<div id='schedule-slider' style='width:" . $schedule_slider_width . "px; left:" . $schedule_slider_offset .  "px; position:absolute;'>\n";
+		
 			//$output .= "This is the output from mstw_gs_build_slider( )\n";
 			foreach ( $games as $game ) {
-				$output .= mstw_gs_build_game_block( $game );
+				$output .= mstw_gs_build_game_block( $game, $css_tag );
 			}
 		$output .= "</div> <!--end .schedule-slider-->\n";
 		
 		// Add the scroll controls - right and left arrows
 		$output .= "<div class='gs-clear'></div>\n";
-		$output .= "<div class='gs-slider-right-arrow'>&rsaquo;</div>\n";
-		$output .= "<div class='gs-slider-left-arrow'>&lsaquo;</div>\n";
-		
+		$output .= "<div id='gs-slider-right-arrow' class='gs-slider-right-arrow" . $css_tag . "'>&rsaquo;</div>\n";
+		$output .= "<div id='gs-slider-left-arrow' class='gs-slider-left-arrow" . $css_tag . "'>&lsaquo;</div>\n";
 		
 		$output .= "</div> <!--end .content-->\n";
 		
@@ -892,35 +1140,35 @@ function mstw_gs_build_countdown( $sched, $intro, $home_only ) {
 		return $output;
 	}
 	
-	function mstw_gs_build_game_block( $game ) {
+	function mstw_gs_build_game_block( $game, $css_tag ) {
 		//THIS WILL COME FROM THE OPTIONS
 		$dtg_format = 'D, M j';
 		$time_format = 'g:i A';
 		
 		$ret = '';
 		$ret .= "<div class='game-block'>\n";
-			$ret .= "<div class='date pad'>\n";
+			$ret .= "<div class='date date" . $css_tag . " pad'>\n";
 				$ret .= mstw_date_loc( $dtg_format, (int)get_post_meta( $game->ID, '_mstw_gs_unix_dtg', true ) );
 			$ret .= "</div> <!--end .date-->\n";
 			
-			$ret .= "<div class='opponent pad'>\n";
+			$ret .= "<div class='opponent opponent" . $css_tag . " pad'>\n";
 				$ret .= "vs " . get_post_meta( $game->ID, '_mstw_gs_opponent', true );
 			$ret .= "</div> <!--end .opponent-->\n";
 			
-			$ret .= "<div class='location pad'>\n";
+			$ret .= "<div class='location location" . $css_tag . " pad'>\n";
 				$ret .= "@ " . get_post_meta( $game->ID, '_mstw_gs_location', true );
 			$ret .= "</div> <!--end .location-->\n";
 			
-			$ret .= "<div class='time-result pad'>\n";
+			$ret .= "<div class='time-result time-result" . $css_tag . " pad'>\n";
 			
 			$game_result = get_post_meta( $game->ID, '_mstw_gs_game_result', true );
 			$game_time_tba = get_post_meta( $game->ID, '_mstw_gs_game_time_tba', true );
 			
-			if ( $game_time_tba != '' ) {
-				$ret .= $game_time_tba;
-			} 
-			else if ( $game_result != '' ) {
+			if ( $game_result != '' ) {
 				$ret .= $game_result;
+			} 
+			else if ( $game_time_tba != '' ) {
+				$ret .= $game_time_tba;
 			}
 			else {
 				$ret .= date( $time_format, get_post_meta( $game->ID, '_mstw_gs_unix_dtg', true ) );
@@ -977,27 +1225,53 @@ function mstw_gs_build_countdown( $sched, $intro, $home_only ) {
 	//	$games = an array of game posts
 	//	dtg => a php time stamp
 	// Return:
-	//	a post ID (>0) if a game was found
-	//	-1 if no game was found with a start DTG after the dtg argument
-	//	-2 if $games is empty
+	//	An array of information:
+	//	next_game_id 
+	//		WP ID for next game if found, otherwise
+	//		-1 if no game was found with a start DTG after the dtg argument
+	//		-2 if $games is empty
+	//	next_game_number
+	//		number of next game [ 0 to sizeof($games)-1 ] 
+	//		(if found, otherwise see next_game_id)
+	//	next_game_dtg
+	//		PHP time stamp (date-time-group) for next game 
+	//		(if found, otherwise see next_game_id)
+	//	next_game_opponent
+	//		PHP time stamp for next game 
+	//		(if found, otherwise see next_game_id)
 	//================================================================================
 	function mstw_gs_get_next_game( $games, $dtg ) {
-		$retval = -1; // No game has been found
+		// No game has been found (yet)
+		$retval = array( 'next_game_id' 	=> -1,
+						 'next_game_nbr'	=> -1,
+						 'next_game_dtg'	=> -1,
+						 'next_game_opponent'	=> '-1',
+						 ); 
+
+		// loop thru the game posts to find the first game in the future
+		$next_game_number = 0;
 		if ( $games ) {
-			// loop thru the game posts to find the first game in the future
-			foreach( $game_posts as $game ) {
+			foreach( $games as $game ) {
 				// Find first game time after the current time, and (just to be sure) has no result		
-				if ( get_post_meta( $game->ID, '_mstw_gs_unix_dtg', true ) > $dtg && 
-						get_post_meta( $game->ID, '_mstw_gs_game_result', true ) == '' ) {
+				if ( get_post_meta( $game->ID, '_mstw_gs_unix_dtg', true ) > $dtg ) {
 					// Ding, ding, ding, we have a winner
 					// Grab the data needed and stop looping through the games
-					$retval = $game->ID;
-					break; 	
+					$retval['next_game_id'] = $game->ID;
+					$retval['next_game_number'] = $next_game_number;
+					$retval['next_game_dtg'] = get_post_meta( $game->ID, '_mstw_gs_unix_dtg', true );
+					$retval['next_game_opponent'] = get_post_meta( $game->ID, '_mstw_gs_opponent', true );
+					
+					//return $game->ID;
+					break;
 				}
+				$next_game_number++;
 			}
 		} else {  
-			$retval = -2; // The $games array is empty
-		}	
+			$retval['next_game_id'] =  -2; 
+		}
+		
+		return $retval;
+
 	}
 
 /*--------------------------------------------------------------------------
@@ -1031,7 +1305,7 @@ function mstw_gs_build_countdown( $sched, $intro, $home_only ) {
 
 /* ------------------------------------------------------------------------
  *
- * Game Schedule Widgets [file mstw-schedule-widgets.php]
+ * Game Schedule Widgets
  *	- mstw_gs_sched_widget - displays the schedule as a simple 
  *		date-opponent table
  *	- mstw_gs_countdown_widget - counts down the time from now 
@@ -1099,7 +1373,7 @@ class mstw_gs_sched_widget extends WP_Widget {
             					type="text" value="<?php echo esc_attr( $sched_title ); ?>" /></p>
         <p>Schedule ID: <input class="widefat" name="<?php echo $this->get_field_name( 'sched_id' ); ?>"  
         						type="text" value="<?php echo esc_attr( $sched_id ); ?>" /></p>
-		<p>The dates below MUST be in the format yyyy-mm-dd hh:mm. (You can omit the hh:mm for 00:00.) Otherwise, you can expect unexpected results.</p>
+		<p>The dates below MUST be in the format yyyy-mm-dd hh:mm. (You can omit the hh:mm for 00:00.) Otherwise, you can expect unexpected results. Use 'now' as the start date to show only future games.</p>
 		<p>Display Start Date: <input class="widefat" name="<?php echo $this->get_field_name( 'sched_start_date' ); ?>"	type="text" value="<?php echo $sched_start_date; ?>" />
 		</p>
         <p>Display End Date: <input class="widefat" name="<?php echo $this->get_field_name( 'sched_end_date' ); ?>"  type="text" value="<?php echo date('Y-m-d H:i', (int)esc_attr( $sched_end_date ) ); ?>" />
@@ -1140,15 +1414,20 @@ class mstw_gs_sched_widget extends WP_Widget {
  
 function widget( $args, $instance ) {
 
-		//Date column of the widget's table
-		$options = get_option('mstw_gs_options');
-		$tab_widget_dtg_format = $options['gs_tab_widget_dtg_format'];
-		if ( $tab_widget_dtg_format == '' ) {
-			$tab_widget_dtg_format =  'Y-m-d';
-		}
-		
 		// $args holds the global theme variables, such as $before_widget
 		extract( $args );
+		
+		$options = get_option('mstw_gs_options');
+		// Remove all keys with empty values
+		foreach ( $options as $k=>$v ) {
+			if( $v == '' ) {
+				unset( $options[$k] );
+			}
+		}
+		$options = wp_parse_args( $options, mstw_gs_get_defaults() );
+		
+		//Build the date format from the display settings
+		$date_format = ( $options['table_widget_date_format'] == 'custom' ? $options['custom_table_widget_date_format'] : $options['table_widget_date_format'] );
 		
 		echo $before_widget;
 		
@@ -1203,8 +1482,16 @@ function widget( $args, $instance ) {
         
         	<table class="mstw-gs-sw-tab">
         	<thead class="mstw-gs-sw-tab-head"><tr>
-            	<th><?php _e( 'DATE', 'mstw-loc-domain' ); ?></th>
-            	<th><?php _e( 'OPPONENT', 'mstw-loc-domain' ); ?></th>	
+				<?php if( $options['show_date'] == 1 ) { ?>
+					<th><?php echo $options['date_label']; ?></th>
+				<?php } ?>
+				<?php if( $options['opponent_label'] == "" ) { ?>
+					<th><?php _e( 'Opponent', 'mstw-loc-domain' ); ?></th>
+				<?php } else {?>
+					<th><?php echo $options['opponent_label']; ?></th>
+				<?php } ?>
+				
+					
 			</tr></thead>
         
 			<?php
@@ -1228,11 +1515,12 @@ function widget( $args, $instance ) {
 				// create the row
 				$row_string = $row_tr;		
 			
-				// column 1: Build the game date in a specified format			
-				$date_string = mstw_date_loc( $tab_widget_dtg_format, (int)get_post_meta( $post->ID, '_mstw_gs_unix_dtg', true ) );
-			
-				$row_string = $row_string. $row_td . $date_string . '</td>';
-			
+				// column 1: Build the game date in a specified format
+				if( $options['show_date'] == 1 ) { 
+					$date_string = mstw_date_loc( $date_format, (int)get_post_meta( $post->ID, '_mstw_gs_unix_dtg', true ) );
+				
+					$row_string = $row_string. $row_td . $date_string . '</td>';
+				}
 				// column 2: create the opponent entry
 				$opponent = get_post_meta( $post->ID, '_mstw_gs_opponent', true);
 				
@@ -1301,16 +1589,32 @@ class mstw_gs_countdown_widget extends WP_Widget {
 	function form( $instance ) {
 	
         $defaults = array(	'cd_title' => 'Countdown', 
-							'cd_sched_id' => '1', 
-							'cd_intro_text' => 'Time to kickoff:', 
-							'cd_home_only' => '', 
+							'sched' => '1', //'cd_sched_id' => '1', 
+							'intro' => 'Time to kickoff:', 
+							'home_only' => '', 
 							); 
 							
-        $instance = wp_parse_args( (array) $instance, $defaults );
+		$options = get_option( 'mstw_gs_options' );
+		//$output = '<pre>OPTIONS:' . print_r( $options, true ) . '</pre>';
+	
+		// and merge them with the defaults
+		$new_args = wp_parse_args( $options, mstw_gs_get_defaults( ) );
+		//$output .= '<pre>ARGS:' . print_r( $args, true ) . '</pre>';
+	
+		// then merge the parameters passed to the shortcode with the result									
+		$attribs = wp_parse_args( $new_args, (array) $instance );					
 		
-        $cd_title = $instance['cd_title'];
+        /*
+		$cd_title = $instance['cd_title'];
 		$cd_sched_id = $instance['cd_sched_id'];
 		$cd_home_only = $instance['cd_home_only'];
+		*/
+		
+		
+		$cd_title = $attribs['cd_title'];
+		$cd_sched_id = $attribs['sched'];
+		$cd_home_only = $attribs['home_only'];
+		$cd_intro_text = $attribs['intro'];
 		
         ?>
         <p>Countdown Title: <input class="widefat" name="<?php echo $this->get_field_name( 'cd_title' ); ?>"  
@@ -1319,13 +1623,13 @@ class mstw_gs_countdown_widget extends WP_Widget {
         <p>Schedule ID: <input class="widefat" name="<?php echo $this->get_field_name( 'cd_sched_id' ); ?>"  
         						type="text" value="<?php echo esc_attr( $cd_sched_id ); ?>" /></p> 
 		
-		<p><input class="checkbox" type="checkbox" <?php checked( $instance['cd_home_only'], 'on' ); ?> id="<?php echo $this->get_field_id( 'cd_home_only' ); ?>" name="<?php echo $this->get_field_name( 'cd_home_only' ); ?>" /> 
+		<p><input class="checkbox" type="checkbox" <?php checked( $attribs['home_only'], 'on' ); ?> id="<?php echo $this->get_field_id( 'home_only' ); ?>" name="<?php echo $this->get_field_name( 'cd_home_only' ); ?>" /> 
 		<label for="<?php echo $this->get_field_id( 'cd_home_only' ); ?>">Use home games only?</label></p>
 		
         <p>Countdown Intro Text: <input class="widefat" name="<?php echo $this->get_field_name( 'cd_intro_text' ); ?>"
         						type="text" value="<?php echo esc_attr( $cd_intro_text ); ?>" /></p>
             
-        <?php
+        <?php 
     }
 	
 /*--------------------------------------------------------------------
@@ -1337,11 +1641,11 @@ class mstw_gs_countdown_widget extends WP_Widget {
 		
 		$instance['cd_title'] = strip_tags( $new_instance['cd_title'] );
 
-		$instance['cd_sched_id'] = strip_tags( $new_instance['cd_sched_id'] );
+		$instance['sched'] = strip_tags( $new_instance['sched'] );
 		
-		$instance['cd_home_only'] = strip_tags( $new_instance['cd_home_only'] );
+		$instance['home_only'] = strip_tags( $new_instance['home_only'] );
 		
-		$instance['cd_intro_text'] = strip_tags( $new_instance['cd_intro_text'] );
+		$instance['intro'] = strip_tags( $new_instance['intro'] );
  
         return $instance;
 		
@@ -1360,6 +1664,28 @@ class mstw_gs_countdown_widget extends WP_Widget {
 		
 		$title = apply_filters( 'widget_title', $instance['cd_title'] );
 		
+		// get the options set in the admin screen
+		$options = get_option( 'mstw_gs_options' );
+		//$output = '<pre>OPTIONS:' . print_r( $options, true ) . '</pre>';
+		
+		// Remove all keys with empty values
+		foreach ( $options as $k=>$v ) {
+			if( $v == '' ) {
+				unset( $options[$k] );
+			}
+		}
+	
+		// and merge them with the defaults
+		$new_args = wp_parse_args( $options, mstw_gs_get_defaults( ) );
+		//$output .= '<pre>ARGS:' . print_r( $args, true ) . '</pre>';
+	
+		// then merge the parameters passed to the shortcode with the result									
+		$attribs = wp_parse_args( $new_args, (array) $instance );
+		//$output .= '<pre>ATTS:' . print_r( $atts, true ) . '</pre>';
+		//$output .= '<pre>ATTRIBS:' . print_r( $attribs, true ) . '</pre>';
+		//echo $output;
+		//return;
+		
 		// Get the parameters for get_posts() below
 		$cd_sched_id = $instance['cd_sched_id'];
 		$cd_home_only = $instance['cd_home_only'];
@@ -1369,9 +1695,10 @@ class mstw_gs_countdown_widget extends WP_Widget {
 			echo $before_title . $title . $after_title;
 		}
 			
-        $cd_str = mstw_gs_build_countdown( $cd_sched_id, $cd_intro_text,  $cd_home_only );
+        $cd_str = mstw_gs_build_countdown( $attribs ); //$cd_sched_id, $cd_intro_text,  $cd_home_only );
         
         echo $cd_str;
+		//echo 'Hello, world!';
 		
 		echo $after_widget;
       	

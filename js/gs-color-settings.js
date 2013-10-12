@@ -4,6 +4,8 @@ jQuery(document).ready(function($){
 	$('#gs_tbl_hdr_bkgd_color').wpColorPicker();
 	$('#gs_tbl_hdr_text_color').wpColorPicker();
 	
+	$('#gs_tbl_border_color').wpColorPicker();
+	
 	$('#gs_tbl_odd_text_color').wpColorPicker();
 	$('#gs_tbl_odd_bkgd_color').wpColorPicker();
 	
