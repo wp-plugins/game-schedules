@@ -177,19 +177,28 @@
 		
 	}  //End: mstw_utl_select_option_ctrl
 
-/*----------------------------------------------------------------	
- *	Builds date format controls for the admin UI
- *
- * 	Arguments:
- *	$args['opt_name'] (string) name of option (array) 
- *	$args['set_name'] (string) setting name  from option array
- *	$args['set_default'] (string) default to use of setting is blank
- *	$args['cdt'] (boolean) true -> this is countdown timer date setting
- *		true -> use date-time, false -> use date only
- *
- *	return - none. Output is echoed.
- *---------------------------------------------------------------*/
+//----------------------------------------------------------------	
+//	Builds date format controls for the admin UI
+//
+// 	Arguments:
+//	string $args['name']: 		name of option 
+//	string $args['id']: 		id of option
+//	string $args['curr_value']:	current value of option
+//	string $args['dtg']: 		show entire date-time group or only the date
+//								'date-time' -> use date-time, 
+//								'date-only' -> use date only
+//
+//	return - none. Output is echoed.
+//---------------------------------------------------------------
 	function mstw_utl_date_format_ctrl( $args ) {
+	
+		//extract( $args );
+		$name = $args['name'];
+		$id = $args['id'];
+		$curr_value = $args['curr_value'];
+		$dtg = $args['dtg'];
+		
+		//echo '<pre>'; print_r( $args ); echo '</pre>';
 
 		$mstw_utl_date_formats = array ( 
 			'2013-04-07' => 'Y-m-d',
@@ -222,25 +231,27 @@
 			__( '7 April 01:15 pm', 'mstw-loc-domain' ) => 'j M g:i a',		
 			);
 		
-		/*
-		if ( !isset( $mstw_date_formats ) ) {
-			include 'mstw-date-format-array.php';
-		}
-		*/
-		
-		$opt_name = $args['opt_name'];
-		$set_name = $args['set_name'];
-		$set_default = $args['set_default'];
-		$cdt = $args['cdt'];
-		
-		if ( $cdt ) {
+		if ( $dtg == 'date-time' ) {
 			$loop_array = $mstw_utl_date_time_formats;
+			$label = __( 'Formats for', 'mstw-loc-domain' ) . " " . __( '7 April 2013 13:15', 'mstw-loc-domain' );
 		}
 		else {
 			$loop_array = $mstw_utl_date_formats;
+			$label =  __( 'Formats for', 'mstw-loc-domain' ) . " " . __( '7 April 2013', 'mstw-loc-domain' );
 		}
 		
+		echo "<select id='$id' name='$name' style='width: 160px' >";
+		foreach( $loop_array as $key=>$value ) {
+			//echo '<p> key: ' . $key . ' value: ' . $value .'</p>';
+			$selected = ( $curr_value == $value ) ? 'selected="selected"' : '';
+			echo "<option value='$value' $selected>$key</option>";
+		}
+		echo "</select> \n";
+		//echo "<label for='$id'>". $label . "</label> \n";
+		echo "<label for='$id'>$label</label> \n";
+		
 		// get option value from the database
+		/* OLD STUFF
 		$options = get_option( $opt_name );
 		if ( ( $dtg_format = $options[$set_name] ) == '' )
 			$dtg_format = $set_default;
@@ -257,6 +268,7 @@
 		else {
 			echo "</select>" . __( 'Formats for', 'mstw-loc-domain' ) . " " . __( '7 April 2013', 'mstw-loc-domain' );
 		}
+		*/
 		
 	}
 	

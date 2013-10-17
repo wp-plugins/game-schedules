@@ -13,9 +13,9 @@
 		return true;
 	}
 
-/*---------------------------------------------------------------------------------
- *	mstw_gs_get_defaults: returns the array of option defaults
- *-------------------------------------------------------------------------------*/	
+//---------------------------------------------------------------------------------
+//	mstw_gs_get_defaults: returns the array of option defaults
+
 	function mstw_gs_get_defaults( ) {
 		//Base defaults
 		$defaults = array(
@@ -44,7 +44,14 @@
 				'time_label'			=> __( 'Time/Result', 'mstw-loc-domain' ),
 				'show_media'			=> 3,
 				'media_label'			=> __( 'Media Links', 'mstw-loc-domain' ),
+				);
 				
+		return $defaults;
+	}
+	
+	function mstw_gs_get_dtg_defaults( ) {
+		//Base defaults
+		$defaults = array(
 				//date and time format defaults
 				'admin_date_format' 	=>'Y-m-d',
 				//'custom_admin_date_format' => 'Y-m-d',

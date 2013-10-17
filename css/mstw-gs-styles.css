@@ -495,6 +495,15 @@
 	color: #C8AA76; 			/*49er gold*/
 }
 
+.gs-slider .game-block .location.location_49ers.pad  a {
+	color: #C8AA76; 			/*49er gold*/
+	text-decoration: underline;
+}
+
+.gs-slider .game-block .location.location_49ers.pad  a:hover {
+	text-decoration: none;
+}
+
 .gs-slider .game-block .time-result.time-result_49ers.pad {
 	color: white;
 }

@@ -34,4 +34,7 @@ jQuery(document).ready(function($){
 	$('#gs_sldr_game_time_color').wpColorPicker();
 	$('#gs_sldr_game_links_color').wpColorPicker();
 
+	$('#gs_game_date').datepicker({
+        dateFormat : 'yy-mm-dd'
+    });
 });
