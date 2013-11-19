@@ -26,6 +26,7 @@ There are SIX NEW FEATURES in the front and back ends of version 4.0:
 * Supports a new team structure which allows the inclusion of team logos in schedule tables and sliders
 * Color settings admin screen so the colors of displays can be controlled without editing CSS files
 * Display next N games from current date in schedule tables ([shortcode] and widget)
+* Filter allowing developers to control user access to the Game Schedules admin menu items
 
 = Front-end features for Website visitors =
 The following features enhance the site user experience:
@@ -140,14 +141,16 @@ A MAJOR UPGRADE with significant new functionality requested by users including:
 * Added a new shortcode, [mstw_gs_slider], which displays a schedule slider
 * Added the ability to show/hide data fields and custom data field labels so they can be re-purposed
 * Completed internationalization of admin screens
-* Admin screens now display any custom data field labels, rather than the defaults
+* Admin screens now display any customized data field labels, rather than the defaults
+* Added the ability to sort the "All Games" admin table by Schedule ID
+* Re-organized (expanded) Display Settings into a tabbed admin screen
 * Added a javascript datepicker control to simplify game date entry
 * Completely re-factored the code for both the front and back ends
 * Removed the Edit option from the Bulk Edit actions. Bulk delete remains available
 * Added javascript colorpicker controls to admin screens
-* Made other cosmetic improvements to admin menus and screens
 * Added the ability to display the next N games in a schedule to the [shortcode] and the widget (by setting the first date-time to 'now'.
 * Added the ability to specify custom formats for dates and times (based on php date() format strings.
+* Added a filter (mstw_gs_user_capability) that allows developers to better control admin access to the plugin's admin menu items
 
 = 3.0 =
 A MAJOR upgrade adding significant functionality requested by users:
