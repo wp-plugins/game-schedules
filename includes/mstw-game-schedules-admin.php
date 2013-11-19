@@ -23,18 +23,25 @@
 
 
 	// ----------------------------------------------------------------
-	// Load the mstw-utility-functions if necessary
+	// Load the admin utils if necessary
 	//
-	if ( !function_exists( 'mstw_sanitize_hex_color' ) ) {
-		require_once 'mstw-utility-functions.php';
+	if ( is_admin( ) and !function_exists( 'mstw_gs_admin_utils_loaded' ) ) {
+		require_once 'mstw-gs-admin-utils.php';
 	}
 	
-	// ----------------------------------------------------------------
-	// Load the MSTW Admin Date-Time Utilities if necessary
-	//
-	if ( !function_exists( 'mstw_utl_date_format_ctrl' ) ) {
-		require_once 'mstw-dtg-admin-utils.php';
-	}	
+	// ----------------------------------------------------------------	
+	// Add filter to set the capabilities required to access custom post types. 
+	// add_filter( 'mstw_gs_user_capability', 'mstw_gs_set_user_capability', 1, 2 );
+	//		1 is the priority, we want this to fire before developers
+	//		2 is the number of arguments passed to callback
+	
+	function mstw_gs_set_user_capability( $capability, $filter4) {
+		// You can change this capability if you don't want to write your only filter
+		if ( $filter4 == 'display_settings_menu_item' )
+			return 'manage_options';
+			
+		return 'edit_others_posts';  
+	}
 	
 	// ----------------------------------------------------------------	
 	// Add styles and scripts for the color picker. 
@@ -61,14 +68,30 @@
 			#icon-mstw-gs-main-menu.icon32 {
 				background: url(<?php echo plugins_url( '/game-schedules/images/mstw-logo-32x32.png', 'game-schedules' );?>) transparent no-repeat;
 			}
+			#menu-posts-scheduled_game .wp-menu-image {
+				background-image: url(<?php echo plugins_url( '/game-schedules/images/mstw-admin-menu-icon.png', 'game-schedules' );?>) no-repeat 6px -17px !important;
+			}
+			
 			#icon-scheduled_game.icon32 {
 				background: url(<?php echo plugins_url( '/game-schedules/images/mstw-logo-32x32.png', 'game-schedules' );?>) transparent no-repeat;
 			}
+			#icon-mstw_gs_teams.icon32 {
+				background: url(<?php echo plugins_url( '/game-schedules/images/mstw-logo-32x32.png', 'game-schedules' );?>) transparent no-repeat;
+			}
+			#icon-mstw_gs_schedules.icon32 {
+				background: url(<?php echo plugins_url( '/game-schedules/images/mstw-logo-32x32.png', 'game-schedules' );?>) transparent no-repeat;
+			}
+			
+			
+			
 			#icon-edit.icon32-posts-scheduled_games {
 				background: url(<?php echo plugins_url( '/game-schedules/images/mstw-logo-32x32.png', 'game-schedules' );?>) transparent no-repeat;
 			}
-			#menu-posts-scheduled_game .wp-menu-image {
-				background-image: url(<?php echo plugins_url( '/game-schedules/images/mstw-admin-menu-icon.png', 'game-schedules' );?>) no-repeat 6px -17px !important;
+			#icon-edit.icon32-posts-mstw_gs_teams {
+				background: url(<?php echo plugins_url( '/game-schedules/images/mstw-logo-32x32.png', 'game-schedules' );?>) transparent no-repeat;
+			}
+			#icon-edit.icon32-posts-mstw_gs_schedules {
+				background: url(<?php echo plugins_url( '/game-schedules/images/mstw-logo-32x32.png', 'game-schedules' );?>) transparent no-repeat;
 			}
 			
 		</style>
@@ -79,9 +102,13 @@
 	add_filter( 'post_row_actions', 'mstw_gs_remove_quick_edit', 10, 2 );
 
 	function mstw_gs_remove_quick_edit( $actions, $post ) {
-		if( $post->post_type == 'scheduled_games' ) {
-			unset( $actions['inline hide-if-no-js'] );
+		if ( $post->post_type == 'scheduled_games' or 
+			$post->post_type == 'mstw_gs_teams' or 
+			$post->post_type == 'mstw_gs_schedules' ) {
+			
+				unset( $actions['inline hide-if-no-js'] );
 		}
+		 
 		return $actions;
 	}
 	
@@ -105,6 +132,9 @@
 		
 		add_meta_box('mstw-gs-meta', 'Team', 'mstw_gs_create_teams_ui', 
 						'mstw_gs_teams', 'normal', 'high' );
+						
+		add_meta_box('mstw-gs-meta', 'Schedule', 'mstw_gs_create_schedules_ui', 
+						'mstw_gs_schedules', 'normal', 'high' );
 	}
 	
 	// ----------------------------------------------------------------
@@ -126,6 +156,99 @@
 		echo '</h2>';
 	}
 	
+	// ----------------------------------------------------------------
+	// Add a filter the All Games screen based on the Schedule ID
+	//
+	add_action( 'restrict_manage_posts','mstw_restrict_games_by_schedID' );
+	
+	function mstw_restrict_games_by_schedID( ) {
+		global $wpdb;
+		global $typenow;
+		
+		//echo '<p> In mstw_restrict_games_by_schedID() $typenow= ' . $typenow . '</p>';
+		
+		if( isset( $typenow ) && $typenow != "" && $typenow == "scheduled_games" ) {
+			$meta_values = $wpdb->get_col("
+				SELECT DISTINCT meta_value
+				FROM ". $wpdb->postmeta ."
+				WHERE meta_key = '_mstw_gs_sched_id'
+				ORDER BY meta_value
+			");
+			//echo "</pre>" . print_r( $wpdb->postmeta ) . "</pre>";
+			//return;
+			?>
+			<select name="_mstw_gs_sched_id" id="issue">
+				<option value="">Show All Schedules</option>
+				
+				<?php foreach ($meta_values as $meta_value) { ?>
+					<option value="<?php echo esc_attr( $meta_value ); ?>" <?php if( isset($_GET['_mstw_gs_sched_id']) && !empty($_GET['_mstw_gs_sched_id']) ) selected($_GET['_mstw_gs_sched_id'], $meta_value ); ?>>
+					<?php
+					  echo $meta_value;
+					?>
+					</option>
+				<?php } ?>
+			</select>
+		<?php
+		}
+	}  //End of mstw_restrict_games_by_schedID()
+
+	// ----------------------------------------------------------------
+	// Add a filter to the where clause in mstw_restrict_games_by_schedID()
+	//
+	add_filter( 'posts_where' , 'mstw_gs_posts_where_metavalue' );
+	
+	function mstw_gs_posts_where_metavalue( $where ) {
+		if( is_admin( ) ) {
+			global $wpdb;       
+			if ( isset( $_GET['_mstw_gs_sched_id'] ) && !empty( $_GET['_mstw_gs_sched_id'] ) ) {
+				$meta_number = $_GET['_mstw_gs_sched_id'];
+				$where .= " AND ID IN (SELECT post_id FROM " . $wpdb->postmeta . " WHERE meta_key='_mstw_gs_sched_id' AND meta_value='$meta_number' )";
+			}
+		}   
+		return $where;
+	}
+	
+	// ----------------------------------------------------------------
+	// Add a filter to sort all games table on the schedule column
+	//
+	add_filter("manage_edit-scheduled_games_sortable_columns", 'mstw_gs_columns_sort');
+	
+	function mstw_gs_columns_sort( $columns ) {
+		$custom = array(
+			'sched_id' 	=> 'sched_id'
+		);
+		return wp_parse_args( $custom, $columns );
+		/* or this way
+			$columns['concertdate'] = 'concertdate';
+			$columns['city'] = 'city';
+			return $columns;
+		*/
+	}
+
+	// ----------------------------------------------------------------
+	// Sort show all games by schedule. See:
+	// http://scribu.net/wordpress/custom-sortable-columns.html#comment-4732
+	//
+	add_filter( 'request', 'mstw_gs_schedule_column_order' );
+	
+	function mstw_gs_schedule_column_order( $vars ) {
+		if ( isset( $vars['orderby'] ) && 'sched_id' == $vars['orderby'] ) {
+			$vars = array_merge( $vars, array(
+									'meta_key' => '_mstw_gs_sched_id',
+									//'orderby' => 'meta_value_num', // does not work
+									'orderby' => 'meta_value'
+									//'order' => 'asc' // don't use this; blocks toggle UI
+									) 
+								);
+		}
+		
+		return $vars;
+		
+	} //End mstw_gs_schedule_column_order( )
+	
+	// ----------------------------------------------------------------
+	// Create Team data entry page
+	//
 	function mstw_gs_create_teams_ui( $post ) {
 		// pull the team data from the UI
 		$team_full_name = get_post_meta( $post->ID, 'team_full_name', true );
@@ -168,13 +291,6 @@
 									'size' => $std_size,
 									'notes' => 'E.g., "Niners" or "Bears"',
 								),
-								//'team_home_venue' => array (
-								//	'value' => $team_home_venue,
-								//	'label' => 'Team Home Venue:',
-								//	'maxlength' => $std_length,
-								//	'size' => $std_size,
-								//	'notes' => 'Must install Game Locations to use this field',
-								//	),
 								'team_link' => array (
 									'value' => $team_link,
 									'label' => 'Team Link:',
@@ -184,24 +300,24 @@
 									),
 								'team_logo' => array (
 									'value' => $team_logo,
-									'label' => 'Team Logo:',
+									'label' => 'Team Table Logo:',
 									'maxlength' => 256,
 									'size' => $std_size,
-									'notes' => 'Provide full path to file (uploaded to media library, for example).',
+									'notes' => 'Provide full path to file (uploaded to media library, for example). Recommended size 41x28px.',
 									),
 								'team_alt_logo' => array (
 									'value' => $team_alt_logo,
-									'label' => 'Alternate Team Logo:',
+									'label' => 'Team Slider Logo:',
 									'maxlength' => 256,
 									'size' => $std_size,
-									'notes' => 'Provide full path to file (uploaded to media library, for example).',
+									'notes' => 'Provide full path to file (uploaded to media library, for example). Recommended size 125x125px.',
 									),
 							);
 							
 		?> 
 		<table class="form-table">
 		
-		<?php mstw_cs_build_admin_edit_screen( $admin_fields ); 
+		<?php mstw_gs_build_admin_edit_screen( $admin_fields ); 
 		
 		if( is_plugin_active('game-locations/mstw-game-locations.php') ) { 
 			$plugin_active = 'Active';
@@ -222,36 +338,98 @@
 					$selected = ( $team_home_venue == $loc->ID ) ? 'selected="selected"' : '';
 					echo "<option value='" . $loc->ID . "'" . $selected . ">" . get_the_title( $loc->ID ) . "</option>";
 				}
-				echo "</select>     Note: this setting requires that the Game Locations plugin is activated.</td>";
+				echo "</select>\n";     
+				echo "<br><span class='description'>Note: this setting requires that the Game Locations plugin is activated.</span></td>";
 				echo "</tr>";
 				
 			}
 		} //End: if (is_plugin_active) 
-		else {
-			echo '<tr valign="top">';
-			echo '<th scope="row">Team Home Venue:</th>';
-			echo "<td>Please activate the <a href='http://wordpress.org/extend/plugins/game-locations/' title='Game Locations Plugin'>Game Locations Plugin</a> to use this feature. It makes life a lot simpler for 'normal' Game Schedules use.</td>";
-			echo '</tr>';
-		} ?>
+		?>
 		
 		</table>
 	<?php }
 	
-	function mstw_cs_build_admin_edit_screen( $fields ) {
+	
+	// ----------------------------------------------------------------
+	// Create Schedule data entry page
+	//
+	function mstw_gs_create_schedules_ui( $post ) {
+		// pull the team data from the UI
+		$schedule_id = get_post_meta( $post->ID, 'schedule_id', true );
+		$schedule_team = get_post_meta( $post->ID, 'schedule_team', true );
+		
+		$std_length = 128;
+		$std_size = 30;
+		
+		$admin_fields = array(  'schedule_id' => array (
+									'value' => $schedule_id,
+									'label' => __( 'Unique Schedule ID:', 'mstw-loc-domain' ),
+									'maxlength' => $std_length,
+									'size' => $std_size,
+									'notes' => '(128 character max) E.g., "2013-varsity-football"',
+									),
+							);
+							
+		
+		echo "<table class='form-table'>\n";
+		
+	
+		mstw_gs_build_admin_edit_screen( $admin_fields ); 
+		
+		
+		$teams = get_posts(array( 'numberposts' => -1,
+						  'post_type' => 'mstw_gs_teams',
+						  'orderby' => 'title',
+						  'order' => 'ASC' 
+						));						
+	
+		if( $teams ) {
+			echo "<tr valign='top'>\n";
+			echo "<th>Schedule For:</th>\n";
+			echo "<td><select id='schedule_team' name='schedule_team'>\n";
+			
+			$selected = ( empty( $schedule_team ) or $schedule_team == -1 ) ? 'selected="selected"' : '';
+			echo "<option value='-1' " . $selected . "> ---- </option>\n";
+				
+			foreach( $teams as $team ) {
+				$selected = ( $schedule_team == $team->ID ) ? 'selected="selected"' : '';
+				echo "<option value='" . $team->ID . "'" . $selected . ">" . get_the_title( $team->ID ) . "</option>\n";
+			}
+			
+			echo "</select>\n";
+			echo "<br/><span class='description'>Selected team (from the Teams DB) will be the home team for this schedule.</span></td>\n";
+			echo "</tr>\n";
+			
+		}
+		?>
+		
+		</table>
+	<?php 
+	}
+	
+//----------------------------------------------------------------
+//Convenience function to build admin UI data entry screens
+//
+	
+	function mstw_gs_build_admin_edit_screen( $fields ) {
 		
 		foreach( $fields as $field=>$data ) {
 			echo "<tr valign='top'> \n";
 			echo "<th scope='row'><label for=" . $field . ">";
 			echo $data['label'] . "</label></th>\n";
-			echo "<td><input maxlength=" . $data['maxlength'] . " size=" . $data['size'] . " name='" . $field ;
-			echo "' value='" . esc_attr( $data['value'] ) . "' />     " . $data['notes'] . "</td>\n";
+			echo "<td><input type=" . $data['type'] . " maxlength=" . $data['maxlength'] . " size=" . $data['size'] . " name='" . $field ;
+			echo "' id='" . $field . "' value='" . esc_attr( $data['value'] ) . "' />\n";
+			if( $data['notes'] != '' ) {
+				echo "<br /><span class='description'>" . $data['notes'] . "</span></td>\n";
+			}
 			echo "</tr> \n";
 		}
 	}
 	
 // ----------------------------------------------------------------
-// Creates the UI form for entering a Game Schedules in the Admin page
+// Creates the UI form for entering a Games in the Admin page
 // Callback for: add_meta_box('mstw-gl-meta', 'Game', ... )
+//
 
 	function mstw_gs_create_games_ui( $post ) {
 		// mstw_set_wp_default_timezone( ); Not needed??
@@ -337,23 +515,39 @@
 		$mstw_gs_media_url_1  = get_post_meta($post->ID, '_mstw_gs_media_url_1', true );
 		$mstw_gs_media_url_2  = get_post_meta($post->ID, '_mstw_gs_media_url_2', true );
 		$mstw_gs_media_url_3  = get_post_meta($post->ID, '_mstw_gs_media_url_3', true );
-		   
-		?>	
+		
+		$game_date_label = ( $options['date_label'] == '' ? __( 'Game Date', 'mstw-loc-domain' ) : $options['date_label'] );
+		$game_time_label = ( $options['time_label'] == '' ? __( 'Game Time', 'mstw-loc-domain' ) : $options['time_label'] );
+		$opponent_label = ( $options['opponent_label'] == '' ? __( 'Opponent', 'mstw-loc-domain' ) : $options['opponent_label'] );
+		$media_label = ( $options['media_label'] == '' ? __( 'Media', 'mstw-loc-domain' ) : $options['media_label'] );
+		
+		?>
 		
 	   <table class="form-table">
-		<tr valign="top">
-			<th scope="row"><label for="mstw_gs_sched_id" ><?php echo __( 'Schedule ID', 'mstw-loc-domain') . ':'; ?></label></th>
-			<td><input maxlength="64" size="20" name="mstw_gs_sched_id"
-				value="<?php echo esc_attr( $mstw_gs_sched_id ); ?>"/></td>
-		</tr>
+	   
+	   <?php
+	   $admin_fields = array( 	'mstw_gs_sched_id' => array (
+									'type' => 'text',
+									'value' => $mstw_gs_sched_id,
+									'label' => __( 'Schedule ID:', 'mstw-loc-domain' ),
+									'maxlength' => 128,
+									'size' => 30,
+									'notes' => 'MUST be unique. (128 character max) E.g., "2013-varsity-football"',
+								),
+								'gs_game_date' => array (
+									'type' => 'text',
+									'value' => date( 'Y-m-d', $mstw_gs_unix_dtg ),
+									'label' => $game_date_label,
+									'maxlength' => 128,
+									'size' => 30,
+									'notes' => '',
+								),
+							);
 		
-		<!-- Game Date (now uses datepicker javascript -->
-		<?php $game_date_label = ( $options['date_label'] == '' ? __( 'Game Date', 'mstw-loc-domain' ) : $options['date_label'] ); ?>
-		<tr valign="top">
-			<th scope="row"><label for="gs_game_date" ><?php echo $game_date_label . ':';?></label></th>
-			<td><input type="text" id="gs_game_date" name="gs_game_date" value="<?php echo date( 'Y-m-d', $mstw_gs_unix_dtg );?>"/></td>
-		</tr>
 	
+		mstw_gs_build_admin_edit_screen( $admin_fields );
+		?>
+		
 		<!-- Game Time -->
 		<?php
 		$curr_hrs = date( 'H', (int)esc_attr( $mstw_gs_unix_dtg ) );
@@ -362,9 +556,8 @@
 		if ( $curr_tba == '' ) {
 			$curr_tba = '---';
 		}
-		
-		$game_time_label = ( $options['time_label'] == '' ? __( 'Game Time', 'mstw-loc-domain' ) : $options['time_label'] );
 		?>
+		
 		<tr valign="top">
 			<th scope="row"><label for="game_time_hrs" ><?php echo $game_time_label . ' [hh:mm]:';?></label></th>
 			<td>
@@ -394,27 +587,35 @@
 					}
 					?>
 				</select>
-			</td>
-			<td>Note: if TBA is anything other than '---', then it is used for the game time whether or not a time is entered.</td>
+			<br/><span class='description'>If TBA is anything other than '---', then it is used for the game time whether or not a time is entered.</span></td>
 			<!--<td><?php //echo '$curr_hrs:$curr_mins: ' . $curr_hrs .':' . $curr_mins; ?> </td>-->
 		</tr>
 		
 		<!-- This is the new stuff for the MSTW teams CPT-->
 		<?php mstw_gs_build_teams_input( $mstw_gs_opponent_team ); ?>
 		
-		<tr valign="top">
-			<!--<th scope="row"><label for="mstw_gs_opponent" >Opponent:</label></th>-->
-			<?php $opponent_label = ( $options['opponent_label'] == '' ? __( 'Opponent', 'mstw-loc-domain' ) : $options['opponent_label'] ); ?>
-			<th scope="row"><label for="mstw_gs_opponent" ><?php echo $opponent_label . ':' ?></label></th>
-			<td><input maxlength="64" size="30" name="mstw_gs_opponent"
-				value="<?php echo esc_attr( $mstw_gs_opponent ); ?>"/></td>
-		</tr>
+		<?php
+		$admin_fields = array( 	'mstw_gs_opponent' => array (
+									'type' => 'text',
+									'value' => $mstw_gs_opponent,
+									'label' => $opponent_label  . ":",
+									'maxlength' => 128,
+									'size' => 30,
+									'notes' => 'Name of opponent (your choice of format).',
+								),
+								'mstw_gs_opponent_link' => array (
+									'type' => 'text',
+									'value' => $mstw_gs_opponent_link,
+									'label' =>  $opponent_label . ' ' . __( 'Link:', 'mstw-loc-domain' ),
+									'maxlength' => 256,
+									'size' => 30,
+									'notes' => 'Link to a website for the opponent (your choice, maybe the team website or school website.',
+								),
+							);
 		
-		<tr valign="top">
-			<th scope="row"><label for="mstw_gs_opponent_link" ><?php echo $opponent . " " . __( 'Link:', 'mstw-loc-domain' ); ?></label></th>
-			<td><input maxlength="256" size="30" name="mstw_gs_opponent_link"
-				value="<?php echo esc_attr( $mstw_gs_opponent_link ); ?>"/></td>
-		</tr>
+	
+		mstw_gs_build_admin_edit_screen( $admin_fields );
+		?>
 		
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_home_game" >Home Game?</label></th>
@@ -444,9 +645,9 @@
 					$selected = ( $mstw_gs_gl_location == $loc->ID ) ? 'selected="selected"' : '';
 					echo "<option value='" . $loc->ID . "'" . $selected . ">" . get_the_title( $loc->ID ) . "</option>";
 				}
-				echo "</select></td>";
-				echo "<td>Note: this setting requires that the Game Locations plugin is activated. It is preferred to using the custom location and link settings below.</td>";
-				echo "</tr>";
+				echo "</select>\n";
+				echo "<br/><span class='description'>Note: this setting requires that the Game Locations plugin is activated. It is preferred to using the custom location and link settings below.</span></td>\n";
+				echo "</tr>\n";
 				
 			}
 		} //End: if (is_plugin_active) 
@@ -457,36 +658,84 @@
 			echo '</tr>';
 		} 
 		
+		$admin_fields = array( 	'mstw_gs_location' => array (
+									'type' => 'text',
+									'value' => $mstw_gs_location,
+									'label' => $location_label  . ":",
+									'maxlength' => 128,
+									'size' => 30,
+									'notes' => __( 'This setting WILL OVERRIDE any selection from the Game Locations dropdown. Therefore it should not be used if location is selected from Game Locations dropdown.', 'mstw-loc-domain' ),
+								),
+								'mstw_gs_location_link' => array (
+									'type' => 'text',
+									'value' => $mstw_gs_location_link,
+									'label' =>  $location_label . ' ' . __( 'Link:', 'mstw-loc-domain' ),
+									'maxlength' => 256,
+									'size' => 30,
+									'notes' => __( 'This could be a link to a map or to a venue website. It will override the Game Locations map link. ', 'mstw-loc-domain' ),
+								),
+								'mstw_gs_game_result' => array (
+									'type' => 'text',
+									'value' => $mstw_gs_game_result,
+									'label' =>  __( 'Game Result:', 'mstw-loc-domain' ),
+									'maxlength' => 128,
+									'size' => 30,
+									'notes' => __( 'If a result is entered here, it will replace the game time in all front end displays.', 'mstw-loc-domain' ),
+								),
+								'mstw_gs_media_label_1' => array (
+									'type' => 'text',
+									'value' => $mstw_gs_media_label_1,
+									'label' =>  $media_label . ' ' . __( 'Label 1:', 'mstw-loc-domain' ),
+									'maxlength' => 128,
+									'size' => 30,
+									'notes' => __( 'This text will be displayed for ', 'mstw-loc-domain' ) . $media_label . __( ' link 1. If it is blank, NO LINKS WILL BE DISPLAYED.', 'mstw-loc-domain' ),
+								),
+								'mstw_gs_media_url_1' => array (
+									'type' => 'text',
+									'value' => $mstw_gs_media_url_1,
+									'label' =>  $media_label . ' ' . __( 'URL 1:', 'mstw-loc-domain' ),
+									'maxlength' => 256,
+									'size' => 30,
+									'notes' => _( 'URL for ', 'mstw-loc-domain' ) . $media_label . __( ' link 1.', 'mstw-loc-domain' ),
+								),
+								'mstw_gs_media_label_2' => array (
+									'type' => 'text',
+									'value' => $mstw_gs_media_label_2,
+									'label' =>  $media_label . ' ' . __( 'Label 2:', 'mstw-loc-domain' ),
+									'maxlength' => 128,
+									'size' => 30,
+									'notes' => __( 'This text will be displayed for ', 'mstw-loc-domain' ) . $media_label . __( ' link 2. If it is blank, #3 below will be ignored.', 'mstw-loc-domain' ),
+								),
+								'mstw_gs_media_url_2' => array (
+									'type' => 'text',
+									'value' => $mstw_gs_media_url_2,
+									'label' =>  $media_label . ' ' . __( 'URL 2:', 'mstw-loc-domain' ),
+									'maxlength' => 256,
+									'size' => 30,
+									'notes' => _( 'URL for ', 'mstw-loc-domain' ) . $media_label . __( ' link 2.', 'mstw-loc-domain' ),
+								),
+								'mstw_gs_media_label_3' => array (
+									'type' => 'text',
+									'value' => $mstw_gs_media_label_3,
+									'label' =>  $media_label . ' ' . __( 'Label 3:', 'mstw-loc-domain' ),
+									'maxlength' => 128,
+									'size' => 30,
+									'notes' => __( 'This text will be displayed for ', 'mstw-loc-domain' ). $media_label . __( ' link 3.', 'mstw-loc-domain' ),
+								),
+								'mstw_gs_media_url_3' => array (
+									'type' => 'text',
+									'value' => $mstw_gs_media_url_3,
+									'label' =>  $media_label . ' ' . __( 'URL 3:', 'mstw-loc-domain' ),
+									'maxlength' => 256,
+									'size' => 30,
+									'notes' => __( 'URL for ', 'mstw-loc-domain' ) . $media_label . __( ' link 3.', 'mstw-loc-domain' ),
+								),
+							);
+		
+	
+		mstw_gs_build_admin_edit_screen( $admin_fields );
 		?>
-		
-		<tr valign="top">
-			<th scope="row"><label for="mstw_gs_location" ><?php echo $location_label . ':' ?></label></th>
-			<td><input maxlength="64" size="30" name="mstw_gs_location"
-				value="<?php echo esc_attr( $mstw_gs_location ); ?>"/></td>
-			<td>Note: this setting is not needed if location is selected from Game Locations dropdown AND it will override any selection from the Game Locations dropdown.</td>
-		</tr>
-		<tr valign="top">
-			<th scope="row"><label for="mstw_gs_location_link" ><?php echo $location_label . __( ' Link:', 'mstw-loc-domain' ); ?></label></th>
-			<td><input maxlength="256" size="30" name="mstw_gs_location_link"
-				value="<?php echo esc_attr( $mstw_gs_location_link ); ?>"/></td>
-			<td>Note: this setting will override the Game Locations map link.</td>
-		</tr>
-			
-		<tr valign="top">
-			<th scope="row"><label for="mstw_gs_game_result" ><?php _e( 'Game Result:', 'mstw-loc-domain' ) ?> </label></th>
-			<td><input maxlength="16" size="10" name="mstw_gs_game_result"
-				value="<?php echo esc_attr( $mstw_gs_game_result ); ?>"/></td>
-		</tr>
-		
-		<?php 
-		$media_label = ( $options['media_label'] == '' ? __( 'Media', 'mstw-loc-domain' ) : $options['media_label'] );
-		?>
-		
-		<tr valign="top">
-			<th scope="row"><label for="mstw_gs_media_label_1" ><?php echo $media_label . ' ' . __( 'Label', 'mstw-loc-domain' ) . ' 1:'; ?></label></th>
-			<td><input maxlength="64" size="30" name="mstw_gs_media_label_1"
-				value="<?php echo esc_attr( $mstw_gs_media_label_1 ); ?>"/></td>
-		</tr>
+		<!--	
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_media_url_1" ><?php echo $media_label . ' ' . __( 'URL', 'mstw-loc-domain' ) . ' 1:'; ?></label></th>
 			<td><input maxlength="256" size="30" name="mstw_gs_media_url_1"
@@ -512,6 +761,7 @@
 			<td><input maxlength="256" size="30" name="mstw_gs_media_url_3"
 				value="<?php echo esc_attr( $mstw_gs_media_url_3 ); ?>"/></td>
 		</tr>
+		-->
 		
 		<tr valign="top">
 			<th scope="row"><label for="mstw_gs_unix_date" >UNIX Date (Info Only):</label></th>
@@ -540,25 +790,25 @@
 			
 		$teams = get_posts(array( 'numberposts' => -1,
 						  'post_type' => 'mstw_gs_teams',
-						  'orderby' => 'full_name',
+						  'orderby' => 'title',
 						  'order' => 'ASC' 
 						));						
 
 		if( $teams ) {
 			echo '<tr valign="top">';
 			echo '<th>' . __( 'Select Opponent:', 'mstw-loc-domain' ) . '</th>';
-			echo "<td><select id='team_home_venue' name='team_home_venue'>";
-			$selected = ( empty( $team_home_venue ) or $team_home_venue == -1 ) ? 'selected="selected"' : '';
+			echo "<td><select id='gs_opponent_team' name='gs_opponent_team'>";
+			//$selected = ( empty( $gs_opponent_team ) or $gs_opponent_team == -1 ) ? 'selected="selected"' : '';
+			
 			echo "<option value='-1' " . $selected . "> ---- </option>";
-				
 			foreach( $teams as $team ) {
 				$selected = ( $current_team == $team->ID ) ? 'selected="selected"' : '';
 				echo "<option value='" . $team->ID . "'" . $selected . ">" . get_the_title( $team->ID ) . "</option>";
 			}
 			
-			echo "</select></td>";
-			echo "<td>If set, this setting will override Opponent, Opponent Link, Game Location (if not a home game), and Location Link. It is also the only way to add logos to the various displays.</td>";
-			echo "</tr>";
+			echo "</select>\n";
+			echo "<br/><span class='description'>If set, this setting will override Opponent, Opponent Link, Game Location (if not a home game), and Location Link. It is also the only way to add logos to the various displays.</span></td>\n";
+			echo "</tr>\n";
 			
 		}
 		
@@ -707,18 +957,24 @@
 					
 			update_post_meta( $post_id, 'team_alt_logo',
 					esc_url( $_POST['team_alt_logo'] ) );
-		
+		}		
+		else if ( $_POST['post_type'] == 'mstw_gs_schedules' ) {
+			update_post_meta( $post_id, 'schedule_id',
+					strip_tags( $_POST['schedule_id'] ) );
+			update_post_meta( $post_id, 'schedule_team',
+					strip_tags( $_POST['schedule_team'] ) );
+
 		}
 		
 		return;
 	}
 
 // ----------------------------------------------------------------
-// Set up the Game Schedules 'view all' columns
-// ----------------------------------------------------------------
-add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
+// Set up the All Games table
+//
+add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' ) ;
 
-	function mstw_gs_edit_columns( $columns ) {	
+	function mstw_gs_edit_games_columns( $columns ) {	
 		
 		$options = get_option( 'mstw_gs_options' );
 		
@@ -749,38 +1005,27 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 	}
 
 // ----------------------------------------------------------------
-// Display the Game Locations 'view all' columns
-// ----------------------------------------------------------------
-	add_action( 'manage_scheduled_games_posts_custom_column', 'mstw_gs_manage_columns', 10, 2 );
+// Display the Games 'view all' columns
+// 
+	add_action( 'manage_scheduled_games_posts_custom_column', 'mstw_gs_manage_games_columns', 10, 2 );
 
-	function mstw_gs_manage_columns( $column, $post_id ) {
+	function mstw_gs_manage_games_columns( $column, $post_id ) {
 		global $post;
 		
-		$options = get_option( 'mstw_gs_options' );
+		$options = get_option( 'mstw_gs_dtg_options' );
 		$mstw_admin_date_format = $options['admin_date_format'];
 		$mstw_admin_time_format = $options['admin_time_format'];
 		
 		$game_timestamp = get_post_meta( $post_id, '_mstw_gs_unix_dtg', true );
 
 		switch( $column ) {
-			/* Debug Column */
-			/*case 'debug' :
-				$debug_str = "";
-				echo (	$debug_str );	
-				break;
-			*/
+			// Debug Column */
+			//case 'debug' :
+			//	$debug_str = "";
+			//	echo (	$debug_str );	
+			//	break;
+			//
 			
-			// If displaying the 'sched_year' column.
-			/*
-			case 'sched_year' :
-				// Build from unix timestamp
-				if ( empty( $game_timestamp ) ) 
-					_e( 'No Game Year', 'mstw-loc-domain' );
-				else
-					printf( '%s', date( 'Y', $game_timestamp ) );
-				break;
-			*/
-				
 			// If displaying the 'sched_id' column.
 			case 'sched_id' :
 				// Get the post meta
@@ -797,11 +1042,13 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 			// If displaying the 'game_date' column
 			case 'game_date' :
 				// Build from unix timestamp
-				if ( empty( $game_timestamp ) )
+				if ( empty( $game_timestamp ) ) {
 					_e( 'No Game Date', 'mstw-loc-domain' );
-				else
+				}
+				else {
+					//echo $game_timestamp;
 					echo( date( $mstw_admin_date_format, $game_timestamp ) );
-
+				}
 				break;
 			
 			//If displaying the 'time' column
@@ -809,11 +1056,14 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 				// Build from UNIX timestamp
 				$mstw_gs_game_time_tba = get_post_meta( $post_id, '_mstw_gs_game_time_tba', true );
 
-				if ( $mstw_gs_game_time_tba != '' )
+				if ( $mstw_gs_game_time_tba != '' ) {
 					printf( '%s', $mstw_gs_game_time_tba );
-				else
-					printf( '%s', date( $mstw_admin_time_format, $game_timestamp ) );
-				
+				}
+				else {
+					//echo $game_timestamp;
+					//printf( '%s', date( $mstw_admin_time_format, $game_timestamp ) );
+					echo( date( $mstw_admin_time_format, $game_timestamp ) );
+				}
 				break;	
 
 			//If displaying the 'result' column
@@ -894,9 +1144,200 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 				break;
 		}
 	}
+
+	
+// ----------------------------------------------------------------
+// Set up the All Teams table
+//
+	add_filter( 'manage_edit-mstw_gs_teams_columns', 'mstw_gs_edit_teams_columns' ) ;
+
+	function mstw_gs_edit_teams_columns( $columns ) {	
+		
+		$options = get_option( 'mstw_gs_options' );
+
+		$columns = array(
+			'cb' => '<input type="checkbox" />',
+			'title' => __( 'Title', 'mstw-loc-domain' ),
+			'team_full_name' => __( 'Team Full Name', 'mstw-loc-domain' ),
+			'team_short_name' => __( 'Team Short Name', 'mstw-loc-domain' ),
+			'team_full_mascot' => __( 'Mascot Full Name', 'mstw-loc-domain' ),
+			'team_short_mascot' => __( 'Mascot Short Name', 'mstw-loc-domain' ),
+			'team_link' => __( 'Team Link', 'mstw-loc-domain' ),
+			'team_logo' => __( 'Team Table Logo', 'mstw-loc-domain' ),
+			'team_alt_logo' => __( 'Team Slider Logo', 'mstw-loc-domain' ),
+			'team_home_venue' => __( 'Team Home Venue', 'mstw-loc-domain' ),
+			/* 'debug' => __('Debug-Remove') */
+		);
+
+		return $columns;
+	}
+
+
+	
+// ----------------------------------------------------------------
+// Display the Teams 'view all' columns
+// 
+	add_action( 'manage_mstw_gs_teams_posts_custom_column', 'mstw_gs_manage_teams_columns', 10, 2 );
+
+	function mstw_gs_manage_teams_columns( $column, $post_id ) {
+		global $post;
+		
+		switch( $column ) {
+			/* Debug Column */
+			/*case 'debug' :
+				$debug_str = "";
+				echo (	$debug_str );	
+				break;
+			*/
+				
+			// FULL NAME column
+			case 'team_full_name' :
+				$full_name = get_post_meta( $post_id, 'team_full_name', true );
+				if( $full_name != '' )
+					echo( $full_name );
+				else
+					_e( 'No Full Name', 'mstw-loc-domain' ); 
+				break;
+			
+			// SHORT NAME column
+			case 'team_short_name' :
+				$short_name = get_post_meta( $post_id, 'team_short_name', true );
+				if( $short_name != '' )
+					echo( $short_name );
+				else
+					_e( 'No Short Name', 'mstw-loc-domain' ); 
+				break;
+			
+			// FULL MASCOT column
+			case 'team_full_mascot' :
+				$name = get_post_meta( $post_id, 'team_full_mascot', true );
+				if( $name != '' )
+					echo( $name );
+				else
+					_e( 'No Full Mascot', 'mstw-loc-domain' ); 
+				break;
+
+			// SHORT MASCOT column
+			case 'team_short_mascot' :
+				$name = get_post_meta( $post_id, 'team_short_mascot', true );
+				if( $name != '' )
+					echo( $name );
+				else
+					_e( 'No Short Mascot', 'mstw-loc-domain' ); 
+				break;
+				
+			// TEAM LINK column
+			case 'team_link' :
+				$name = get_post_meta( $post_id, 'team_link', true );
+				if( $name != '' )
+					echo( $name );
+				else
+					_e( 'No Team Link', 'mstw-loc-domain' ); 
+				break;
+
+			// TEAM (TABLE) LOGO column
+			case 'team_logo' :
+				$name = get_post_meta( $post_id, 'team_logo', true );
+				if( $name != '' )
+					echo( $name );
+				else
+					_e( 'No Table Logo', 'mstw-loc-domain' ); 
+				break;
+				
+			// TEAM ALT (SLIDER) LOGO column
+			case 'team_alt_logo' :
+				$name = get_post_meta( $post_id, 'team_alt_logo', true );
+				if( $name != '' )
+					echo( $name );
+				else
+					_e( 'No Slider Logo', 'mstw-loc-domain' ); 
+				break;	
+				
+			// TEAM HOME VENUE column
+			case 'team_home_venue' :
+				// Get the post meta
+				$venue = get_post_meta( $post_id, 'team_home_venue', true );
+
+				if ( empty( $venue ) )
+					_e( 'No Home Venue', 'mstw-loc-domain' );
+				else
+					echo get_the_title( $venue );
+
+				break;	
+				
+			/* Just break out of the switch statement for everything else. */
+			default :
+				break;
+		}
+	}
+	
+// ----------------------------------------------------------------
+// Set up the All Schedules table
+//
+	add_filter( 'manage_edit-mstw_gs_schedules_columns', 'mstw_gs_edit_schedules_columns' ) ;
+
+	function mstw_gs_edit_schedules_columns( $columns ) {	
+		
+		$options = get_option( 'mstw_gs_options' );
+
+		$columns = array(
+			'cb' => '<input type="checkbox" />',
+			'title' => __( 'Title', 'mstw-loc-domain' ),
+			'schedule_id' => __( 'Unique Schedule ID', 'mstw-loc-domain' ),
+			'schedule_team' => __( 'Schedule for Team', 'mstw-loc-domain' ),
+			// 'debug' => __('Debug-Remove')
+		);
+
+		return $columns;
+	}
+
+
+	
+// ----------------------------------------------------------------
+// Display the Schedules 'view all' columns
+// 
+	add_action( 'manage_mstw_gs_schedules_posts_custom_column', 'mstw_gs_manage_schedules_columns', 10, 2 );
+
+	function mstw_gs_manage_schedules_columns( $column, $post_id ) {
+		global $post;
+		
+		switch( $column ) {
+			/* Debug Column */
+			/*case 'debug' :
+				$debug_str = "";
+				echo (	$debug_str );	
+				break;
+			*/
+				
+			// SCHEDULE ID column
+			case 'schedule_id' :
+				$id = get_post_meta( $post_id, 'schedule_id', true );
+				if( $id != '' )
+					echo ( $id );
+				else
+					_e( 'No Schedule ID', 'mstw-loc-domain' ); 
+					
+				break;
+			
+			// SCHEDULE FOR column
+			case 'schedule_team' :
+				$team = get_post_meta( $post_id, 'schedule_team', true );
+				if( $team != '' )
+					echo( get_the_title( $team ) );
+				else
+					_e( 'No Team for Schedule', 'mstw-loc-domain' ); 
+					
+				break;
+			
+			/* Just break out of the switch statement for everything else. */
+			default :
+				break;
+		}
+	}
+	
 // ----------------------------------------------------------------
 // Remove the "View Post" option
-// ----------------------------------------------------------------
+//
 	if ( is_admin( ) ) {
 		add_filter( 'post_row_actions', 'mstw_gs_remove_the_view', 10, 2 );
 	}			
@@ -919,20 +1360,26 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 	add_action( 'admin_menu', 'mstw_gs_add_page' );
 
 	function mstw_gs_add_page( ) {
+	
+		//remove_submenu_page( 'post-new.php?post_type=scheduled_games' );
+		global $submenu;
+		
+		unset( $submenu['edit.php?post_type=scheduled_games'][10] );
 		
 		// Decided to add the settings page to the Games menu rather than
 		// the settings menu
+		$capability = apply_filters( 'mstw_gs_user_capability', 'edit_others_posts', 'display_settings_menu_item' );
 		$page = add_submenu_page( 	'edit.php?post_type=scheduled_games', 
 							'Game Schedule Settings', 	//page title
 							'Display Settings', 		//menu title
-							'manage_options', 			// Capability required to see this option.
+							$capability, 			// Capability required to see this option.
 							'mstw_gs_settings', 		// Slug name to refer to this menu
 							'mstw_gs_option_page' );	// Callback to output content
 							
 		/*$page = add_submenu_page( 	'edit.php?post_type=scheduled_games', 
 							'Game Schedule Color Settings', 	//page title
 							'Color Settings', 		//menu title
-							'manage_options', 			// Capability required to see this option.
+							'edit_posts', 			// Capability required to see this option.
 							'mstw_gs_colors', 		// Slug name to refer to this menu
 							'mstw_gs_colors_page' );	// Callback to output content
 		*/
@@ -940,13 +1387,13 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 							
 		// Does the importing work
 		$plugin = new MSTW_GS_ImporterPlugin;
-		
+		$capability = apply_filters( 'mstw_gs_user_capability', 'edit_others_posts', 'csv_import_menu_item' );
 		add_submenu_page(	'edit.php?post_type=scheduled_games',
-							'Import Schedule from CSV File',		//page title
-							'CSV Schedule Import',					//menu title
-							'manage_options',						//capability to access
-							'mstw_gs_csv_import',					//slug name for menu
-							array( $plugin, 'form' )				//callback to display menu
+							'Import Schedule from CSV File',	//page title
+							'CSV Schedule Import',				//menu title
+							$capability,						//capability to access
+							'mstw_gs_csv_import',				//slug name for menu
+							array( $plugin, 'form' )			//callback to display menu
 						);
 	}
 
@@ -1007,28 +1454,6 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		</div>
 		<?php
 	}
-	
-/*
-	// ----------------------------------------------------------------	
-// 	Render the Colors Settins page
-// ----------------------------------------------------------------
-	function mstw_gs_colors_page( ) {
-		?>
-		<div class="wrap">
-			<?php screen_icon(); ?>
-			<h2>Game Schedule Color Settings</h2>
-			<?php //settings_errors(); ?>
-			<form action="options.php" method="post">
-				<?php settings_fields( 'mstw_gs_colors_group' ); ?>
-				<?php do_settings_sections( 'mstw_gs_colors' ); ?>
-				<p>
-				<input name="Submit" type="submit" class="button-primary" value="Save Changes" />
-				</p>
-			</form>
-		</div>
-		<?php
-	}
-*/
 	
 // ----------------------------------------------------------------	
 // 	Register and define the settings
@@ -1523,6 +1948,13 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		echo '<p>' . __( "Enter the default colors for your Schedule Slider shortcodes and widgets. NOTE: These settings will override the default colors in the plugin's stylsheet.", 'mstw-loc-domain' ) . '</p>';
 	}
 	
+// ----------------------------------------------------------------	
+// 	Team Logo section instructions	
+// ----------------------------------------------------------------	
+	function mstw_gs_team_logo_inst( ) {
+		echo '<p>' . __( "Control the display of team logos. NOTE: THESE SETTINGS ONLY APPLY WHEN SELECTING OPPONENTS FROM THE MSTW TEAMS DATABASE.", 'mstw-loc-domain' ) . '</p>';
+	}	
+	
 	function mstw_gs_dtg_format_setup( ) {
 		// DTG format section
 		// Data fields/columns -- show/hide and labels
@@ -1867,7 +2299,9 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		$page_section = 'mstw_gs_fields_columns_settings';
 		
 		//$options = get_option( 'mstw_gs_options' );
-		$options = wp_parse_args( get_option( 'mstw_gs_options' ), mstw_gs_get_defaults() );
+		$options = wp_parse_args( 	get_option( 'mstw_gs_options' ), 
+									mstw_gs_get_defaults() 
+								);
 		
 		add_settings_section(
 			$page_section,  //id attribute of tags
@@ -1875,160 +2309,373 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 			'mstw_gs_data_fields_inst',		//callback to fill section with desired output - should echo
 			$display_on_page				//menu page slug on which to display
 		);
-			
-		//time/result, media
 		
-		// Show/hide DATE column
-		$args = array( 	'id' => 'show_date',
-						'name'	=> 'mstw_gs_options[show_date]',
-						'value'	=> $options['show_date'],
-						'label'	=> __( 'Show or hide the Date field/column. (Default: Show)', 'mstw-loc-domain' )
-						//'label' => 'show_number: ' . $options['show_number'] . '::'
-						);						
-		add_settings_field(
-			'gs_show_date',
-			__( 'Show Date Column:', 'mstw-loc-domain' ),
-			'mstw_utl_show_hide_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);	
-		
-			
-		// DATE field/column label
-		$args = array( 	'id' => 'date_label',
-						'name'	=> 'mstw_gs_options[date_label]',
-						'value'	=> $options['date_label'],
-						'label'	=> __( 'Set label for date data field or column. (Default: "Date")', 'mstw-loc-domain' )
-						//'label' => 'number_label: ' . $options['number_label'] . '::'
-						);						
-		add_settings_field(
-			'gs_date_label',
-			__( 'Date Column Label:', 'mstw-loc-domain' ),
-			'mstw_utl_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// OPPONENT field/column must be shown
-		
-		// OPPONENT field/column label
-		$args = array( 	'id' => 'opponent_label',
-						'name'	=> 'mstw_gs_options[opponent_label]',
-						'value'	=> $options['opponent_label'],
-						'label'	=> __( 'Set label for opponent data field or column. (Default: "Opponent") NOTE: THE OPPONENT FIELD MUST  BE SHOWN.', 'mstw-loc-domain' )
-						//'label' => 'number_label: ' . $options['number_label'] . '::'
-						);						
-		add_settings_field(
-			'gs_opponent_label',
-			__( 'Opponent Column Label:', 'mstw-loc-domain' ),
-			'mstw_utl_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// Show/hide LOCATION column
-		$args = array( 	'id' => 'show_location',
-						'name'	=> 'mstw_gs_options[show_location]',
-						'value'	=> $options['show_location'],
-						'label'	=> __( 'Show or hide the Location field/column. (Default: Show)', 'mstw-loc-domain' )
-						//'label' => 'show_number: ' . $options['show_number'] . '::'
-						);						
-		add_settings_field(
-			'gs_show_location',
-			__( 'Show Location Column:', 'mstw-loc-domain' ),
-			'mstw_utl_show_hide_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);	
-		
-			
-		// LOCATION field/column label
-		$args = array( 	'id' => 'location_label',
-						'name'	=> 'mstw_gs_options[location_label]',
-						'value'	=> $options['location_label'],
-						'label'	=> __( 'Set label for location data field or column. (Default: "Location")', 'mstw-loc-domain' )
-						//'label' => 'number_label: ' . $options['number_label'] . '::'
-						);						
-		add_settings_field(
-			'gs_location_label',
-			__( 'Location Column Label:', 'mstw-loc-domain' ),
-			'mstw_utl_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);		
-		
-		// Show/hide TIME/RESULT column
-		$args = array( 	'id' => 'show_time',
-						'name'	=> 'mstw_gs_options[show_time]',
-						'value'	=> $options['show_time'],
-						'label'	=> __( 'Show or hide the Time/Result field or column. (Default: Show)', 'mstw-loc-domain' )
-						//'label' => 'show_number: ' . $options['show_number'] . '::'
-						);						
-		add_settings_field(
-			'gs_show_time',
-			__( 'Show Time Column:', 'mstw-loc-domain' ),
-			'mstw_utl_show_hide_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);	
-		
-			
-		// TIME/RESULT field/column label
-		$args = array( 	'id' => 'time_label',
-						'name'	=> 'mstw_gs_options[time_label]',
-						'value'	=> $options['time_label'],
-						'label'	=> __( 'Set label for Time/Result data field or column. (Default: "Time/Result")', 'mstw-loc-domain' )
-						//'label' => 'number_label: ' . $options['number_label'] . '::'
-						);						
-		add_settings_field(
-			'gs_time_label',
-			__( 'Time/Result Column Label:', 'mstw-loc-domain' ),
-			'mstw_utl_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
+		$arguments = array(
+						// Show/Hide Date Column
+						array( 	// the HTML form element to use
+							'type'    => 'show-hide', 
+							// the ID of the setting in options array, 
+							// and the ID of the HTML form element
+							'id' => 'show_date',
+							// the label for the HTML form element
+							'title'	=> __( 'Opponent Name Format:', 'mstw-loc-domain' ),
+							// the description displayed under the HTML form element
+							'desc'	=> __( 'Show or hide the Date field/column. (Default: Show)', 'mstw-loc-domain' ),
+							// the default value for this setting
+							'default' => '1', //show
+							// only used for select-option and ..
+							'options' => "",
+							// name of HTML form element
+							'name'	=> 'mstw_gs_options[show_date]',
+							// current value of field
+							'value'	=> $options['show_date'],
+							// page on which to display HTML control
+							'page' => $display_on_page,
+							// page section in which to display HTML control
+							'section' => $page_section,
+							),
+							
+						// DATE field/column label
+						array( 	// the HTML form element to use
+							'type'    => 'text', 
+							// the ID of the setting in options array, 
+							// and the ID of the HTML form element
+							'id' => 'date_label',
+							// the label for the HTML form element
+							'title'	=> __( 'Date Column Label:', 'mstw-loc-domain' ), 
+							// the description displayed under the HTML form element
+							'desc'	=> __( 'Set the label/title for date data field and/or column. (Default: "Date")', 'mstw-loc-domain' ),
+							// the default value for this setting
+							'default' => '', 
+							// only used for select-option and ..
+							'options' => "",
+							// name of HTML form element
+							'name'	=> 'mstw_gs_options[date_label]',
+							// current value of field
+							'value'	=> $options['date_label'],
+							// page on which to display HTML control
+							'page' => $display_on_page,
+							// page section in which to display HTML control
+							'section' => $page_section,
+							),
+							
+							// OPPONENT field/column label
+							array( 	// the HTML form element to use
+							'type'    => 'text', 
+							// the ID of the setting in options array, 
+							// and the ID of the HTML form element
+							'id' => 'opponent_label',
+							// the label for the HTML form element
+							'title'	=>__( 'Opponent Column Label:', 'mstw-loc-domain' ), 
+							// the description displayed under the HTML form element
+							'desc'	=> __( 'Set label for opponent data field or column. (Default: "Opponent") NOTE: THE OPPONENT FIELD MUST  BE SHOWN.', 'mstw-loc-domain' ),
+							// the default value for this setting
+							'default' => '', 
+							// only used for select-option and ..
+							'options' => "",
+							// name of HTML form element
+							'name'	=> 'mstw_gs_options[opponent_label]',
+							// current value of field
+							'value'	=> $options['opponent_label'],
+							// page on which to display HTML control
+							'page' => $display_on_page,
+							// page section in which to display HTML control
+							'section' => $page_section,
+							),
+							
+						// Show/hide LOCATION column
+						array( 	// the HTML form element to use
+							'type'    => 'show-hide', 
+							// the ID of the setting in options array, 
+							// and the ID of the HTML form element
+							'id' => 'show_location',
+							// the label for the HTML form element
+							'title'	=> __( 'Show Location Column:', 'mstw-loc-domain' ),
+							// the description displayed under the HTML form element
+							'desc'	=> __( 'Show or hide the Location field/column. (Default: Show)', 'mstw-loc-domain' ),
+							// the default value for this setting
+							'default' => '1', //show
+							// only used for select-option and ..
+							'options' => "",
+							// name of HTML form element
+							'name'	=> 'mstw_gs_options[show_location]',
+							// current value of field
+							'value'	=> $options['show_location'],
+							// page on which to display HTML control
+							'page' => $display_on_page,
+							// page section in which to display HTML control
+							'section' => $page_section,
+							),
+							
+							// LOCATION field/column label
+							array( 	// the HTML form element to use
+							'type'    => 'text', 
+							// the ID of the setting in options array, 
+							// and the ID of the HTML form element
+							'id' => 'location_label',
+							// the label for the HTML form element
+							'title'	=>__( 'Location Column Label:', 'mstw-loc-domain' ), 
+							// the description displayed under the HTML form element
+							'desc'	=> __( 'Set label for location data field or column. (Default: "Location")', 'mstw-loc-domain' ),
+							// the default value for this setting
+							'default' => '', 
+							// only used for select-option and ..
+							'options' => "",
+							// name of HTML form element
+							'name'	=> 'mstw_gs_options[location_label]',
+							// current value of field
+							'value'	=> $options['location_label'],
+							// page on which to display HTML control
+							'page' => $display_on_page,
+							// page section in which to display HTML control
+							'section' => $page_section,
+							),
+							
+							// Show/hide TIME/RESULT column
+							array( 	// the HTML form element to use
+							'type'    => 'show-hide', 
+							// the ID of the setting in options array, 
+							// and the ID of the HTML form element
+							'id' => 'show_time',
+							// the label for the HTML form element
+							'title'	=> __( 'Show Time/Result Column:', 'mstw-loc-domain' ),
+							// the description displayed under the HTML form element
+							'desc'	=> __( 'Show or hide the Time/Result field or column. (Default: Show)', 'mstw-loc-domain' ),
+							// the default value for this setting
+							'default' => '1', //show
+							// only used for select-option and ..
+							'options' => "",
+							// name of HTML form element
+							'name'	=> 'mstw_gs_options[show_time]',
+							// current value of field
+							'value'	=> $options['show_time'],
+							// page on which to display HTML control
+							'page' => $display_on_page,
+							// page section in which to display HTML control
+							'section' => $page_section,
+							),
+							
+							// TIME/RESULT field/column label
+							array( 	// the HTML form element to use
+							'type'    => 'text', 
+							// the ID of the setting in options array, 
+							// and the ID of the HTML form element
+							'id' => 'time_label',
+							// the label for the HTML form element
+							'title'	=>__( 'Time/Result Column Label:', 'mstw-loc-domain' ), 
+							// the description displayed under the HTML form element
+							'desc'	=> __( 'Set label for time/result data field or column. (Default: "Time/Result")', 'mstw-loc-domain' ),
+							// the default value for this setting
+							'default' => '', 
+							// only used for select-option and ..
+							'options' => "",
+							// name of HTML form element
+							'name'	=> 'mstw_gs_options[time_label]',
+							// current value of field
+							'value'	=> $options['time_label'],
+							// page on which to display HTML control
+							'page' => $display_on_page,
+							// page section in which to display HTML control
+							'section' => $page_section,
+							),
+							
+							// Show/hide MEDIA column
+							array( 	// the HTML form element to use
+								'type'    => 'select-option', 
+								// the ID of the setting in options array, 
+								// and the ID of the HTML form element
+								'id' => 'show_media',
+								// the label for the HTML form element
+								'title'	=> __( 'Show Media Column:', 'mstw-loc-domain' ),
+								// the description displayed under the HTML form element
+								'desc'	=> __( 'Show a number of media fields (1-3) or hide the Media field or column. (Default: Show all 3)', 'mstw-loc-domain' ),
+								// the default value for this setting
+								'default' => '',
+								// only used for select-option and ..
+								'options' => array( 'Hide' => 0,
+													'Show 1' => 1,
+													'Show 2' => 2,
+													'Show 3' => 3,
+													),
+								// name of HTML form element
+								'name'	=> 'mstw_gs_options[show_media]',
+								// current value of field
+								'value'	=> $options['show_media'],
+								// page on which to display HTML control
+								'page' => $display_on_page,
+								// page section in which to display HTML control
+								'section' => $page_section,
+							),
+							
+							// MEDIA field/column label
+							array( 	// the HTML form element to use
+							'type'    => 'text', 
+							// the ID of the setting in options array, 
+							// and the ID of the HTML form element
+							'id' => 'media_label',
+							// the label for the HTML form element
+							'title'	=>__( 'Media Column Label:', 'mstw-loc-domain' ), 
+							// the description displayed under the HTML form element
+							'desc'	=> __( 'Set label for media data field or column. (Default: "Media Links")', 'mstw-loc-domain' ),
+							// the default value for this setting
+							'default' => '', 
+							// only used for select-option and ..
+							'options' => "",
+							// name of HTML form element
+							'name'	=> 'mstw_gs_options[media_label]',
+							// current value of field
+							'value'	=> $options['media_label'],
+							// page on which to display HTML control
+							'page' => $display_on_page,
+							// page section in which to display HTML control
+							'section' => $page_section,
+							),
+							
+						);
+						
+		foreach ( $arguments as $args ) {
+			mstw_gs_build_form_field( $args );
+		}
 
-		// Show/hide MEDIA column
-		$args = array( 	'options' => array( 'Hide' => 0,
-											'Show 1' => 1,
-											'Show 2' => 2,
-											'Show 3' => 3,
+		//---------------------------------------------------------------
+		// TEAM LOGOS SECTION
+		//
+		$page_section = 'mstw-gs-team-logos-section';
+		
+		add_settings_section(
+			$page_section,	//id attribute of tags
+			__( 'MSTW Team Database Settings', 'mstw-loc-domain' ),	//title of the section
+			'mstw_gs_team_logo_inst',	//callback to fill section with desired output - should echo
+			$display_on_page	//menu page slug on which to display
+		);
+		
+		
+		
+		// Opponent name format
+		$args = array( 	// the HTML form element to use
+						'type'    => 'select-option', 
+						// the ID of the setting in options array, 
+						// and the ID of the HTML form element
+						'id' => 'table_opponent_format',
+						// the label for the HTML form element
+						'title'	=> __( 'Opponent Name Format:', 'mstw-loc-domain' ),
+						// the description displayed under the HTML form element
+						'desc'	=> __( 'Opponent name format in schedule table shortcode. (Default: Short Name & Mascot)', 'mstw-loc-domain' ),
+						// the default value for this setting
+						'default' => '',
+						// only used for select-option and ..
+						'options' => array( 'Short Name Only' => 'short-name',
+											'Full Name Only' => 'full-name',
+											'Short Name & Mascot' => 'short-name-mascot',
+											'Full Name & Mascot' => 'full-name-mascot',
 											),
-						'id' => 'show_media',
-						'name'	=> 'mstw_gs_options[show_media]',
-						'value'	=> $options['show_media'],
-						'label'	=> __( 'Show a number of media fields (1-3) or hide the Media field or column. (Default: Show all 3)', 'mstw-loc-domain' )
+						// name of HTML form element
+						'name'	=> 'mstw_gs_options[table_opponent_format]',
+						// current value of field
+						'value'	=> $options['table_opponent_format'],
+						// page on which to display HTML control
+						'page' => $display_on_page,
+						// page section in which to display HTML control
+						'section' => $page_section,
+						);
+						
+		mstw_gs_build_form_field( $args );
+		
+		/*$args = array( 	'options' => array( 'Short Name Only' => 'short-name',
+											'Full Name Only' => 'full-name',
+											'Short Name & Mascot' => 'short-name-mascot',
+											'Full Name & Mascot' => 'full-name-mascot',
+											),
+						'id' => 'table_opponent_format',
+						'name'	=> 'mstw_gs_options[table_opponent_format]',
+						'value'	=> $options['table_opponent_format'],
+						'label'	=> __( 'Opponent name format in schedule table shortcode. (Default: Short Name & Mascot)', 'mstw-loc-domain' )
 						);						
 		add_settings_field(
-			'gs_show_media',
-			__( 'Show Media Column:', 'mstw-loc-domain' ),
-			'mstw_utl_select_option_ctrl', //'mstw_utl_show_hide_ctrl',
+			'table_opponent_format',
+			__( 'Opponent Name Format:', 'mstw-loc-domain' ),
+			'mstw_utl_select_option_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);	
+		*/
+		
+		// Show/hide LOGO in schedule tables
+		$args = array( 	'options' => array( 'Show Name Only' => 'name-only',
+											'Show Logo & Name' => 'logo-name',
+											'Show Logo Only' => 'logo-only',
+											),
+						'id' => 'show_table_logos',
+						'name'	=> 'mstw_gs_options[show_table_logos]',
+						'value'	=> $options['show_table_logos'],
+						'label'	=> __( 'NOTE: this setting only applies if scheduled opponents are selected from the MSTW Teams database. . (Default: Show Name Only)', 'mstw-loc-domain' )
+						);						
+		add_settings_field(
+			'show_table_logos',
+			__( 'Show Team Logos in Schedule TABLES:', 'mstw-loc-domain' ),
+			'mstw_utl_select_option_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
 		);	
 		
-		// MEDIA field/column label
-		$args = array( 	'id' => 'media_label',
-						'name'	=> 'mstw_gs_options[media_label]',
-						'value'	=> $options['media_label'],
-						'label'	=> __( 'Set label for Media data field or column. (Default: "Time/Result")', 'mstw-loc-domain' )
+		// Show/hide LOGO in schedule sliders
+		$args = array( 	'options' => array( 'Show Name Only' => 'name-only',
+											'Show Logo & Name' => 'logo-name',
+											'Show Logo Only' => 'logo-only',
+											),
+						'id' => 'show_slider_logos',
+						'name'	=> 'mstw_gs_options[show_slider_logos]',
+						'value'	=> $options['show_slider_logos'],
+						'label'	=> __( 'NOTE: this setting only applies if scheduled opponents are selected from the MSTW Teams database. (Default: Hide-Show Name Only)', 'mstw-loc-domain' )
 						);						
 		add_settings_field(
-			'gs_media_label',
-			__( 'Media Column Label:', 'mstw-loc-domain' ),
-			'mstw_utl_text_ctrl',
+			'show_slider_logos',
+			__( 'Show Team Logos in Schedule SLIDERS:', 'mstw-loc-domain' ),
+			'mstw_utl_select_option_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
-		);				
+		);	
+		
+		// Format location
+		$args = array( 	'options' => array( 'Show Name Only' => 'name-only',
+											'Show City, State (Name)' => 'city-state-name',
+											),
+						'id' => 'venue_format',
+						'name'	=> 'mstw_gs_options[venue_format]',
+						'value'	=> $options['venue_format'],
+						'label'	=> __( 'NOTE: this setting only applies if scheduled opponents are selected from the MSTW Teams database. (Default: Name Only)', 'mstw-loc-domain' )
+						);						
+		add_settings_field(
+			'venue_format',
+			__( 'Format for Location:', 'mstw-loc-domain' ),
+			'mstw_utl_select_option_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);
+		
+		// Link from location
+		$args = array( 	'options' => array( 'No Link' => 'no-link',
+											'Link to Venue URL' => 'link-to-venue',
+											'Link to Map URL' => 'link-to-map',
+											),
+						'id' => 'venue_link_format',
+						'name'	=> 'mstw_gs_options[venue_link_format]',
+						'value'	=> $options['venue_link_format'],
+						'label'	=> __( 'NOTE: this setting only applies if scheduled opponents are selected from the MSTW Teams database. (Default: No Link)', 'mstw-loc-domain' )
+						);						
+		add_settings_field(
+			'venue_link_format',
+			__( 'Link from Location:', 'mstw-loc-domain' ),
+			'mstw_utl_select_option_ctrl',
+			$display_on_page,
+			$page_section,
+			$args
+		);
+					
 	
 	} //End of data_fields_setup()
 // ----------------------------------------------------------------	
@@ -2071,96 +2718,6 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		echo '<p>' . __( 'Enter the date-time formats for the schedule slider [shortcode]', 'mstw-loc-domain' ) . '<br>' .  __( "NOTE that if 'Custom' is selected as the format a valid PHP date() format string must be entered in the corresponding format text field.", 'mstw-loc-domain' ) . '</p>';;
 	}
 	
-
-/*----------------------------------------------------------------	
- *	Builds date format controls for the admin UI
- *
- * 	Arguments:
- *	$args['opt_name'] (string) name of option (array) 
- *	$args['set_name'] (string) setting name  from option array
- *	$args['set_default'] (string) default to use of setting is blank
- *	$args['cdt'] (boolean) true -> this is countdown timer date setting
- *		true -> use date-time, false -> use date only
- *
- *	return - none. Output is echoed.
- *---------------------------------------------------------------*/
-	
-	/*function mstw_date_format_control( $args ) {
-		// need the $mstw_date_formats array
-		if ( !isset( $mstw_date_formats ) ) {
-			include 'mstw-date-format-array.php';
-		}
-		
-		$opt_name = $args['opt_name'];
-		$set_name = $args['set_name'];
-		$set_default = $args['set_default'];
-		$cdt = $args['cdt'];
-		
-		if ( $cdt ) {
-			$loop_array = $mstw_cdt_date_time_formats;
-		}
-		else {
-			$loop_array = $mstw_date_formats;
-		}
-		
-		// get option value from the database
-		$options = get_option( $opt_name );
-		if ( ( $dtg_format = $options[$set_name] ) == '' )
-			$dtg_format = $set_default;
-			
-		echo "<select id=$set_name name='mstw_gs_options[$set_name]'>";
-		foreach( $loop_array as $key=>$value ) {
-			//echo '<p> key: ' . $key . ' value: ' . $value .'</p>';
-			$selected = ( $dtg_format == $value ) ? 'selected="selected"' : '';
-			echo "<option value='$value' $selected>$key</option>";
-		}
-		if ( $cdt ) {
-			echo "</select>" . __( 'Formats for', 'mstw-loc-domain' ) . " " . __( '7 April 2013 13:15', 'mstw-loc-domain' );
-		}
-		else {
-			echo "</select>" . __( 'Formats for', 'mstw-loc-domain' ) . " " . __( '7 April 2013', 'mstw-loc-domain' );
-		}
-		
-	}
-	*/
-	
-/*----------------------------------------------------------------	
- *	Builds time format controls for the admin UI
- *
- * 	Arguments:
- *	$args['opt_name'] (string) name of option (array) 
- *	$args['set_name'] (string) setting name  from option array
- *	$args['set_default'] (string) default to use of setting is blank
- *
- *	return - none. Output is echoed.
- *---------------------------------------------------------------*/
-	/*
-	function mstw_time_format_control( $args ) {
-		// need the $mstw_time_formats array
-		if ( !isset( $mstw_time_formats ) ) {
-			include 'mstw-time-format-array.php';
-		}
-		
-		$opt_name = $args['opt_name'];
-		$set_name = $args['set_name'];
-		$set_default = $args['set_default'];
-		
-		// get option value from the database
-		$options = get_option( $opt_name );
-		if ( ( $time_format = $options[$set_name] ) == '' )
-			$time_format = $set_default;
-			
-		echo "<select id=$set_name name='mstw_gs_options[$set_name]' style='width: 160px' >";
-		foreach( $mstw_time_formats as $key=>$value ) {
-			//echo '<p> key: ' . $key . ' value: ' . $value .'</p>';
-			$selected = ( $time_format == $value ) ? 'selected="selected"' : '';
-			echo "<option value='$value' $selected>$key</option>";
-		}
-		
-		echo "</select>" . __( 'Formats for', 'mstw-loc-domain' ) . " 08:00";
-		
-	}
-	*/
 // ----------------------------------------------------------------	
 //	Validate user input (we want text only)
  
@@ -2170,6 +2727,14 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_columns' ) ;
 		
 		// Pull the previous (last good) options
 		$options = get_option( 'mstw_gs_options' );
+		
+		//the checkboxes need to be handled separately because unchecked
+		//	boxes are not returned
+		/*$checkboxes = array( 'show_date', 'show_location' );
+		foreach( $checkboxes as $checkbox ) {
+			$output[$checkbox] = ( isset( $input[$checkbox] ) && $input[$checkbox] == 1 ? 1 : 0 );
+		}
+		*/
 		
 		// Loop through each of the incoming options
 		foreach( $input as $key => $value ) {
@@ -2272,7 +2837,7 @@ function mstw_gs_validate_dtg_options( $input ) {
 					// we should only be dealing with hex colors here but just in case ...
 					//default:
 						// validate the color for proper hex format
-						$sanitized_color = mstw_sanitize_hex_color( $input[$key] );
+						$sanitized_color = mstw_gs_sanitize_hex_color( $input[$key] );
 						
 						// decide what to do - save new setting 
 						// or display error & revert to last setting
@@ -2302,10 +2867,11 @@ function mstw_gs_validate_dtg_options( $input ) {
 
 // ------------------------------------------------------------------------
 //	Why do we need this?	
+	
 	function mstw_gs_admin_notices() {
 		settings_errors( );
 	}
-	add_action( 'admin_notices', 'mstw_gs_admin_notices' );
+	//add_action( 'admin_notices', 'mstw_gs_admin_notices' );
 
 
 // ------------------------------------------------------------------------
