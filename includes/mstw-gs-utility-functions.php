@@ -1,21 +1,48 @@
 <?php
-/*----------------------------------------------------------
- *	MSTW-GS-UTILITY-FUNCTIONS.PHP
- *	mstr_gs_set_options() - returns the default option settings
- * 
+/*
+ * mstw-gs-utility-functions.php
+ * 	Utility functions for MSTW Game Schedules Plugin (front end)
+ *
+ *	MSTW Wordpress Plugins
+ *	Copyright (C) 2013 Mark O'Donnell
+ *	Contact me at http://shoalsummitsolutions.com
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *	along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ /*----------------------------------------------------------
+ *	MSTW-GS-UTILITY-FUNCTIONS
+ *	These functions are included in the front end.
+ *
+ *	0. mstw_gs_utility_functions_loaded() - indicator that the file is loaded 
+ *	1. mstw_gs_get_defaults() - returns the default mstw_gs_op
+ *	2. mstw_gs_get_dtg_defaults() - returns default mstw_dtg_options[]
+ *	3. mstw_gs_build_css_rule() - helper function to build custom css rules 
+ *		from option settings and included in headers
+ *	 
  *---------------------------------------------------------*/
  
-/*----------------------------------------------------------
- *	mstw_gs_utility_fuctions_loaded: DO NOT DELETE
- *		It does nothing EXCEPT indicate whether or not the file is loaded!!
- *---------------------------------------------------------*/
+//---------------------------------------------------------------------------------
+//	0. mstw_gs_utility_fuctions_loaded: DO NOT DELETE
+//		It does nothing EXCEPT indicate whether or not the file is loaded!!
+//
 	function mstw_gs_utility_functions_loaded( ) {
 		return true;
 	}
 
 //---------------------------------------------------------------------------------
-//	mstw_gs_get_defaults: returns the array of option defaults
-
+//	1. mstw_gs_get_defaults -returns the mstw_gs_options[] default values
+//
 	function mstw_gs_get_defaults( ) {
 		//Base defaults
 		$defaults = array(
@@ -31,9 +58,10 @@
 				'intro'				=> __( 'Time to kickoff', 'mstw-loc-domain' ),
 				
 				//default slider shortcode arguments
-				
-				
-				
+				'title'				=> 'Schedule',
+				'link_label' 		=> '',
+				'link' 				=>'',
+
 				//show/hide date fields and default labels
 				'show_date'				=> 1,
 				'date_label'			=> __( 'Date', 'mstw-loc-domain' ),
@@ -44,11 +72,18 @@
 				'time_label'			=> __( 'Time/Result', 'mstw-loc-domain' ),
 				'show_media'			=> 3,
 				'media_label'			=> __( 'Media Links', 'mstw-loc-domain' ),
+				'show_table_logos'		=> 0, //Hide Logos
+				'show_slider_logos'		=> 0, //Hide Logos
+				'venue_format'			=> 0, //Show (location) name only
+				'venue_link_format'		=> 0, //No Link
 				);
 				
 		return $defaults;
 	}
 	
+//---------------------------------------------------------------------------------
+//	2. mstw_gs_get_dtg_defaults - returns the mstw_gs_dtg_options[] default values
+//	
 	function mstw_gs_get_dtg_defaults( ) {
 		//Base defaults
 		$defaults = array(
@@ -75,5 +110,16 @@
 				
 		return $defaults;
 	}
-				
-	?>
+
+//---------------------------------------------------------------------------------
+//	3. mstw_gs_build_css_rule - helper function to build css rules
+//		
+	function mstw_gs_build_css_rule( $options_array, $option_name, $css_rule ) {
+		if ( isset( $options_array[$option_name] ) and !empty( $options_array[$option_name] ) ) {
+			return $css_rule . ":" . $options_array[$option_name] . "; \n";	
+		} 
+		else {
+			return "";
+		}
+	}			
+?>
