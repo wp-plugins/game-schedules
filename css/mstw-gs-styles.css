@@ -61,9 +61,9 @@
 
 .gs-slider-area {
 	width: 100%;
-	height: 208px;
+	/*height: 208px;*/
 	line-height: 20px;
-	margin-top: 20px;
+	/*margin-top: 20px;*/
 	background-color: #fff;
 }
 
@@ -177,7 +177,7 @@
 	color: #231F20;
 }
 
-.gs-slider .game-block .date {
+.game-block .date {
 	width: 90%;
 	margin: 0 auto;
 	text-transform: uppercase;
@@ -191,37 +191,51 @@
 	margin-bottom: 10px;
 }
 
+.game-block img.mstw-gs-slider-logo {
+	width: 80px;
+	margin: 0 45px;
+}
+
+/*
 .gs-slider .pad {
 	width: 90%;
 	margin: 0 auto;
 }
+*/
 
-.gs-slider .opponent {
+.pad {
+	width: 90%;
+	margin: 0 auto;
+}
+
+/*.gs-slider .opponent {*/
+.game-block .opponent {
 	font-size: 1.3em;
 	/*height: 29px;*/
 	/*line-height: 35px;*/
 	color: #041E42;
+	margin-bottom: 10px;
 }
 
-.gs-slider .location {
+.game-block .location {
 	font-size: 1.0em;
 	line-height: 1.2em;
 	margin-bottom: 10px;
 }
 
-.gs-slider .time-result {
+.game-block .time-result {
 	font-size: 1.2em;
 	color: #041E42;
 	font-weight: bold;
 }
-.gs-slider .links, .gs-slider .links a:hover {
+.game-block .links, .gaem-block .links a:hover {
 	color: #0A2A50;
 	font-size: 11px;
 	line-height: 12px;
 	text-decoration: none;
 }
 
-.gs-slider .links a {
+.game-block .links a {
 	color: #041E42;
 	font-size: 11px;
 	text-decoration: underline;
@@ -242,10 +256,11 @@
     background-color: #4f81bd;
     color: #fff;
 	font-size: 12px;
+	line-height: 24px;
 	font-weight: bold;
 	border-spacing: 0px;
     border: 2px solid white;  /* So the border does not appear */
-    padding: 2px;
+    padding: 6px 6px;
 }
 
 /* Set the even row attributes */
@@ -255,6 +270,7 @@
 	border-style: solid; 
 	border-color: #fff; 
 	border-width: 2px;
+	padding: 6px 6px;
 }
 
 /* Set the even links */
@@ -276,6 +292,7 @@
 	border-style: solid;
 	border-color: #fff;
 	border-width: 2px;
+	padding: 6px 6px;
 }
 
 /* Set the odd links */
@@ -306,6 +323,11 @@
 	text-decoration: none;
 }
 
+img.mstw-gs-table-logo {
+	vertical-align: middle;
+	padding-right: 5px;
+}
+
 /******************************************************/
 /* Styles for the SCHEDULE WIDGET  */
 /******************************************************/
@@ -334,9 +356,13 @@
 }
 
 /* Set the even links */
-.mstw-gs-sw-even td a,  .mstw-gs-sw-even td a:visited, .mstw-gs-sw-even td a:active, .mstw-gs-sw-even td a:hover {
+.mstw-gs-sw-even td a,  .mstw-gs-sw-even td a:visited, .mstw-gs-sw-even td a:active {
     text-decoration: underline;
     color: #fff;
+}
+
+.mstw-gs-sw-even td a:hover {
+	text-decoration: none;
 }
 
 /* Set the odd row attributes */
@@ -375,18 +401,18 @@
 	font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
 }
 
-.mstw-gs-cdt-opponent {
+.mstw-gs-cdt-opponent, .mstw-gs-cdt-location {
 	color: #000;
 	font-weight: bold;
 	font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
 }
 
-.mstw-gs-cdt-opponent a {
+.mstw-gs-cdt-opponent a, .mstw-gs-cdt-location a {
 	text-decoration: underline;
     /*color: #4F81BD;*/
 }
 
-.mstw-gs-cdt-opponent a:hover {
+.mstw-gs-cdt-opponent a:hover, .mstw-gs-cdt-location a:hover {
 	text-decoration: none;
     /*color: #666;*/
 }
@@ -407,6 +433,36 @@
 /* 49ers Schedule Rules                               */
 /******************************************************/
 
+/*--------------------------------------------------------------
+ *	49ers Countdown Timer
+ *------------------------------------------------------------*/
+.mstw-gs-cdt-dtg.mstw-gs-cdt-dtg_49ers {
+	color: #AA0000;	/*49er red*/
+}
+
+ .mstw-gs-cdt-opponent.mstw-gs-cdt-opponent_49ers, .mstw-gs-cdt-opponent.mstw-gs-cdt-opponent_49ers a {
+	color: #AA0000;	/*49er red*/
+}
+
+.mstw-gs-cdt-location.mstw-gs-cdt-location_49ers, .mstw-gs-cdt-location.mstw-gs-cdt-location_49ers a {
+	color: #C8AA76; /*49er gold*/
+}
+ 
+.mstw-gs-cdt-intro.mstw-gs-cdt-intro_49ers {
+	color: #AA0000;	/*49er red*/
+}
+
+.mstw-gs-cdt-countdown.mstw-gs-cdt-countdown_49ers {
+	color: #AA0000;	/*49er red*/
+	background-color: #C8AA76; /*49er gold*/
+}
+
+ 
+ 
+/*--------------------------------------------------------------
+ *	49ers Schedule Table [shortcode]
+ *------------------------------------------------------------*/
+ 
 .mstw-gs-table-head.mstw-gs-table-head_49ers th {
     background-color: #AA0000;	/*49er red*/
     color: #C8AA76; 			/*49er gold*/
@@ -458,6 +514,54 @@
 	border-color: #black; 
 }
 
+
+
+/*--------------------------------------------------------------
+ *	49ers Schedule Table Widget
+ *------------------------------------------------------------*/
+.mstw-gs-sw-tab-head.mstw-gs-sw-tab-head-49ers th {
+    background-color: #AA0000;	/*49er red*/
+    color: #C8AA76; 			/*49er gold*/
+	border-color: black;
+}
+
+.mstw-gs-sw-tab-head_49ers thead,  .mstw-gs-sw-tab-head_49ers tr, .mstw-gs-gs-tab-head_49ers th {
+    border-color: black;
+}
+
+.mstw-gs-sw-odd.mstw-gs-sw-odd_49ers td {
+    background-color: #C8AA76; 			/*49er gold*/
+    color: #AA0000;				/*49er red*/
+	border-color: black;
+}
+
+.mstw-gs-sw-odd.mstw-gs-sw-odd_49ers td a, .mstw-gs-sw-odd.mstw-gs-sw-odd_49ers td a:visited, .mstw-gs-sw-odd.mstw-gs-sw-odd_49ers td a:active {
+	color: #AA0000;				/*49er red*/
+	background: none;
+	text-decoration: underline;
+}
+
+.mstw-gs-sw-odd.mstw-gs-sw-odd_49ers td a:hover {
+	text-decoration: none;
+}
+
+.mstw-gs-sw-even.mstw-gs-sw-even_49ers td {
+    background-color: #AA0000;	/*49er red*/
+    color: #C8AA76; 			/*49er gold*/
+	border-color: black;
+}
+
+.mstw-gs-sw-even.mstw-gs-sw-even_49ers td a, .mstw-gs-sw-even.mstw-gs-sw-even_49ers td a:visited, .mstw-gs-sw-even.mstw-gs-sw-even_49ers td a:active {
+	color: #C8AA76; 			/*49er gold*/
+	background: none;
+	text-decoration: underline;
+}
+
+.mstw-gs-sw-even.mstw-gs-sw-even_49ers td a:hover {
+	text-decoration: none;
+}
+
+
 /*--------------------------------------------------------------
  *	49ers Schedule Slider
  *------------------------------------------------------------*/
@@ -482,13 +586,24 @@
 	background-color: #AA0000;
 }
 
-.gs-slider .game-block .date.date_49ers {
+.game-block .date.date_49ers {
 	color: white;
 	border-bottom-color: white;
 }
 
-.gs-slider .game-block .opponent.opponent_49ers.pad {
+/*.gs-slider .game-block .opponent.opponent_49ers.pad {*/
+.game-block .opponent.opponent_49ers {
 	color: white;
+}
+
+.game-block  .opponent.opponent_49ers a {
+	color: #FFF;
+	text-decoration: underline;	
+}
+
+.game-block .opponent.opponent_49ers a:hover {
+	text-decoration: none;	
+	color: #fff;
 }
 
 .gs-slider .game-block .location.location_49ers.pad {
