@@ -277,34 +277,27 @@ function mstw_gs_delete_plugin_options() {
 		
 	} //end mstw_gs_enqueue_styles( )
 
-// --------------------------------------------------------------------------------
-// CUSTOM POST TYPES
-//	registers scheduled_games, mstw_gs_teams, mstw_gs_schedules, and
-//		mstw_gs_teams
-//
+	// --------------------------------------------------------------------------------
+	// CUSTOM POST TYPES
+	//	registers scheduled_games, mstw_gs_schedules, and mstw_gs_teams
+	//
 	add_action( 'init', 'mstw_gs_register_post_types' );
 
-	function mstw_gs_register_post_types() {
+	function mstw_gs_register_post_types( ) {
 		
 		$menu_icon_url = plugins_url( ) . '/game-schedules/images/mstw-admin-menu-icon.png';
 		
 		// show ui (or not) based on user's capability
-		// filter so developers can adjust
-		$capability = apply_filters( 'mstw_gs_user_capability', 'edit_others_posts', 'game-schedules' );
-		// if no filters are set, use edit_others_posts as default (editor role)
-		//if ( $capability == '' )
-			//$capability = 'edit_others_posts';
+		
+		// filter default capability so developers can modify
+		$capability = apply_filters( 'mstw_gs_user_capability', 'edit_others_posts', 'game_schedules_menu' );
+		
+		// if filter returns the empty string, someone screwed up; use edit_others_posts as default (editor role)
+		if ( $capability == '' )
+			$capability = 'edit_others_posts';
+			
 		// set show_ui based on user and capability
 		$show_ui = ( current_user_can( $capability ) == true ? true : false );
-		//if ( current_user_can( $capability ) )
-		//	$show_ui =  true;
-		//else
-		//	$show_ui = false;
-			
-		//$show_ui = true;
-			
-		//$show_ui = true;
-		// if current_user_can( $capability ) show_ui == true else false
 		
 		//-----------------------------------------------------------------------
 		// register scheduled_games post type
@@ -1245,7 +1238,7 @@ function mstw_gs_build_countdown( $attribs ) {
 
 	function mstw_gs_slider_handler( $atts ) {
 	
-		//return '<p>' . print_r( $atts, true );
+		//return '<pre>' . print_r( $atts, true ) . '</pre>';
 	
 		//$atts = shortcode_atts( array(
 		//			'sched' => '1',
@@ -1372,26 +1365,23 @@ function mstw_gs_build_countdown( $attribs ) {
 		$schedule_view_width = 584; //DEFAULT. CALCULATED BELOW BASED ON GAMES_TO_SHOW
 
 		$nbr_of_games = sizeof( $games );
-		// the 10 accounts for the size of the right arrow bar
-		$schedule_slider_width = $nbr_of_games*$game_block_width+10 . 'px';
-		$schedule_slider_offset = ($game_number > 0 ? (-1)*($game_number-1)*$game_block_width : 0) . 'px';
-		
-		( $atts['games_to_show'] == '' ? $games_to_show = 3 : $games_to_show = $atts['games_to_show'] );
+	
+		$games_to_show = $atts['games_to_show'];
+		$games_to_show = ( $games_to_show == '' or $games_to_show == -1 ) ? 3 : $games_to_show;
 		$slider_view_width = $games_to_show*$game_block_width+10 . 'px';
 		
 		$slider_view_height = ( $atts['show_slider_logos'] == 'name-only' ? '197px' : '250px' );
+		
+		// this is the entire width the 10 accounts for the size of the right arrow bar
+		$schedule_slider_width = $nbr_of_games*$game_block_width+10 . 'px';
+		// postions the next game on the left
+		$game_number = min( $game_number, $nbr_of_games-$games_to_show+1 );
+		$schedule_slider_offset = ($game_number > 0 ? (-1)*($game_number-1)*$game_block_width : 0) . 'px';
 		
 		$output = '';
 		//$output = '<pre>' . print_r( $atts, true ) . '</pre>';
 		//return $output;
 		
-		/*
-		$output .= '<p>Total Games: ' . $nbr_of_games . '</p>';
-		$output .= '<p>Next Game: ' . $game_number . '</p>';
-		$output .= '<p>Slider Offset: ' . $schedule_slider_offset . '</p>';
-		$output .= '<p>Slider Width= ' . $schedule_slider_width . '</p>';
-		return $output;
-		*/
 		
 		$output .= "<div class='gs-slider-area gs-slider-area$css_tag' style='width:$slider_view_width;'>\n"; //height:$slider_view_height;'>\n";
 		$output .= "<div class='gs-slider gs-one-edge-shadow gs-one-edge-shadow" . $css_tag . "'>\n";
