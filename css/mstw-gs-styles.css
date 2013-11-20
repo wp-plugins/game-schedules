@@ -3,44 +3,6 @@
  ************************************************************
  *  THIS FILE IS THE DEFAULT FOR THE GAME SCHEDULES PLUGIN  *
  ************************************************************
- *  SCHEDULES
- *	For the SHORTCODE, the tables have five 'row types': 
- *	the header row, even rows, odd rows, home games, and away games. 
- *
- *	For each row type, you can set:
- *		1. Text color
- *		2. Background color
- *		3. Border style, width, and color
- *		4. Link attributes - visited, hover, active, etc.
- *
- *	There is a separate set of entries for the schedule WIDGET,
- *	so you can better fit it into the available widget space.
- *
- *	COUNTDOWN TIMER
- *	The countdown timer has styles for each line in the display:
- *		1. Game date and time
- *		2. Opponent
- *		3. Intro text
- *  	4. Countdown
- *
- *  The countdown widget uses the same styles.
- *
- * 20120705-MAO:
- *	Added padding to widget schedule table
- *
- * 20121019-MAO:
- *	Cleaned up for version 2.0 release
- *
- * 20121104-MAO:
- *	Fixed some problems with 'default' values.
- *
- * 20130318-MAO:
- *	Moved the HOME row rules below the EVEN and ODD
- *	row rules so they will take precedence.
- * 
- * 20130912-MAO: STARTING VERSION 3.1 UPGRADE
- *	- Starting new schedule slider shortcode
- *
  */
  
  
