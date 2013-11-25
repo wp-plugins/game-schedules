@@ -107,17 +107,20 @@
  *
  *	Return - none. Control is displayed.
  *---------------------------------------------------------------*/
+	/*
 	function mstw_gs_checkbox_ctrl( $args ) { 
 		$id = 		$args['id'];
 		$name = 	$args['name'];
 		$value = 	$args['value'];
 		$label = 	$args['label'];
+		$checked =	$args['checked'];
 		
-		echo "<input type='checkbox' id='$id' name='$name' value='1' " . 
-				checked( '1', $value, false ) . "/> \n";  
+		echo "<input type='checkbox' id='$id' name='$name' value='$value' " . 
+				checked( $checked, $value, false ) . "/> \n";  
 		echo "<label for='$id'>$label</label> \n";
 		
 	}	//End: mstw_gs_checkbox_ctrl
+	*/
 	
 //----------------------------------------------------------------	
 // 4. MSTW_GS_SHOW_HIDE_CTRL
@@ -398,6 +401,7 @@ function mstw_gs_build_form_field( $args ) {
 		
 			//TEXT CONTROL
 			case 'text':
+			case 'color':
 				/*
 				$options[$id] = stripslashes($options[$id]);
 				$options[$id] = esc_attr( $options[$id]);
