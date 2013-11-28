@@ -72,10 +72,12 @@
 				'time_label'			=> __( 'Time/Result', 'mstw-loc-domain' ),
 				'show_media'			=> 3,
 				'media_label'			=> __( 'Media Links', 'mstw-loc-domain' ),
-				'show_table_logos'		=> 0, //Hide Logos
-				'show_slider_logos'		=> 0, //Hide Logos
-				'venue_format'			=> 0, //Show (location) name only
-				'venue_link_format'		=> 0, //No Link
+				'table_opponent_format'	=> 'full-name',
+				'slider_opponent_format'	=> 'full-name',
+				'show_table_logos'		=> 'name-only', //Hide Logos
+				'show_slider_logos'		=> 'name-only', //Hide Logos
+				'venue_format'			=> 'city-name-state', //Show (location) name only
+				'venue_link_format'		=> 'no-link', //No Link
 				);
 				
 		return $defaults;
@@ -96,7 +98,7 @@
 				//'custom_table_date_format' => 'j M y',
 				'table_time_format'		=> 'H:i',
 				//'custom_table_time_format' => 'H:i',
-				'table_widget_date_format' => 'j M y',
+				'table_widget_date_format' => 'j M',
 				//'custom_table_widget_date_format' => 'j M y',
 				'cdt_dtg_format'		=> 'l, j M g:i a',
 				//'custom_cdt_dtg_format' => 'l, j M g:i a',
