@@ -401,9 +401,7 @@
 		
 		echo "<table class='form-table'>\n";
 		
-	
 		mstw_gs_build_admin_edit_screen( $admin_fields ); 
-		
 		
 		$teams = get_posts(array( 'numberposts' => -1,
 						  'post_type' => 'mstw_gs_teams',
@@ -688,7 +686,7 @@
 				echo "<th>" . __(' Select ', 'mstw-loc-domain' ) . $location_label . __( ' from Game Locations:', 'mstw-loc-domain' ) . "</th>";
 				echo "<td><select id='mstw_gs_gl_location' name='mstw_gs_gl_location'>";
 				// trying to add --- option
-				echo "<option value='-1'>----</option>";
+				echo "<option value=''>----</option>";
 				
 				foreach( $locations as $loc ) {
 					$selected = ( $mstw_gs_gl_location == $loc->ID ) ? 'selected="selected"' : '';
@@ -905,55 +903,36 @@
 					
 			// New in 4.0 for MSTW Teams CPT entries
 			//
-			$opponent_team = ( $_POST['gs_opponent_team'] == '' ? '' : absint( $_POST['gs_opponent_team'] ) );
-			update_post_meta( $post_id, 'gs_opponent_team', $opponent_team );
-
-			
+			update_post_meta( $post_id, 'gs_opponent_team', $_POST['gs_opponent_team'] );
 						
 			update_post_meta( $post_id, '_mstw_gs_opponent_link', esc_url( $_POST['mstw_gs_opponent_link'] ) );
 
-
-			
-			$game_location = ( $_POST['mstw_gs_gl_location'] == '' ? '' : absint( $_POST['mstw_gs_gl_location'] ) );
-
-
-			update_post_meta( $post_id, '_mstw_gs_gl_location', $game_location );
+			update_post_meta( $post_id, '_mstw_gs_gl_location', $_POST['_mstw_gs_gl_location'] );
 				
-			$game_location_title = ( $game_location != '' ? sanitize_text_field( get_the_title( $_POST['mstw_gs_gl_location'] ) ) : '' );	
+			$game_location_title = ( $_POST['_mstw_gs_gl_location'] != '' ? sanitize_text_field( get_the_title( $_POST['mstw_gs_gl_location'] ) ) : '' );
+			
 			update_post_meta( $post_id, '_mstw_gs_gl_loc_title', $game_location_title );
 			
-			
 			update_post_meta( $post_id, '_mstw_gs_location', sanitize_text_field( $_POST['mstw_gs_location'] ) );
-
-					
+	
 			update_post_meta( $post_id, '_mstw_gs_location_link', esc_url( $_POST['mstw_gs_location_link'] ) );		
-		
-
 
 			update_post_meta( $post_id, '_mstw_gs_home_game', strip_tags( $_POST['mstw_gs_home_game'] ) );
 					
-
-
 			update_post_meta( $post_id, '_mstw_gs_game_time',  strip_tags( $_POST['mstw_gs_game_time'] ) );
 					
 			update_post_meta( $post_id, '_mstw_gs_game_result', sanitize_text_field( $_POST['mstw_gs_game_result'] ) );
-
-					
+	
 			update_post_meta( $post_id, '_mstw_gs_media_label_1', sanitize_text_field( $_POST['mstw_gs_media_label_1'] ) );
-
-					
+		
 			update_post_meta( $post_id, '_mstw_gs_media_label_2', sanitize_text_field( $_POST['mstw_gs_media_label_2'] ) );
-
-					
+		
 			update_post_meta( $post_id, '_mstw_gs_media_label_3', sanitize_text_field( $_POST['mstw_gs_media_label_3'] ) );
-
-					
+		
 			update_post_meta( $post_id, '_mstw_gs_media_url_1', esc_url( $_POST['mstw_gs_media_url_1'] ) );
-
-					
+		
 			update_post_meta( $post_id, '_mstw_gs_media_url_2', esc_url( $_POST['mstw_gs_media_url_2'] ) );
-
-					
+		
 			update_post_meta( $post_id, '_mstw_gs_media_url_3', esc_url( $_POST['mstw_gs_media_url_3'] ) );
 		}
 		
@@ -961,40 +940,29 @@
 		else if ( $_POST['post_type'] == 'mstw_gs_teams' ) {
 		
 			update_post_meta( $post_id, 'team_full_name', sanitize_text_field( $_POST['team_full_name'] ) );
-
-
-
-
-					
+	
 			update_post_meta( $post_id, 'team_short_name', sanitize_text_field( $_POST['team_short_name'] ) );
-
-					
+		
 			update_post_meta( $post_id, 'team_full_mascot', sanitize_text_field( $_POST['team_full_mascot'] ) );
-
-					
+		
 			update_post_meta( $post_id, 'team_short_mascot', sanitize_text_field( $_POST['team_short_mascot'] ) );
 			
-			$team_home_venue = ( $_POST['team_home_venue'] == '' ? '' : absint( $_POST['team_home_venue'] ) );
-			update_post_meta( $post_id, 'team_home_venue', $team_home_venue );
+			update_post_meta( $post_id, 'team_home_venue', $_POST['team_home_venue'] );
 					
 			update_post_meta( $post_id, 'team_link', esc_url( $_POST['team_link'] ) );
 
-					
 			update_post_meta( $post_id, 'team_logo', esc_url( $_POST['team_logo'] ) );
-
 					
 			update_post_meta( $post_id, 'team_alt_logo', esc_url( $_POST['team_alt_logo'] ) );
-
 
 		}
 	
 		// MSTW_GS_SCHEDULES POST TYPE
 		else if ( $_POST['post_type'] == 'mstw_gs_schedules' ) {
+		
 			update_post_meta( $post_id, 'schedule_id', sanitize_title( $_POST['schedule_id'], 'not-specified' ) );
-
-					
-			$schedule_team = ( $_POST['schedule_team'] == '' ? '' : absint( $_POST['schedule_team'] ) );		
-			update_post_meta( $post_id, 'schedule_team', $schedule_team );
+			
+			update_post_meta( $post_id, 'schedule_team', $_POST['schedule_id'] );
 		}
 	
 		return;
@@ -1423,19 +1391,14 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 		<div class="wrap">
 			<?php screen_icon(); ?>
 			<h2>Game Schedule Plugin Settings</h2>
+			<?php //settings_errors(); ?> 
 			
 			<?php 
 			//Get or set the current tab - default to first/main settings tab
-			if ( isset ( $_GET['tab'] ) ) {
-				$current_tab = $_GET['tab'];
-			}
-			else {
-				$current_tab = 'files-columns-tab';
-			}
+			$current_tab = ( isset( $_GET['tab'] ) ? $_GET['tab'] : 'files-columns-tab' );
 			
-			mstw_gs_admin_tabs( $current_tab ); 
-			
-			//settings_errors(); 
+			//Display the tabs, showing the current tab
+			mstw_gs_admin_tabs( $current_tab );  
 			?>
 			
 			<form action="options.php" method="post">
@@ -1444,28 +1407,30 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			//echo '<h2>pagenow = ' . $pagenow . ' page = ' . $_GET['page'] . '</h2>';
 			//WHY DO WE NEED THIS CONDITIONAL, REALLY?
 			if ( $pagenow == 'edit.php' && $_GET['page'] == 'mstw_gs_settings' ) {
-				//echo '<table class="form-table">';
-				switch ( $current_tab ){
+				switch ( $current_tab ) {
 					case 'files-columns-tab':
-						settings_fields( 'mstw_gs_options_group' );
+						settings_fields( 'mstw_gs_options' );
 						do_settings_sections( 'mstw_gs_settings' );
 						break;
 					case 'date-time-tab';
-						settings_fields( 'mstw_gs_dtg_group' );
+						settings_fields( 'mstw_gs_dtg_options' );
 						do_settings_sections( 'mstw_gs_dtg_settings' );
 						break;
 					case 'colors-tab':
-						settings_fields( 'mstw_gs_colors_group' );
+						settings_fields( 'mstw_gs_color_options' );
 						do_settings_sections( 'mstw_gs_colors' );
 						break;
-				}
-				  
+				}	  
 			}
+			
+			//submit_button();
+			//submit_button( "Reset" );
 			?>
-				<?php //settings_fields( 'mstw_gs_options_group' ); ?>
-				<?php //do_settings_sections( 'mstw_gs_settings' ); ?>
 				<p>
-				<input name="Submit" type="submit" class="button-primary" value="Save Changes" />
+				<input name="Submit" type="submit" class="button-primary" value=<?php _e( "Save Changes", "mstw-loc-domain" ) ?> />
+				
+				<input type="submit" name="mstw_gs_options[reset]" value=<?php _e( "Reset Default Values", "mstw-loc-domain" ) ?> />
+					<strong><?php _e( "WARNING! Reset Default Values will do so without further warning!", "mstw-loc-domain" ); ?></strong>
 				</p>
 			</form>
 		</div>
@@ -1475,27 +1440,20 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 // ----------------------------------------------------------------	
 // 	Register and define the settings
 // ----------------------------------------------------------------
-	add_action('admin_init', 'mstw_gs_admin_init');
+	add_action( 'admin_init', 'mstw_gs_admin_init' );
 	
 	function mstw_gs_admin_init( ) {
-		register_setting(
-			'mstw_gs_options_group',  	// settings group name
-			'mstw_gs_options',  		// options (array) to validate
-			'mstw_gs_validate_options'  // validation function
-			);
-			
-		register_setting(
-			'mstw_gs_dtg_group',  	// settings group name
-			'mstw_gs_dtg_options',  		// options (array) to validate
-			'mstw_gs_validate_options'  // validation function
-			);
-			
-		register_setting(
-			'mstw_gs_colors_group',  	// settings group name
-			'mstw_gs_color_options',  		// options (array) to validate
-			'mstw_gs_validate_color_options'  // validation function
-			);
-			
+		//If options do not exist, add them
+		if( false == get_option( 'mstw_gs_options' ) ) {    
+			add_option( 'mstw_gs_options' );  
+		}  
+		if( false == get_option( 'mstw_gs_dtg_options' ) ) {    
+			add_option( 'mstw_gs_dtg_options' );  
+		} 
+		if( false == get_option( 'mstw_gs_color_options' ) ) {    
+			add_option( 'mstw_gs_color_options' );  
+		}
+		
 		// Data Fields (& columns) Settings
 		mstw_gs_data_fields_setup( );
 		
@@ -1505,6 +1463,23 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 		// Colors Settings
 		mstw_gs_colors_setup( );
 		
+		register_setting(
+			'mstw_gs_options',  	// settings group name
+			'mstw_gs_options',  		// options (array) to validate
+			'mstw_gs_validate_options'  // validation function
+			);
+			
+		register_setting(
+			'mstw_gs_dtg_options',  	// settings group name
+			'mstw_gs_dtg_options',  		// options (array) to validate
+			'mstw_gs_validate_dtg_options'  // validation function
+			);
+			
+		register_setting(
+			'mstw_gs_color_options',  	// settings group name
+			'mstw_gs_color_options', 		// options (array) to validate
+			'mstw_gs_validate_color_options'  // validation function
+			);
 	}
 	
 // ----------------------------------------------------------------	
@@ -1520,9 +1495,9 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			
 	}
 	
-// ----------------------------------------------------------------	
-// 	Table (shortcode and widget) colors section setup	
-// ----------------------------------------------------------------
+	// ----------------------------------------------------------------	
+	// 	Table (shortcode and widget) colors section setup	
+	// 
 	function mstw_gs_table_colors_section_setup( ) {
 	
 		$display_on_page = 'mstw_gs_colors';
@@ -1537,149 +1512,92 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			$display_on_page
 			);
 	
-		// Header background color
-		$args = array( 	'id' => 'gs_tbl_hdr_bkgd_color',
-						'name' => 'mstw_gs_color_options[gs_tbl_hdr_bkgd_color]',
-						'value' => $options['gs_tbl_hdr_bkgd_color'],
-						'label' => ''
-					 );
-					 
-		add_settings_field(
-			'gs_tbl_hdr_bkgd_color',
-			__( 'Header Background Color:', 'mstw-loc-domain' ),
-			'mstw_gs_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
+		$arguments = array(
+			array( 	// TABLE HEADER BACKGROUND COLOR
+				'type' => 'color', 
+				'id' => 'gs_tbl_hdr_bkgd_color',
+				'name' => 'mstw_gs_color_options[gs_tbl_hdr_bkgd_color]',
+				'value' => $options['gs_tbl_hdr_bkgd_color'],
+				'title'	=> __( 'Header Background Color:', 'mstw-loc-domain' ),
+				'page' => $display_on_page,
+				'section' => $page_section,
+			),array( 	// TABLE HEADER TEXT COLOR
+				'type' => 'color', 
+				'id' => 'gs_tbl_hdr_text_color',
+				'name' => 'mstw_gs_color_options[gs_tbl_hdr_text_color]',
+				'value' => $options['gs_tbl_hdr_text_color'],
+				'title'	=> __( 'Header Text Color:', 'mstw-loc-domain' ),
+				'page' => $display_on_page,
+				'section' => $page_section,
+			),
+			array( 	// TABLE BORDER COLOR
+				'type' => 'color', 
+				'id' => 'gs_tbl_border_color',
+				'name' => 'mstw_gs_color_options[gs_tbl_border_color]',
+				'value' => $options['gs_tbl_border_color'],
+				'title'	=> __( 'Table Border Color:', 'mstw-loc-domain' ),
+				'page' => $display_on_page,
+				'section' => $page_section,
+			),
+			array( 	// ODD ROW BACKGROUND COLOR
+				'type' => 'color', 
+				'id' => 'gs_tbl_odd_bkgd_color',
+				'name' => 'mstw_gs_color_options[gs_tbl_odd_bkgd_color]',
+				'value' => $options['gs_tbl_odd_bkgd_color'],
+				'title'	=> __( 'Odd Row Background Color:', 'mstw-loc-domain' ),
+				'page' => $display_on_page,
+				'section' => $page_section,
+			),
+			array( 	// ODD ROW TEXT COLOR
+				'type' => 'color', 
+				'id' => 'gs_tbl_odd_text_color',
+				'name' => 'mstw_gs_color_options[gs_tbl_odd_text_color]',
+				'value' => $options['gs_tbl_odd_text_color'],
+				'title'	=> __( 'Odd Row Text Color:', 'mstw-loc-domain' ),
+				'page' => $display_on_page,
+				'section' => $page_section,
+			),
+			array( 	// EVEN ROW BACKGROUND COLOR
+				'type' => 'color', 
+				'id' => 'gs_tbl_even_bkgd_color',
+				'name' => 'mstw_gs_color_options[gs_tbl_even_bkgd_color]',
+				'value' => $options['gs_tbl_even_bkgd_color'],
+				'title'	=> __( 'Even Row Background Color:', 'mstw-loc-domain' ),
+				'page' => $display_on_page,
+				'section' => $page_section,
+			),
+			array( 	// EVEN ROW TEXT COLOR
+				'type' => 'color', 
+				'id' => 'gs_tbl_even_text_color',
+				'name' => 'mstw_gs_color_options[gs_tbl_even_text_color]',
+				'value' => $options['gs_tbl_even_text_color'],
+				'title'	=> __( 'Even Row Text Color:', 'mstw-loc-domain' ),
+				'page' => $display_on_page,
+				'section' => $page_section,
+			),
+			array( 	// HOME GAME ROW BACKGROUND COLOR
+				'type' => 'color', 
+				'id' => 'gs_tbl_home_bkgd_color',
+				'name' => 'mstw_gs_color_options[gs_tbl_home_bkgd_color]',
+				'value' => $options['gs_tbl_home_bkgd_color'],
+				'title'	=> __( 'Home Game (row) Background Color:', 'mstw-loc-domain' ),
+				'page' => $display_on_page,
+				'section' => $page_section,
+			),
+			array( 	// HOME GAME ROW TEXT COLOR
+				'type' => 'color', 
+				'id' => 'gs_tbl_home_text_color',
+				'name' => 'mstw_gs_color_options[gs_tbl_home_text_color]',
+				'value' => $options['gs_tbl_home_text_color'],
+				'title'	=> __( 'Home Game (row) Text Color:', 'mstw-loc-domain' ),
+				'page' => $display_on_page,
+				'section' => $page_section,
+			),
 		);
 		
-		// Header text color
-		$args = array( 	'id' => 'gs_tbl_hdr_text_color',
-						'name' => 'mstw_gs_color_options[gs_tbl_hdr_text_color]',
-						'value' => $options['gs_tbl_hdr_text_color'],
-						'label' => ''
-					 );
-					 
-		add_settings_field(
-			'gs_tbl_hdr_text_color',
-			__( 'Header Text Color:', 'mstw-loc-domain' ),
-			'mstw_gs_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-		
-		// Header border color
-		$args = array( 	'id' => 'gs_tbl_border_color',
-						'name' => 'mstw_gs_color_options[gs_tbl_border_color]',
-						'value' => $options['gs_tbl_border_color'],
-						'label' => ''
-					 );
-					 
-		add_settings_field(
-			'gs_tbl_border_color',
-			__( 'Table Border Color:', 'mstw-loc-domain' ),
-			'mstw_gs_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-		
-		// Odd row background color
-		$args = array( 	'id' => 'gs_tbl_odd_bkgd_color',
-						'name' => 'mstw_gs_color_options[gs_tbl_odd_bkgd_color]',
-						'value' => $options['gs_tbl_odd_bkgd_color'],
-						'label' => ''
-					 );
-					 
-		add_settings_field(
-			'gs_tbl_odd_bkgd_color',
-			__( 'Odd Row Background Color:', 'mstw-loc-domain' ),
-			'mstw_gs_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-		
-		// Odd row text color
-		$args = array( 	'id' => 'gs_tbl_odd_text_color',
-						'name' => 'mstw_gs_color_options[gs_tbl_odd_text_color]',
-						'value' => $options['gs_tbl_odd_text_color'],
-						'label' => ''
-					 );
-					 
-		add_settings_field(
-			'gs_tbl_odd_text_color',
-			__( 'Odd Row Text Color:', 'mstw-loc-domain' ),
-			'mstw_gs_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-		
-		// Even row background color
-		$args = array( 	'id' => 'gs_tbl_even_bkgd_color',
-						'name' => 'mstw_gs_color_options[gs_tbl_even_bkgd_color]',
-						'value' => $options['gs_tbl_even_bkgd_color'],
-						'label' => ''
-					 );
-					 
-		add_settings_field(
-			'gs_tbl_even_bkgd_color',
-			__( 'Even Row Background Color:', 'mstw-loc-domain' ),
-			'mstw_gs_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-		
-		// Even row text color
-		$args = array( 	'id' => 'gs_tbl_even_text_color',
-						'name' => 'mstw_gs_color_options[gs_tbl_even_text_color]',
-						'value' => $options['gs_tbl_even_text_color'],
-						'label' => ''
-					 );
-					 
-		add_settings_field(
-			'gs_tbl_even_text_color',
-			__( 'Even Row Text Color:', 'mstw-loc-domain' ),
-			'mstw_gs_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-		
-		// Home game (row) background color
-		$args = array( 	'id' => 'gs_tbl_home_bkgd_color',
-						'name' => 'mstw_gs_color_options[gs_tbl_home_bkgd_color]',
-						'value' => $options['gs_tbl_home_bkgd_color'],
-						'label' => ''
-					 );
-					 
-		add_settings_field(
-			'gs_tbl_home_bkgd_color',
-			__( 'Home Game (Row) Background Color:', 'mstw-loc-domain' ),
-			'mstw_gs_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-		
-		// Home game (row) text color
-		$args = array( 	'id' => 'gs_tbl_home_text_color',
-						'name' => 'mstw_gs_color_options[gs_tbl_home_text_color]',
-						'value' => $options['gs_tbl_home_text_color'],
-						'label' => ''
-					 );
-					 
-		add_settings_field(
-			'gs_tbl_home_text_color',
-			__( 'Home Game (Row) Text Color:', 'mstw-loc-domain' ),
-			'mstw_gs_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
+		foreach ( $arguments as $args ) {
+			mstw_gs_build_form_field( $args );
+		}
 	
 	}	
 	
@@ -1737,103 +1655,46 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			'page' => $display_on_page,
 			'section' => $page_section,
 			),
+			array( 	
+			'type' => 'color',
+			'id' => 'gs_cdt_intro_color',
+			'name' => 'mstw_gs_color_options[gs_cdt_intro_color]',
+			'value' => $options['gs_cdt_intro_color'],
+			'title'	=> __( 'Intro Text Color:', 'mstw-loc-domain' ),
+			'desc'	=> '',
+			'default' => '',
+			'options' => '',
+			'page' => $display_on_page,
+			'section' => $page_section,
+			),
+			array( 	
+			'type' => 'color', 
+			'id' => 'gs_cdt_countdown_color',
+			'name' => 'mstw_gs_color_options[gs_cdt_countdown_color]',
+			'value' => $options['gs_cdt_countdown_color'],
+			'title'	=> __( 'Countdown Text Color:', 'mstw-loc-domain' ),
+			'desc'	=> '',
+			'default' => '',
+			'options' => '',
+			'page' => $display_on_page,
+			'section' => $page_section,
+			),
+			array( 	
+			'type' => 'color', 
+			'id' => 'gs_cdt_countdown_bkgd_color',
+			'name' => 'mstw_gs_color_options[gs_cdt_countdown_bkgd_color]',
+			'value' => $options['gs_cdt_countdown_bkgd_color'],
+			'title'	=> __( 'Countdown Background Color:', 'mstw-loc-domain' ),
+			'desc'	=> '',
+			'default' => '',
+			'options' => '',
+			'page' => $display_on_page,
+			'section' => $page_section,
+			),
 		);
 		foreach ( $arguments as $args ) {
 			mstw_gs_build_form_field( $args );
 		}
-			
-		/*
-		// Game time text color
-		$args = array( 	'id' => 'gs_cdt_game_time_color',
-						'name' => 'mstw_gs_color_options[gs_cdt_game_time_color]',
-						'value' => $options['gs_cdt_game_time_color'],
-						'label' => ''
-					 );					 
-		add_settings_field(
-			'gs_cdt_game_time_color',
-			__( 'Game Time Text Color:', 'mstw-loc-domain' ),
-			'mstw_gs_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-		
-		
-		// Opponent text color
-		$args = array( 	'id' => 'gs_cdt_opponent_color',
-						'name' => 'mstw_gs_color_options[gs_cdt_opponent_color]',
-						'value' => $options['gs_cdt_opponent_color'],
-						'label' => ''
-					 );					 
-		add_settings_field(
-			'gs_cdt_opponent_color',
-			__( 'Opponent Text Color:', 'mstw-loc-domain' ),
-			'mstw_gs_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-		
-		// Location text color
-		$args = array( 	'id' => 'gs_cdt_location_color',
-						'name' => 'mstw_gs_color_options[gs_cdt_location_color]',
-						'value' => $options['gs_cdt_location_color'],
-						'label' => ''
-					 );				 
-		add_settings_field(
-			'gs_cdt_location_color',
-			__( 'Location Text Color:', 'mstw-loc-domain' ),
-			'mstw_gs_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-		*/
-		
-		// Intro text color
-		$args = array( 	'id' => 'gs_cdt_intro_color',
-						'name' => 'mstw_gs_color_options[gs_cdt_intro_color]',
-						'value' => $options['gs_cdt_intro_color'],
-						'label' => ''
-					 );				 
-		add_settings_field(
-			'gs_cdt_intro_color',
-			__( 'Intro Text Color:', 'mstw-loc-domain' ),
-			'mstw_gs_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-		
-		// Countdown text color
-		$args = array( 	'id' => 'gs_cdt_countdown_color',
-						'name' => 'mstw_gs_color_options[gs_cdt_countdown_color]',
-						'value' => $options['gs_cdt_countdown_color'],
-						'label' => ''
-					 );
-		add_settings_field(
-			'gs_cdt_countdown_color',
-			__( 'Countdown Text Color:', 'mstw-loc-domain' ),
-			'mstw_gs_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-		
-		// Countdown background color
-		$args = array( 	'id' => 'gs_cdt_countdown_bkgd_color',
-						'name' => 'mstw_gs_color_options[gs_cdt_countdown_bkgd_color]',
-						'value' => $options['gs_cdt_countdown_bkgd_color'],
-						'label' => ''
-					 );
-		add_settings_field(
-			'gs_cdt_countdown_bkgd_color',
-			__( 'Countdown Background Color:', 'mstw-loc-domain' ),
-			'mstw_gs_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
 	}
 	
 // ----------------------------------------------------------------	
@@ -1996,7 +1857,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 // 	Team Logo section instructions	
 // ----------------------------------------------------------------	
 	function mstw_gs_team_logo_inst( ) {
-		echo '<p>' . __( "Control the display of team logos. NOTE: THESE SETTINGS ONLY APPLY WHEN SELECTING OPPONENTS FROM THE MSTW TEAMS DATABASE.", 'mstw-loc-domain' ) . '</p>';
+		echo '<p>' . __( "Control the display of team names & logos. NOTE: THESE SETTINGS ONLY APPLY WHEN SELECTING OPPONENTS FROM THE MSTW TEAMS DATABASE.", 'mstw-loc-domain' ) . '</p>';
 	}	
 	
 	function mstw_gs_dtg_format_setup( ) {
@@ -2024,66 +1885,61 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			'mstw_gs_admin_dtg_inst',
 			$display_on_page
 			);
-			
-		// Date format for admin add/edit game screen
-		$args = array( 	'id' => 'admin_date_format',
-						'name'	=> 'mstw_gs_dtg_options[admin_date_format]',
-						'curr_value'	=> $options['admin_date_format'],
-						'dtg' => 'date-only',
+		
+		$arguments = array(
+						array( 	// ADMIN DATE FORMAT
+								'type'    => 'date-only', 
+								'id' => 'admin_date_format',
+								'name'	=> 'mstw_gs_dtg_options[admin_date_format]',
+								'value'	=> $options['admin_date_format'],
+								'desc'	=> '',
+								'title'	=> __( 'Admin Table Date Format:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => '',
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),
+						array( 	// ADMIN CUSTOM DATE FORMAT
+								'type'    => 'text', 
+								'id' => 'custom_admin_date_format',
+								'name'	=> 'mstw_gs_dtg_options[custom_admin_date_format]',
+								'value'	=> $options['custom_admin_date_format'],
+								'desc'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option.', 'mstw-loc-domain' ),
+								'title'	=> __( 'Admin Table Custom Date Format:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => '',
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),
+						array( 	// ADMIN TIME FORMAT
+								'type'    => 'time-only', 
+								'id' => 'admin_time_format',
+								'name' => 'mstw_gs_dtg_options[admin_time_format]',
+								'value' => $options['admin_time_format'],
+								'desc'	=> '',
+								'title'	=> __( 'Admin Table Time Format:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => '',
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),
+						array( 	// ADMIN CUSTOM TIME FORMAT
+								'type'    => 'text', 
+								'id' => 'custom_admin_time_format',
+								'name'	=> 'mstw_gs_dtg_options[custom_admin_time_format]',
+								'value'	=> $options['custom_admin_time_format'],
+								'desc'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option.', 'mstw-loc-domain' ),
+								'title'	=> __( 'Custom Admin Table Time Format:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => '',
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),
 						);
-		
-		add_settings_field(
-			'admin_date_format',
-			__( 'Admin Table Date Format:', 'mstw-loc-domain' ),
-			'mstw_gs_date_format_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
 
-		//Custom date format for admin add/edit game screen
-		$args = array(	'id' => 'custom_admin_date_format',
-						'name'	=> 'mstw_gs_dtg_options[custom_admin_date_format]',
-						'value'	=> $options['custom_admin_date_format'],
-						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
-						);						
-		add_settings_field(
-			'custom_admin_date_format',
-			__( 'Custom Admin Table Date Format:', 'mstw-loc-domain' ),
-			'mstw_gs_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);	
-
-		// Time format for admin add/edit game screen
-		$args = array(	'name' => 'mstw_gs_dtg_options[admin_time_format]',
-						'id' => 'admin_time_format',
-						'curr_value' => $options['admin_time_format'],
-						);						
-		add_settings_field(
-			'admin_time_format',
-			__( 'Admin Table Time Format:', 'mstw-loc-domain' ),
-			'mstw_gs_time_format_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);	
-		
-		//Custom time format for admin add/edit game screen
-		$args = array(	'id' => 'custom_admin_time_format',
-						'name'	=> 'mstw_gs_dtg_options[custom_admin_time_format]',
-						'value'	=> $options['custom_admin_time_format'],
-						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
-						);						
-		add_settings_field(
-			'custom_admin_time_format',
-			__( 'Custom Admin Table Time Format:', 'mstw-loc-domain' ),
-			'mstw_gs_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);	
+		foreach ( $arguments as $args ) {
+			mstw_gs_build_form_field( $args );
+		}		
 		
 		//----------------------------------------------------------
 		// Table format settings section
@@ -2097,98 +1953,84 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			$display_on_page
 			);
 		
-		// Date format for schedule table shortcode
-		$args = array( 	'id' => 'table_date_format',
-						'name'	=> 'mstw_gs_dtg_options[table_date_format]',
-						'curr_value'	=> $options['table_date_format'],
-						'dtg' => 'date-only',
+		$arguments = array(
+						array( 	// DATE FORMAT FOR SCHEDULE TABLE SHORTCODE
+								'type'    => 'date-only', 
+								'id' => 'table_date_format',
+								'name'	=> 'mstw_gs_dtg_options[table_date_format]',
+								'value'	=> $options['table_date_format'],
+								'desc'	=> '',
+								'title'	=> __( 'Schedule Table [shortcode] Date Format:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => '',
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),
+						array( 	// CUSTOM DATE FORMAT FOR SCHEDULE TABLE SHORTCODE
+								'type'    => 'text', 
+								'id' => 'custom_table_date_format',
+								'name'	=> 'mstw_gs_dtg_options[custom_table_date_format]',
+								'value'	=> $options['custom_table_date_format'],
+								'desc'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option.', 'mstw-loc-domain' ),
+								'title'	=> __( 'Schedule Table [shortcode] Custom Date Format:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => '',
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),
+						array( 	// SCHEDULE TABLE SHORTCODE TIME FORMAT
+								'type'    => 'time-only', 
+								'name' => 'mstw_gs_dtg_options[table_time_format]',
+								'id' => 'table_time_format',
+								'value' => $options['table_time_format'],
+								'title'	=> __( 'Schedule Table [shortcode] Time Format:', 'mstw-loc-domain' ),
+								'desc'	=> '',
+								'default' => '',
+								'options' => '',
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),
+						array( 	// SCHEDULE TABLE SHORTCODE CUSTOM TIME FORMAT
+								'type'    => 'text', 
+								'id' => 'custom_table_time_format',
+								'name'	=> 'mstw_gs_dtg_options[custom_table_time_format]',
+								'value'	=> $options['custom_table_time_format'],
+								'desc'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option.', 'mstw-loc-domain' ),
+								'title'	=> __( 'Admin Table Custom Time Format:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => '',
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),
+						array( 	// DATE FORMAT FOR SCHEDULE TABLE WIDGET
+								'type'    => 'date-only', 
+								'id' => 'table_widget_date_format',
+								'name'	=> 'mstw_gs_dtg_options[table_widget_date_format]',
+								'value'	=> $options['table_widget_date_format'],
+								'desc'	=> '',
+								'title'	=> __( 'Schedule Table (widget) Date Format:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => '',
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),
+						array( 	// CUSTOM DATE FORMAT FOR SCHEDULE TABLE WIDGET
+								'type'    => 'text', 
+								'id' => 'custom_table_widget_date_format',
+								'name'	=> 'mstw_gs_dtg_options[custom_table_widget_date_format]',
+								'value'	=> $options['custom_table_widget_date_format'],
+								'desc'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option.', 'mstw-loc-domain' ),
+								'title'	=> __( 'Schedule Table Widget Custom Date Format:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => '',
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),
 						);
-		
-		add_settings_field(
-			'table_date_format',
-			__( 'Schedule Table [shortcode] Date Format:', 'mstw-loc-domain' ),
-			'mstw_gs_date_format_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		//Custom date format for schedule table shortcode
-		$args = array(	'id' => 'custom_table_date_format',
-						'name'	=> 'mstw_gs_dtg_options[custom_table_date_format]',
-						'value'	=> $options['custom_table_date_format'],
-						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
-						);						
-		add_settings_field(
-			'custom_table_date_format',
-			__( 'Custom Schedule Table [shortcode] Date Format:', 'mstw-loc-domain' ),
-			'mstw_gs_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);	
-		
-		// Time format for schedule table shortcode
-		$args = array(	'name' => 'mstw_gs_dtg_options[table_time_format]',
-						'id' => 'table_time_format',
-						'curr_value' => $options['table_time_format'],
-						);						
-		add_settings_field(
-			'table_time_format',
-			__( 'Schedule Table [shortcode] Time Format:', 'mstw-loc-domain' ),
-			'mstw_gs_time_format_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		
-		//Custom time format for schedule table shortcode
-		$args = array(	'id' => 'custom_table_time_format',
-						'name'	=> 'mstw_gs_dtg_options[custom_table_time_format]',
-						'value'	=> $options['custom_table_time_format'],
-						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
-						);						
-		add_settings_field(
-			'custom_table_time_format',
-			__( 'Custom Schedule Table [shortcode] Time Format:', 'mstw-loc-domain' ),
-			'mstw_gs_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);	
-		
-		// Date format for table widget
-		$args = array( 	'id' => 'table_widget_date_format',
-						'name'	=> 'mstw_gs_dtg_options[table_widget_date_format]',
-						'curr_value'	=> $options['table_widget_date_format'],
-						'dtg' => 'date-only',
-						);
-		
-		add_settings_field(
-			'table_widget_date_format',
-			__( 'Schedule Table (widget) Date Format:', 'mstw-loc-domain' ),
-			'mstw_gs_date_format_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		//Custom date format for schedule table widget
-		$args = array(	'id' => 'custom_table_widget_date_format',
-						'name'	=> 'mstw_gs_dtg_options[custom_table_widget_date_format]',
-						'value'	=> $options['custom_table_widget_date_format'],
-						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
-						);						
-		add_settings_field(
-			'custom_table_widget_date_format',
-			__( 'Custom Schedule Table (widget) Date Format:', 'mstw-loc-domain' ),
-			'mstw_gs_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
+						
+		foreach ( $arguments as $args ) {
+			mstw_gs_build_form_field( $args );
+		}	
 		
 		//----------------------------------------------------------
 		// Countdown timer dtg settings section
@@ -2202,95 +2044,61 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			$display_on_page
 			);
 		
-		// Haven't added date format controls yet
 		$arguments = array(
-						// Show/Hide Date Column
-						array( 	// the HTML form element to use
-							'type'    => 'show-hide', 
-							// the ID of the setting in options array, 
-							// and the ID of the HTML form element
-							'id' => 'cdt_dtg_format',
-							// the label for the HTML form element
-							'title'	=> __( 'Opponent Name Format:', 'mstw-loc-domain' ),
-							// the description displayed under the HTML form element
-							'desc'	=> __( 'Show or hide the Date field/column. (Default: Show)', 'mstw-loc-domain' ),
-							// the default value for this setting
-							'default' => '1', //show
-							// only used for select-option and ..
-							'options' => "",
-							// name of HTML form element
-							'name'	=> 'mstw_gs_options[cdt_dtg_format]',
-							// current value of field
-							'value'	=> $options['cdt_dtg_format'],
-							// page on which to display HTML control
-							'page' => $display_on_page,
-							// page section in which to display HTML control
-							'section' => $page_section,
+						array( 	// DATE-TIME FORMAT FOR COUNTDOWN TIMER
+								'type'    => 'date-time', 
+								'id' => 'cdt_dtg_format',
+								'name'	=> 'mstw_gs_dtg_options[cdt_dtg_format]',
+								'value'	=> $options['cdt_dtg_format'],
+								'desc'	=> '',
+								'title'	=> __( 'Countdown Timer (widget & [shortcode]) Date & Time Format:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => '',
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),
+						array( 	// CUSTOM DATE-TIME FORMAT FOR COUNTDOWN TIMER
+								'type'    => 'text', 
+								'id' => 'custom_cdt_dtg_format',
+								'name'	=> 'mstw_gs_dtg_options[custom_cdt_dtg_format]',
+								'value'	=> $options['custom_cdt_dtg_format'],
+								'desc'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option.', 'mstw-loc-domain' ),
+								'title'	=>  __( 'Countdown Timer (widget & [shortcode]) Custom Date & Time Format:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => '',
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),
+						array( 	// DATE (ONLY) FORMAT FOR COUNTDOWN TIMER
+								'type'    => 'date-only', 
+								'id' => 'cdt_date_format',
+								'name'	=> 'mstw_gs_dtg_options[cdt_date_format]',
+								'value'	=> $options['cdt_date_format'],
+								'desc'	=> __( 'Used when game time is TBA.', 'mstw-loc-domain' ),
+								'title'	=> __( 'Countdown Timer (widget & [shortcode]) Date Format:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => '',
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),
+						array( 	// CUSTOM DATE (ONLY) FORMAT FOR COUNTDOWN TIMER
+								'type'    => 'text', 
+								'id' => 'custom_cdt_date_format',
+								'name'	=> 'mstw_gs_dtg_options[custom_cdt_date_format]',
+								'value'	=> $options['custom_cdt_date_format'],
+								'desc'	=> __( 'Used when game time is TBA. Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option.', 'mstw-loc-domain' ),
+								'title'	=> __( 'Countdown Timer (widget & [shortcode]) Custom Date Format:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => '',
+								'page' => $display_on_page,
+								'section' => $page_section,
 							),
 						);
 		
+		foreach ( $arguments as $args ) {
+			mstw_gs_build_form_field( $args );
+		}	
 		
-		// DTG format for countdown timer
-		$args = array( 	'id' => 'cdt_dtg_format',
-						'name'	=> 'mstw_gs_dtg_options[cdt_dtg_format]',
-						'curr_value'	=> $options['cdt_dtg_format'],
-						'dtg' => 'date-time',
-						);
-		
-		add_settings_field(
-			'cdt_dtg_format',
-			__( 'Countdown Timer (widget & [shortcode]) Date & Time Format:', 'mstw-loc-domain' ),
-			'mstw_gs_date_format_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		//Custom DTG format for countdown timer table & widget
-		$args = array(	'id' => 'custom_cdt_dtg_format',
-						'name'	=> 'mstw_gs_dtg_options[custom_cdt_dtg_format]',
-						'value'	=> $options['custom_cdt_dtg_format'],
-						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
-						);						
-		add_settings_field(
-			'custom_cdt_dtg_format',
-			__( 'Custom Countdown Timer (widget & [shortcode]) Date-Time Format:', 'mstw-loc-domain' ),
-			'mstw_gs_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);	
-		
-		// Date format for countdown timer - with no time [TBA]
-		$args = array( 	'id' => 'cdt_date_format',
-						'name'	=> 'mstw_gs_dtg_options[cdt_date_format]',
-						'curr_value'	=> $options['cdt_date_format'],
-						'dtg' => 'date-only',
-						);
-		
-		add_settings_field(
-			'cdt_date_format',
-			__( 'Countdown Timer (widget & [shortcode]) Date Format (game time is TBA):', 'mstw-loc-domain' ),
-			'mstw_gs_date_format_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		//Custom date format for countdown timer
-		$args = array(	'id' => 'custom_cdt_date_format',
-						'name'	=> 'mstw_gs_dtg_options[custom_cdt_date_format]',
-						'value'	=> $options['custom_cdt_date_format'],
-						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
-						);						
-		add_settings_field(
-			'custom_cdt_date_format',
-			__( 'Custom Countdown Timer (widget & [shortcode]) Date Format:', 'mstw-loc-domain' ),
-			'mstw_gs_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
 		//----------------------------------------------------------
 		// Slider dtg settings section
 		//
@@ -2303,67 +2111,63 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			$display_on_page
 			);
 			
-		// Date format schedule slider
-		$args = array( 	'id' => 'slider_date_format',
-						'name'	=> 'mstw_gs_dtg_options[slider_date_format]',
-						'curr_value'	=> $options['slider_date_format'],
-						'dtg' => 'date-only',
+		
+		$arguments = array(
+						array( 	// DATE FORMAT FOR SCHEDULE SLIDER
+								'type'    => 'date-only', 
+								'id' => 'slider_date_format',
+								'name'	=> 'mstw_gs_dtg_options[slider_date_format]',
+								'value'	=> $options['slider_date_format'],
+								'desc'	=> '',
+								'title'	=> __( 'Schedule Slider Date Format:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => '',
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),
+						array( 	// CUSTOM DATE FORMAT FOR SCHEDULE SLIDER
+								'type'    => 'text', 
+								'id' => 'custom_slider_date_format',
+								'name'	=> 'mstw_gs_dtg_options[custom_slider_date_format]',
+								'value'	=> $options['custom_slider_date_format'],
+								'desc'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' ),
+								'title'	=>  __( 'Schedule Slider Custom Date Format:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => '',
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),	
+						array( 	// TIME FORMAT FOR SCHEDULE SLIDER
+								'type'    => 'time-only', 
+								'name' => 'mstw_gs_dtg_options[slider_time_format]',
+								'id' => 'slider_time_format',
+								'value' => $options['slider_time_format'],
+								'desc'	=> '',
+								'title'	=> __( 'Schedule Slider Time Format:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => '',
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),
+						array( 	// CUSTOM TIME FORMAT FOR SCHEDULE SLIDER
+								'type'    => 'text', 
+								'id' => 'custom_slider_time_format',
+								'name'	=> 'mstw_gs_dtg_options[custom_slider_time_format]',
+								'value'	=> $options['custom_slider_time_format'],
+								'desc'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' ),
+								'title'	=>  __( 'Schedule Slider Custom Time Format:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => '',
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),
 						);
+						
+		foreach ( $arguments as $args ) {
+			mstw_gs_build_form_field( $args );
+		}	
 		
-		add_settings_field(
-			'slider_date_format',
-			__( 'Schedule Slider Date Format:', 'mstw-loc-domain' ),
-			'mstw_gs_date_format_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		//Custom date format for schedule slider
-		$args = array(	'id' => 'custom_slider_date_format',
-						'name'	=> 'mstw_gs_dtg_options[custom_slider_date_format]',
-						'value'	=> $options['custom_slider_date_format'],
-						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
-						);						
-		add_settings_field(
-			'custom_slider_date_format',
-			__( 'Custom Schedule Slider Date Format:', 'mstw-loc-domain' ),
-			'mstw_gs_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// Time format schedule slider
-		$args = array(	'name' => 'mstw_gs_dtg_options[slider_time_format]',
-						'id' => 'slider_time_format',
-						'curr_value' => $options['slider_time_format'],
-						);						
-		add_settings_field(
-			'slider_time_format',
-			__( 'Schedule Slider Time Format:', 'mstw-loc-domain' ),
-			'mstw_gs_time_format_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		//Custom time format for schedule slider
-		$args = array(	'id' => 'custom_slider_time_format',
-						'name'	=> 'mstw_gs_dtg_options[custom_slider_time_format]',
-						'value'	=> $options['custom_slider_time_format'],
-						'label'	=> __( 'Enter a PHP date() format string for a custom format. You probably should know what you are doing before selecting the custom option. (Default: "")', 'mstw-loc-domain' )
-						);						
-		add_settings_field(
-			'custom_slider_time_format',
-			__( 'Custom Schedule Slider Time Format:', 'mstw-loc-domain' ),
-			'mstw_gs_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
 	}
-	
 	
 	function mstw_gs_data_fields_setup( ) {
 		// Data fields/columns -- show/hide and labels
@@ -2390,7 +2194,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 							// and the ID of the HTML form element
 							'id' => 'show_date',
 							// the label for the HTML form element
-							'title'	=> __( 'Opponent Name Format:', 'mstw-loc-domain' ),
+							'title'	=> __( 'Show Date Column:', 'mstw-loc-domain' ),
 							// the description displayed under the HTML form element
 							'desc'	=> __( 'Show or hide the Date field/column. (Default: Show)', 'mstw-loc-domain' ),
 							// the default value for this setting
@@ -2620,139 +2424,133 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			'mstw_gs_team_logo_inst',	//callback to fill section with desired output - should echo
 			$display_on_page	//menu page slug on which to display
 		);
-		
-		
-		
+
 		// Opponent name format
-		$args = array( 	// the HTML form element to use
-						'type'    => 'select-option', 
-						// the ID of the setting in options array, 
-						// and the ID of the HTML form element
-						'id' => 'table_opponent_format',
-						// the label for the HTML form element
-						'title'	=> __( 'Opponent Name Format:', 'mstw-loc-domain' ),
-						// the description displayed under the HTML form element
-						'desc'	=> __( 'Opponent name format in schedule table shortcode. (Default: Short Name & Mascot)', 'mstw-loc-domain' ),
-						// the default value for this setting
-						'default' => '',
-						// only used for select-option and ..
-						'options' => array( 'Short Name Only' => 'short-name',
-											'Full Name Only' => 'full-name',
-											'Short Name & Mascot' => 'short-name-mascot',
-											'Full Name & Mascot' => 'full-name-mascot',
-											),
-						// name of HTML form element
-						'name'	=> 'mstw_gs_options[table_opponent_format]',
-						// current value of field
-						'value'	=> $options['table_opponent_format'],
-						// page on which to display HTML control
-						'page' => $display_on_page,
-						// page section in which to display HTML control
-						'section' => $page_section,
-						);
-						
-		mstw_gs_build_form_field( $args );
-		
-		/*$args = array( 	'options' => array( 'Short Name Only' => 'short-name',
-											'Full Name Only' => 'full-name',
-											'Short Name & Mascot' => 'short-name-mascot',
-											'Full Name & Mascot' => 'full-name-mascot',
-											),
-						'id' => 'table_opponent_format',
-						'name'	=> 'mstw_gs_options[table_opponent_format]',
-						'value'	=> $options['table_opponent_format'],
-						'label'	=> __( 'Opponent name format in schedule table shortcode. (Default: Short Name & Mascot)', 'mstw-loc-domain' )
-						);						
-		add_settings_field(
-			'table_opponent_format',
-			__( 'Opponent Name Format:', 'mstw-loc-domain' ),
-			'mstw_gs_select_option_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);	
-		*/
-		
-		// Show/hide LOGO in schedule tables
-		$args = array( 	'options' => array( 'Show Name Only' => 'name-only',
-											'Show Logo & Name' => 'logo-name',
-											'Show Logo Only' => 'logo-only',
-											),
-						'id' => 'show_table_logos',
-						'name'	=> 'mstw_gs_options[show_table_logos]',
-						'value'	=> $options['show_table_logos'],
-						'label'	=> __( 'NOTE: this setting only applies if scheduled opponents are selected from the MSTW Teams database. . (Default: Show Name Only)', 'mstw-loc-domain' )
-						);						
-		add_settings_field(
-			'show_table_logos',
-			__( 'Show Team Logos in Schedule TABLES:', 'mstw-loc-domain' ),
-			'mstw_gs_select_option_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);	
-		
-		// Show/hide LOGO in schedule sliders
-		$args = array( 	'options' => array( 'Show Name Only' => 'name-only',
-											'Show Logo & Name' => 'logo-name',
-											'Show Logo Only' => 'logo-only',
-											),
-						'id' => 'show_slider_logos',
-						'name'	=> 'mstw_gs_options[show_slider_logos]',
-						'value'	=> $options['show_slider_logos'],
-						'label'	=> __( 'NOTE: this setting only applies if scheduled opponents are selected from the MSTW Teams database. (Default: Hide-Show Name Only)', 'mstw-loc-domain' )
-						);						
-		add_settings_field(
-			'show_slider_logos',
-			__( 'Show Team Logos in Schedule SLIDERS:', 'mstw-loc-domain' ),
-			'mstw_gs_select_option_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);	
-		
-		// Format location
-		$args = array( 	'options' => array( 'Show Name Only' => 'name-only',
+		$arguments = array (
+						// OPPONENT NAME FORMAT FOR SCHEDULE TABLES
+						array( 	// the HTML form element to use
+								'type'    => 'select-option', 
+								// the ID of the setting in options array, 
+								// and the ID of the HTML form element
+								'id' => 'table_opponent_format',
+								// the label for the HTML form element
+								'title'	=> __( 'Opponent Name Format in schedule TABLES:', 'mstw-loc-domain' ),
+								// the description displayed under the HTML form element
+								'desc'	=> __( '(Default: Full Name Only)', 'mstw-loc-domain' ),
+								// the default value for this setting
+								'default' => '',
+								// only used for select-option and ..
+								'options' => array( 'Short Name Only' => 'short-name',
+													'Full Name Only' => 'full-name',
+													'Short Name & Mascot' => 'short-name-mascot',
+													'Full Name & Mascot' => 'full-name-mascot',
+													),
+								// name of HTML form element
+								'name'	=> 'mstw_gs_options[table_opponent_format]',
+								// current value of field
+								'value'	=> $options['table_opponent_format'],
+								// page on which to display HTML control
+								'page' => $display_on_page,
+								// page section in which to display HTML control
+								'section' => $page_section,
+							),
+							// OPPONENT NAME FORMAT FOR SLIDER TABLES
+						array( 	// the HTML form element to use
+								'type'    => 'select-option', 
+								// the ID of the setting in options array, 
+								// and the ID of the HTML form element
+								'id' => 'slider_opponent_format',
+								// the label for the HTML form element
+								'title'	=> __( 'Opponent Name Format in schedule SLIDERS:', 'mstw-loc-domain' ),
+								// the description displayed under the HTML form element
+								'desc'	=> __( '(Default: Full Name Only)', 'mstw-loc-domain' ),
+								// the default value for this setting
+								'default' => '',
+								// only used for select-option and ..
+								'options' => array( 'Short Name Only' => 'short-name',
+													'Full Name Only' => 'full-name',
+													'Short Name & Mascot' => 'short-name-mascot',
+													'Full Name & Mascot' => 'full-name-mascot',
+													),
+								// name of HTML form element
+								'name'	=> 'mstw_gs_options[table_opponent_format]',
+								// current value of field
+								'value'	=> $options['table_opponent_format'],
+								// page on which to display HTML control
+								'page' => $display_on_page,
+								// page section in which to display HTML control
+								'section' => $page_section,
+							),
+						// SHOW/HIDE LOGO IN SCHEDULE TABLES
+						array( 	'type'    => 'select-option',
+								'id' => 'show_table_logos',
+								'name'	=> 'mstw_gs_options[show_table_logos]',
+								'value'	=> $options['show_table_logos'],
+								'desc'	=> __( 'NOTE: this setting only applies if scheduled opponents are selected from the MSTW Teams database. . (Default: Show Name Only)', 'mstw-loc-domain' ),
+								'title'	=> __( 'Show Team Logos in Schedule TABLES:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => array( 'Show Name Only' => 'name-only',
+													'Show Logo & Name' => 'logo-name',
+													'Show Logo Only' => 'logo-only',
+													),
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),
+						// SHOW/HIDE LOGO IN SCHEDULE SLIDERS
+						array( 	'type'    => 'select-option',
+								'id' => 'show_slider_logos',
+								'name'	=> 'mstw_gs_options[show_slider_logos]',
+								'value'	=> $options['show_slider_logos'],
+								'desc'	=> __( 'NOTE: this setting only applies if scheduled opponents are selected from the MSTW Teams database. (Default: Hide-Show Name Only)', 'mstw-loc-domain' ),
+								'title'	=> __( 'Show Team Logos in Schedule SLIDERS:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => array( 'Show Name Only' => 'name-only',
+													'Show Logo & Name' => 'logo-name',
+													'Show Logo Only' => 'logo-only',
+													),
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),
+						// FORMAT LOCATION
+						array( 	'type'    => 'select-option',
+								'id' => 'venue_format',
+								'name'	=> 'mstw_gs_options[venue_format]',
+								'value'	=> $options['venue_format'],
+								'desc'	=> __( 'NOTE: this setting only applies if scheduled opponents are selected from the MSTW Teams database. (Default: Name Only)', 'mstw-loc-domain' ),
+								'title'	=> __( 'Format for Location:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => array( 'Show Name Only' => 'name-only',
 											'Show City, State (Name)' => 'city-state-name',
 											),
-						'id' => 'venue_format',
-						'name'	=> 'mstw_gs_options[venue_format]',
-						'value'	=> $options['venue_format'],
-						'label'	=> __( 'NOTE: this setting only applies if scheduled opponents are selected from the MSTW Teams database. (Default: Name Only)', 'mstw-loc-domain' )
-						);						
-		add_settings_field(
-			'venue_format',
-			__( 'Format for Location:', 'mstw-loc-domain' ),
-			'mstw_gs_select_option_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// Link from location
-		$args = array( 	'options' => array( 'No Link' => 'no-link',
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),
+						// LINK FROM LOCATION
+						array( 	'type'    => 'select-option',
+								'id' => 'venue_link_format',
+								'name'	=> 'mstw_gs_options[venue_link_format]',
+								'value'	=> $options['venue_link_format'],
+								'desc'	=> __( 'NOTE: this setting only applies if scheduled opponents are selected from the MSTW Teams database. (Default: No Link)', 'mstw-loc-domain' ),
+								'title'	=> __( 'Link from Location:', 'mstw-loc-domain' ),
+								'default' => '',
+								'options' => array( 'No Link' => 'no-link',
 											'Link to Venue URL' => 'link-to-venue',
 											'Link to Map URL' => 'link-to-map',
 											),
-						'id' => 'venue_link_format',
-						'name'	=> 'mstw_gs_options[venue_link_format]',
-						'value'	=> $options['venue_link_format'],
-						'label'	=> __( 'NOTE: this setting only applies if scheduled opponents are selected from the MSTW Teams database. (Default: No Link)', 'mstw-loc-domain' )
-						);						
-		add_settings_field(
-			'venue_link_format',
-			__( 'Link from Location:', 'mstw-loc-domain' ),
-			'mstw_gs_select_option_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-					
+								'page' => $display_on_page,
+								'section' => $page_section,
+							),
+					);
+		
+		foreach ( $arguments as $args ) {
+			mstw_gs_build_form_field( $args );
+		}			
 	
 	} //End of data_fields_setup()
-// ----------------------------------------------------------------	
-// 	Main section instructions and controls	
-// ----------------------------------------------------------------	
+	
+	//-----------------------------------------------------------------	
+	// 	Main section instructions and controls	
+	// 	
 	function mstw_gs_main_inst( ) {
 		echo '<p>' . __( 'Enter your display settings. ', 'mstw-loc-domain' ) .'</p>';
 		/* Just in case we add some colors someday
@@ -2760,20 +2558,9 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 		*/
 	}
 
-	/*function mstw_gs_color_ctrl( ) {
-		global $just_playing;
-	?>
-		<input id="gs_color" name="mstw_gs_options[gs_color]" type="text" value="" />
-		<div id="colorpicker"></div>
-	<?php
-		echo '<p>' . plugin_dir_url( ) . 'game-schedules/js/settings.js' . '</p>';
-		echo '<p>' . $just_playing . '</p>';
-	}
-	*/
-
-//----------------------------------------------------------------------	
-// 	Date-time format sections instructions
-// 
+	//----------------------------------------------------------------------	
+	// 	Date-time format sections instructions
+	// 
 	function mstw_gs_admin_dtg_inst( ) {
 		echo '<p>' . __( 'Enter the date-time formats for the admin pages. ', 'mstw-loc-domain' ) . '<br>' .  __( "NOTE that if 'Custom' is selected as the format a valid PHP date() format string must be entered in the corresponding format text field.", 'mstw-loc-domain' ) . '</p>';;
 	}
@@ -2790,23 +2577,26 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 		echo '<p>' . __( 'Enter the date-time formats for the schedule slider [shortcode]', 'mstw-loc-domain' ) . '<br>' .  __( "NOTE that if 'Custom' is selected as the format a valid PHP date() format string must be entered in the corresponding format text field.", 'mstw-loc-domain' ) . '</p>';;
 	}
 	
-// ----------------------------------------------------------------	
-//	Validate user input (we want text only)
- 
+	// ----------------------------------------------------------------	
+	//	Validate user input (we want text only)
+	//
 	function mstw_gs_validate_options( $input ) {
 		// Create our array for storing the validated options
 		$output = array();
 		
+		//$string = "<pre>VALIDATE OPTIONS" . print_r( $input, true ) . "</pre>";
+		//die($string);
+		
 		// Pull the previous (last good) options
 		$options = get_option( 'mstw_gs_options' );
 		
-		//the checkboxes need to be handled separately because unchecked
-		//	boxes are not returned
-		/*$checkboxes = array( 'show_date', 'show_location' );
-		foreach( $checkboxes as $checkbox ) {
-			$output[$checkbox] = ( isset( $input[$checkbox] ) && $input[$checkbox] == 1 ? 1 : 0 );
+		// This handles the RESET button
+		if ( array_key_exists( 'reset', $input ) ) {
+			if ( $input['reset'] ) {
+					$output = mstw_gs_get_defaults( );
+					return $output;
+			}
 		}
-		*/
 		
 		// Loop through each of the incoming options
 		foreach( $input as $key => $value ) {
@@ -2845,6 +2635,14 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 		// Create our array for storing the validated options
 		$output = array();
 		
+		// This handles the RESET button
+		if ( array_key_exists( 'reset', $input ) ) {
+			if ( $input['reset'] ) {
+					$output = mstw_gs_get_dtg_defaults( );
+					return $output;
+			}
+		}
+		
 		// Pull the previous (last good) options
 		$options = get_option( 'mstw_gs_dtg_options' );
 		
@@ -2859,7 +2657,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 		} // end foreach
 		
 		// Return the array processing any additional functions filtered by this action
-		return apply_filters( 'sandbox_theme_validate_input_examples', $output, $input );
+		return apply_filters( 'mstw_gs_sanitize_dtg_options', $output, $input );
 		//return $output;
 	}
 	
@@ -2869,6 +2667,14 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 	function mstw_gs_validate_color_options( $input ) {
 		// Create our array for storing the validated options
 		$output = array();
+		
+		// This handles the RESET button
+		if ( array_key_exists( 'reset', $input ) ) {
+			if ( $input['reset'] ) {
+					//$output = mstw_gs_get_defaults( );
+					return $output;
+			}
+		}
 		
 		// Pull the previous (last good) options
 		$options = get_option( 'mstw_gs_color_options' );
