@@ -725,22 +725,30 @@ function mstw_gs_delete_plugin_options() {
 		if ( $team_ID != '' and $team_ID > 0 ) {
 			//Need to check display settings for formats
 			// long name + long mascot, short name + short mascot, etc.
+			
+			$team_short_name = get_post_meta( $team_ID, 'team_short_name', true );
+			$team_full_name = get_post_meta( $team_ID, 'team_full_name', true );
+			$team_short_name = ( trim( $team_short_name ) == '' ? $team_full_name : $team_short_name );
+			
+			$team_short_mascot = get_post_meta( $team_ID, 'team_short_mascot', true );
+			$team_full_mascot = get_post_meta( $team_ID, 'team_full_mascot', true );
+			$team_short_mascot = ( trim( $team_short_mascot ) == '' ? $team_full_mascot : $team_short_mascot );
+			
 			switch ( $options['table_opponent_format'] ) {
 				case 'short-name':
-					$opponent_entry .= get_post_meta( $team_ID, 'team_short_name', true );
+					$opponent_entry .= $team_short_name;
 					break;
 				case 'full-name':
-					$opponent_entry .= get_post_meta( $team_ID, 'team_full_name', true ); 
+					$opponent_entry .= $team_full_name; 
 					break;
 				case 'full-name-mascot':
-					$opponent_entry .= get_post_meta( $team_ID, 'team_full_name', true ) . ' ' . get_post_meta( $team_ID, 'team_full_mascot', true );
+					$opponent_entry .= "$team_full_name $team_full_mascot";
 					break;
 				default: //'short-name-mascot'
-					$opponent_entry = get_post_meta( $team_ID, 'team_short_name', true ) . ' ' . get_post_meta( $team_ID, 'team_short_mascot', true );
+					$opponent_entry .= "$team_short_name $team_short_mascot";
 					break;
 			}
-			
-			
+				
 			//check for a link in the Teams DB, not the game post
 			$opponent_link = get_post_meta( $team_ID, 'team_link', true );
 			
@@ -780,7 +788,7 @@ function mstw_gs_delete_plugin_options() {
 			$opponent_entry = get_post_meta( $post->ID, '_mstw_gs_opponent', true );
 			//check for a link the the game post
 			if ( ( $opponent_link = get_post_meta( $post->ID, '_mstw_gs_opponent_link', true ) ) != '' ) {
-				$opponent_entry = "<a href='$opponent_link' target='_blank'> $opponent_entry</a>";
+				$opponent_entry = "<a href='$opponent_link' target='_blank'>$opponent_entry</a>";
 			}
 		}
 		
@@ -827,7 +835,7 @@ function mstw_gs_delete_plugin_options() {
 		$gl_location = get_post_meta( $post->ID, '_mstw_gs_gl_location', true );
 		
 		//if there's a location entry in game post, use it
-		if ( $location != '' and $location != -1 ) { 
+		if ( trim( $location ) != '' and $location != -1 ) { 
 			$location_entry = $location;
 			//if there's a custom location link entry, use it
 			$location_link = get_post_meta( $post->ID, '_mstw_gs_location_link', true );
@@ -837,7 +845,7 @@ function mstw_gs_delete_plugin_options() {
 		}
 		
 		//else if there's a location entry from the GL DB, use it
-		else if ( $gl_location != '' and $gl_location != -1 ) { 
+		else if ( trim( $gl_location ) != '' and $gl_location != -1 ) { 
 			//grab the data
 			$location_name = get_the_title( $gl_location );	
 			$location_street = get_post_meta( $gl_location, '_mstw_gl_street', true );
