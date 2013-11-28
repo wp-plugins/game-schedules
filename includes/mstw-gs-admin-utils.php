@@ -33,6 +33,7 @@
  *  8. 	mstw_gs_sanitize_hex_color() - 
  *  9. 	mstw_gs_build_form_field() - helper function for registering admin form field settings
  *  10.	mstw_gs_display_form_field() - helper function for building HTML for all admin form fields
+ *  11. mstw_gs_get_admin_defaults() - admin defaults differ from front side defaults
 
  *---------------------------------------------------------*/
  
@@ -337,11 +338,69 @@ function mstw_gs_build_form_field( $args ) {
 	extract( wp_parse_args( $args, $defaults ) );
 	//extract( $args );
 	
-	if ( $type == 'show-hide' ) {
-		$options = array(	__( 'Show', 'mstw-loc-domain' ) => 1, 
-							__( 'Hide', 'mstw-loc-domain' ) => 0, 
-						  );
-		$type = 'select-option';
+	switch ( $type ) {
+		case 'show-hide':
+			$type = 'select-option';
+			$options = array(	__( 'Show', 'mstw-loc-domain' ) => 1, 
+								__( 'Hide', 'mstw-loc-domain' ) => 0, 
+							  );
+			break;
+		case 'date-time':
+			$type = 'select-option';
+			$options = array ( 	__( 'Custom', 'mstw-loc-domain' ) => 'custom',
+								__( 'Tuesday, 07 April 01:15 pm', 'mstw-loc-domain' ) => 'l, d M h:i a',
+								__( 'Tuesday, 7 April 01:15 pm', 'mstw-loc-domain' ) => 'l, j M h:i a',
+								__( 'Tuesday, 07 April 1:15 pm', 'mstw-loc-domain' ) => 'l, d M g:i a',
+								__( 'Tuesday, 7 April 1:15 pm', 'mstw-loc-domain' ) => 'l, j M g:i a',
+								__( 'Tuesday, 7 April 13:15', 'mstw-loc-domain' ) => 'l, d M H:i',
+								__( 'Tuesday, 7 April 13:15', 'mstw-loc-domain' ) => 'l, j M H:i',
+								__( '07 April 13:15', 'mstw-loc-domain' ) => 'd M H:i',
+								__( '7 April 13:15', 'mstw-loc-domain' ) => 'j M H:i',
+								__( '07 April 01:15 pm', 'mstw-loc-domain' ) => 'd M g:i a',
+								__( '7 April 01:15 pm', 'mstw-loc-domain' ) => 'j M g:i a',		
+								);
+			if ( $desc == '' ) {
+				$desc = __( 'Formats for 7 April 2013 13:15.', 'mstw-loc-domain' );
+			}
+			break;
+		case 'date-only':
+			$type = 'select-option';
+			$options = array ( 	__( 'Custom', 'mstw-loc-domain' ) => 'custom',
+								'2013-04-07' => 'Y-m-d',
+								'13-04-07' => 'y-m-d',
+								'04/07/13' => 'm/d/y',
+								'4/7/13' => 'n/j/y',
+								__( '07 Apr 2013', 'mstw-loc-domain' ) => 'd M Y',
+								__( '7 Apr 2013', 'mstw-loc-domain' ) => 'j M Y',
+								__( 'Tues, 07 Apr 2013', 'mstw-loc-domain' ) => 'D, d M Y',
+								__( 'Tues, 7 Apr 13', 'mstw-loc-domain' ) => 'D, j M y',
+								__( 'Tuesday, 07 April 2013', 'mstw-loc-domain' ) => 'l, d F Y',
+								__( 'Tuesday, 7 April 2013', 'mstw-loc-domain' ) => 'l, j F Y',
+								__( 'Tues, 07 Apr', 'mstw-loc-domain' ) => 'D, d M',
+								__( 'Tues, 7 Apr', 'mstw-loc-domain' ) => 'D, j M',
+								__( '07 Apr', 'mstw-loc-domain' ) => 'd M',
+								__( '7 Apr', 'mstw-loc-domain' ) => 'j M',
+								);
+			if ( $desc == '' ) {
+				$desc = __( 'Formats for 7 Apr 2013. Default: 2013-04-07', 'mstw-loc-domain' );
+			}
+			break;
+		case 'time-only':
+			$type = 'select-option';
+			$options = array ( 	__( 'Custom', 'mstw-loc-domain' ) 		=> 'custom',
+								__( '08:00 (24hr)', 'mstw-loc-domain' ) => 'H:i',
+								__( '8:00 (24hr)', 'mstw-loc-domain' ) 	=> 'G:i',
+								__( '08:00 am', 'mstw-loc-domain' ) 	=> 'h:i a',
+								__( '08:00 AM', 'mstw-loc-domain' ) 	=> 'h:i A',
+								__( '8:00 am', 'mstw-loc-domain' ) 		=> 'g:i a',
+								__( '8:00 AM', 'mstw-loc-domain' ) 		=> 'g:i A',
+								);
+			if ( $desc == '' ) {
+				$desc = __( 'Formats for eight in the morning. Default: 08:00', 'mstw-loc-domain' );
+			}
+			break;
+		default:
+			break;
 							
 	}
 	// additional arguments for use in form field output in the function mstw_gs_display_form_field()
@@ -402,13 +461,6 @@ function mstw_gs_build_form_field( $args ) {
 			//TEXT CONTROL
 			case 'text':
 			case 'color':
-				/*
-				$options[$id] = stripslashes($options[$id]);
-				$options[$id] = esc_attr( $options[$id]);
-				echo "<input class='regular-text$field_class' type='text' id='$id' name='" . $wptuts_option_name . "[$id]' value='$options[$id]' />";
-				echo ($desc != '') ? "<br /><span class='description'>$desc</span>" : "";
-				*/
-				
 				//this conditional keeps echo'ed markup tidy 
 				$class_str = ( $field_class == '' ) ? '' : "class='text$field_class'";
 				
@@ -416,33 +468,6 @@ function mstw_gs_build_form_field( $args ) {
 				
 				echo ($desc != '') ? "<br /><span class='description'>$desc</span>" : "";
 				
-			break;
-			
-			// Not working
-			case "multi-text":
-				foreach($options as $item) {
-					$item = explode("|",$item); // cat_name|cat_slug
-					$item[0] = esc_html__($item[0], 'wptuts_textdomain');
-					if (!empty($options[$id])) {
-						foreach ($options[$id] as $option_key => $option_val){
-							if ($item[1] == $option_key) {
-								$value = $option_val;
-							}
-						}
-					} else {
-						$value = '';
-					}
-					echo "<span>$item[0]:</span> <input class='$field_class' type='text' id='$id|$item[1]' name='" . $wptuts_option_name . "[$id|$item[1]]' value='$value' /><br/>";
-				}
-				echo ($desc != '') ? "<span class='description'>$desc</span>" : "";
-			break;
-			
-			// Not working
-			case 'textarea':
-				$options[$id] = stripslashes($options[$id]);
-				$options[$id] = esc_html( $options[$id]);
-				echo "<textarea class='textarea$field_class' type='text' id='$id' name='" . $wptuts_option_name . "[$id]' rows='5' cols='30'>$options[$id]</textarea>";
-				echo ($desc != '') ? "<br /><span class='description'>$desc</span>" : ""; 		
 			break;
 			
 			//SELECT OPTION CONTROL
@@ -465,8 +490,35 @@ function mstw_gs_build_form_field( $args ) {
 				echo ($desc != '') ? "<br /><span class='description'>$desc</span>" : "";
 				
 			break;
+
+	//-----------------------------------------------------------------------------
+	// THE FOLLOWING CASES HAVE NOT BEEN TESTED/USED
 			
-			// Not working
+			case "multi-text":
+				foreach($options as $item) {
+					$item = explode("|",$item); // cat_name|cat_slug
+					$item[0] = esc_html__($item[0], 'wptuts_textdomain');
+					if (!empty($options[$id])) {
+						foreach ($options[$id] as $option_key => $option_val){
+							if ($item[1] == $option_key) {
+								$value = $option_val;
+							}
+						}
+					} else {
+						$value = '';
+					}
+					echo "<span>$item[0]:</span> <input class='$field_class' type='text' id='$id|$item[1]' name='" . $wptuts_option_name . "[$id|$item[1]]' value='$value' /><br/>";
+				}
+				echo ($desc != '') ? "<span class='description'>$desc</span>" : "";
+			break;
+			
+			case 'textarea':
+				$options[$id] = stripslashes($options[$id]);
+				$options[$id] = esc_html( $options[$id]);
+				echo "<textarea class='textarea$field_class' type='text' id='$id' name='" . $wptuts_option_name . "[$id]' rows='5' cols='30'>$options[$id]</textarea>";
+				echo ($desc != '') ? "<br /><span class='description'>$desc</span>" : ""; 		
+			break;
+
 			case 'select2':
 				echo "<select id='$id' class='select$field_class' name='" . $wptuts_option_name . "[$id]'>";
 				foreach($options as $item) {
@@ -480,14 +532,12 @@ function mstw_gs_build_form_field( $args ) {
 				echo "</select>";
 				echo ($desc != '') ? "<br /><span class='description'>$desc</span>" : "";
 			break;
-			
-			// Not working
+
 			case 'checkbox':
 				echo "<input class='checkbox$field_class' type='checkbox' id='$id' name='$name' value='$value' " . checked( $value, 1, false ) . " />";
 				echo ($desc != '') ? "<br /><span class='description'>$desc</span>" : "";
 			break;
-			
-			// Not working
+
 			case "multi-checkbox":
 				foreach($options as $item) {
 					
@@ -507,7 +557,43 @@ function mstw_gs_build_form_field( $args ) {
 				echo ($desc != '') ? "<br /><span class='description'>$desc</span>" : "";
 			break;
 			
+			default:
+				echo "CONTROL TYPE $type NOT RECOGNIZED.";
+			break;
+			
 		}
 		
+	}
+
+//----------------------------------------------------------------
+// 11. MSTW_GS_GET_ADMIN_DEFAULTS	
+// 		Helper function resetting admin mstw_gs_options[]
+// 		Differs from mstw_gs_get_options() because many shortcode args
+//			are not needed; especially the labels
+//----------------------------------------------------------------	
+
+	function mstw_gs_get_admin_defaults( ) {
+		//Base defaults
+		$defaults = array(			
+				//show/hide date fields (default labels are blank)
+				'show_date'				=> 1,
+				'date_label'			=> '',
+				'opponent_label'		=> '',
+				'show_location'			=> 1,
+				'location_label'		=> '',
+				'show_time'				=> 1,
+				'time_label'			=> '',
+				'show_media'			=> 3,
+				'media_label'			=> '',
+				
+				'table_opponent_format'	=> 'full-name',
+				'slider_opponent_format'	=> 'full-name',
+				'show_table_logos'		=> 'name-only', //Hide Logos
+				'show_slider_logos'		=> 'name-only', //Hide Logos
+				'venue_format'			=> 'city-name-state', //Show (location) name only
+				'venue_link_format'		=> 'no-link', //No Link
+				);
+				
+		return $defaults;
 	}
 ?>
