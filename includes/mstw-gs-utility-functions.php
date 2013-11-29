@@ -25,9 +25,10 @@
  *	These functions are included in the front end.
  *
  *	0. mstw_gs_utility_functions_loaded() - indicator that the file is loaded 
- *	1. mstw_gs_get_defaults() - returns the default mstw_gs_op
- *	2. mstw_gs_get_dtg_defaults() - returns default mstw_dtg_options[]
- *	3. mstw_gs_build_css_rule() - helper function to build custom css rules 
+ *	1. mstw_gs_get_defaults() - returns the default mstw_gs_options[]
+ *	2. mstw_gs_get_dtg_defaults() - returns default mstw_gs_dtg_options[]
+ *	3. mstw_gs_get_color_defaults() - returns default mstw_gs_color_options[]
+ *	4. mstw_gs_build_css_rule() - helper function to build custom css rules 
  *		from option settings and included in headers
  *	 
  *---------------------------------------------------------*/
@@ -91,30 +92,74 @@
 		$defaults = array(
 				//date and time format defaults
 				'admin_date_format' 	=>'Y-m-d',
-				//'custom_admin_date_format' => 'Y-m-d',
+				'custom_admin_date_format' => '',
 				'admin_time_format'		=> 'H:i',
-				//'custom_admin_time_format' => 'H:i',
-				'table_date_format'		=> 'j M y',
-				//'custom_table_date_format' => 'j M y',
+				'custom_admin_time_format' => '',
+				
+				'table_date_format'		=> 'Y-m-d',
+				'custom_table_date_format' => '',
 				'table_time_format'		=> 'H:i',
-				//'custom_table_time_format' => 'H:i',
+				'custom_table_time_format' => '',
+				
 				'table_widget_date_format' => 'j M',
-				//'custom_table_widget_date_format' => 'j M y',
+				'custom_table_widget_date_format' => '',
+				
 				'cdt_dtg_format'		=> 'l, j M g:i a',
-				//'custom_cdt_dtg_format' => 'l, j M g:i a',
+				'custom_cdt_dtg_format' => '',
 				'cdt_date_format'		=> 'l, j M',
-				//'custom_cdt_date_format' => 'l, j M',
+				'custom_cdt_date_format' => '',
+				
 				'slider_date_format'	=> 'D, j M',
-				//'custom_slider_date_format' => 'D, j M',
+				'custom_slider_date_format' => '',
 				'slider_time_format'	=> 'g:i A',
-				//'custom_slider_time_format' => 'g:i A',
+				'custom_slider_time_format' => '',
+				);
+				
+		return $defaults;
+	}
+	
+//---------------------------------------------------------------------------------
+//	3. mstw_gs_get_color_defaults - returns the mstw_gs_color_options[] default values
+//	
+	function mstw_gs_get_color_defaults( ) {
+		//resets all the colors to blank
+		$defaults = array(
+				'gs_tbl_hdr_bkgd_color' 		=> '',
+				'gs_tbl_hdr_text_color' 		=> '',
+				'gs_tbl_border_color'			=> '',
+				'gs_tbl_odd_bkgd_color' 		=> '',
+				'gs_tbl_odd_text_color'			=> '',
+				'gs_tbl_even_bkgd_color' 		=> '',
+				'gs_tbl_even_text_color'		=> '',
+				'gs_tbl_home_bkgd_color' 		=> '',
+				'gs_tbl_home_text_color' 		=> '',
+				
+				'gs_cdt_game_time_color' 		=> '',
+				'gs_cdt_opponent_color' 		=> '',
+				'gs_cdt_location_color'			=> '',
+				'gs_cdt_intro_color' 			=> '',
+				'gs_cdt_countdown_color'		=> '',
+				'gs_cdt_countdown_bkgd_color' 	=> '',
+				'gs_tbl_even_text_color'		=> '',
+				'gs_tbl_home_bkgd_color' 		=> '',
+				'gs_tbl_home_text_color' 		=> '',
+				
+				'gs_sldr_hdr_bkgd_color' 		=> '',
+				'gs_sldr_game_block_bkgd_color' => '',
+				'gs_sldr_hdr_text_color'		=> '',
+				'gs_sldr_hdr_divider_color' 	=> '',
+				'gs_sldr_game_date_color'		=> '',
+				'gs_sldr_game_opponent_color' 	=> '',
+				'gs_sldr_game_location_color'	=> '',
+				'gs_sldr_game_time_color' 		=> '',
+				'gs_sldr_game_links_color' 		=> '',
 				);
 				
 		return $defaults;
 	}
 
 //---------------------------------------------------------------------------------
-//	3. mstw_gs_build_css_rule - helper function to build css rules
+//	4. mstw_gs_build_css_rule - helper function to build css rules
 //		
 	function mstw_gs_build_css_rule( $options_array, $option_name, $css_rule ) {
 		if ( isset( $options_array[$option_name] ) and !empty( $options_array[$option_name] ) ) {
