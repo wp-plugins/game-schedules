@@ -320,7 +320,6 @@ img.mstw-gs-table-logo {
 /* Set the even links */
 .mstw-gs-sw-even td a,  .mstw-gs-sw-even td a:visited, .mstw-gs-sw-even td a:active {
     text-decoration: underline;
-    color: #fff;
 }
 
 .mstw-gs-sw-even td a:hover {
@@ -338,9 +337,12 @@ img.mstw-gs-table-logo {
 }
 
 /* Set the odd links */
-.mstw-gs-sw-odd td a,  .mstw-gs-sw-odd td a:visited, .mstw-gs-sw-odd td a:active, .mstw-gs-sw-odd td a:hover {
+.mstw-gs-sw-odd td a,  .mstw-gs-sw-odd td a:visited, .mstw-gs-sw-odd td a:active {
     text-decoration: underline;
-    color: #000064;
+}
+
+mstw-gs-sw-odd td a:hover {
+    text-decoration: none;
 }
 
 /* Set the home row attributes */
@@ -348,11 +350,16 @@ img.mstw-gs-table-logo {
 	font-weight: bold!important;
 }
 
-/* Set the home links */
-.mstw-gs-sw-home td a,  .mstw-gs-sw-home td a:visited, .mstw-gs-sw-home td a:active, .mstw-gs-sw-home td a:hover {
+/* Set the home links 
+.mstw-gs-sw-home td a,  .mstw-gs-sw-home td a:visited, .mstw-gs-sw-home td a:active {
     font-weight: bold!important;
+	text-decoration: underline;
 }
 
+.mstw-gs-sw-home td a:hover {
+	text-decoration: none;
+}
+*/
 
 /******************************************************/
 /* Styles for the Countdown Timer shortcode & widget  */
