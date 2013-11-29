@@ -899,8 +899,7 @@
 			// Okay, we should be good to update the database
 					
 			update_post_meta( $post_id, '_mstw_gs_opponent', sanitize_text_field( $_POST['mstw_gs_opponent'] ) );
-
-					
+		
 			// New in 4.0 for MSTW Teams CPT entries
 			//
 			update_post_meta( $post_id, 'gs_opponent_team', $_POST['gs_opponent_team'] );
@@ -1411,27 +1410,38 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 					case 'files-columns-tab':
 						settings_fields( 'mstw_gs_options' );
 						do_settings_sections( 'mstw_gs_settings' );
+						$options_name = 'mstw_gs_options[reset]';
 						break;
 					case 'date-time-tab';
 						settings_fields( 'mstw_gs_dtg_options' );
 						do_settings_sections( 'mstw_gs_dtg_settings' );
+						$options_name = 'mstw_gs_dtg_options[reset]';
 						break;
 					case 'colors-tab':
 						settings_fields( 'mstw_gs_color_options' );
 						do_settings_sections( 'mstw_gs_colors' );
+						$options_name = 'mstw_gs_color_options[reset]';
 						break;
-				}	  
+				}
+				?>
+				<table class="form-table">
+				<tr>
+					<td>
+						<input name="Submit" type="submit" class="button-primary" value=<?php _e( "Save Changes", "mstw-loc-domain" ) ?> /><br/><span="description">&nbsp;&nbsp;</span>
+					</td>
+					<td>
+						<input type="submit" name="<?php echo $options_name ?>" value=<?php _e( "Reset Default Values", "mstw-loc-domain" ) ?> /> <br/>
+						<strong><span class="description"><?php _e( "WARNING! Reset Default Values will do so without further warning!", "mstw-loc-domain" ); ?></span></strong>
+					</td>
+				</tr>
+				</table>
+				<?php
 			}
 			
 			//submit_button();
 			//submit_button( "Reset" );
 			?>
-				<p>
-				<input name="Submit" type="submit" class="button-primary" value=<?php _e( "Save Changes", "mstw-loc-domain" ) ?> />
 				
-				<input type="submit" name="mstw_gs_options[reset]" value=<?php _e( "Reset Default Values", "mstw-loc-domain" ) ?> />
-					<strong><?php _e( "WARNING! Reset Default Values will do so without further warning!", "mstw-loc-domain" ); ?></strong>
-				</p>
 			</form>
 		</div>
 		<?php
@@ -2584,16 +2594,13 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 		// Create our array for storing the validated options
 		$output = array();
 		
-		//$string = "<pre>VALIDATE OPTIONS" . print_r( $input, true ) . "</pre>";
-		//die($string);
-		
 		// Pull the previous (last good) options
 		$options = get_option( 'mstw_gs_options' );
 		
 		// This handles the RESET button
 		if ( array_key_exists( 'reset', $input ) ) {
 			if ( $input['reset'] ) {
-					$output = mstw_gs_get_defaults( );
+					$output = mstw_gs_get_admin_defaults( );
 					return $output;
 			}
 		}
@@ -2638,10 +2645,15 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 		// This handles the RESET button
 		if ( array_key_exists( 'reset', $input ) ) {
 			if ( $input['reset'] ) {
+					//echo "<pre>input: <br/>" . print_r( $input, true ) . "</pre>";
 					$output = mstw_gs_get_dtg_defaults( );
+					//echo "<pre>output: <br/>" . print_r( $output, true ) . "</pre>";
+					//die();
 					return $output;
 			}
 		}
+		
+		//echo "<pre>input: <br/>" . print_r( $input, true ) . "</pre>";
 		
 		// Pull the previous (last good) options
 		$options = get_option( 'mstw_gs_dtg_options' );
@@ -2650,9 +2662,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 		foreach( $input as $key => $value ) {
 			// Check to see if the current option has a value. If so, process it.
 			if( isset( $input[$key] ) ) {
-				// There should not be user/accidental errors in these fields
 				$output[$key] = sanitize_text_field( $input[$key] );
-				break;
 			} // end if
 		} // end foreach
 		
@@ -2671,10 +2681,15 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 		// This handles the RESET button
 		if ( array_key_exists( 'reset', $input ) ) {
 			if ( $input['reset'] ) {
-					//$output = mstw_gs_get_defaults( );
+					//echo "<pre>input: <br/>" . print_r( $input, true ) . "</pre>";
+					$output = mstw_gs_get_color_defaults( );
+					//echo "<pre>output: <br/>" . print_r( $output, true ) . "</pre>";
+					//die();
 					return $output;
 			}
 		}
+		
+		//die( "<pre>input: <br/>" . print_r( $input, true ) . "</pre>" );
 		
 		// Pull the previous (last good) options
 		$options = get_option( 'mstw_gs_color_options' );
