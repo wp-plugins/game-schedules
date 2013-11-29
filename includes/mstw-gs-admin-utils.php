@@ -220,7 +220,9 @@
 			__( 'Tuesday, 07 April 2013', 'mstw-loc-domain' ) => 'l, d F Y',
 			__( 'Tuesday, 7 April 2013', 'mstw-loc-domain' ) => 'l, j F Y',
 			__( 'Tues, 07 Apr', 'mstw-loc-domain' ) => 'D, d M',
+			__( 'Tuesday, 07 Apr', 'mstw-loc-domain' ) => 'l, d M',
 			__( 'Tues, 7 Apr', 'mstw-loc-domain' ) => 'D, j M',
+			__( 'Tuesday, 7 Apr', 'mstw-loc-domain' ) => 'l, j M',
 			__( '07 Apr', 'mstw-loc-domain' ) => 'd M',
 			__( '7 Apr', 'mstw-loc-domain' ) => 'j M',
 			);
@@ -374,6 +376,7 @@ function mstw_gs_build_form_field( $args ) {
 								__( '7 Apr 2013', 'mstw-loc-domain' ) => 'j M Y',
 								__( 'Tues, 07 Apr 2013', 'mstw-loc-domain' ) => 'D, d M Y',
 								__( 'Tues, 7 Apr 13', 'mstw-loc-domain' ) => 'D, j M y',
+								__( 'Tuesday, 7 Apr', 'mstw-loc-domain' ) => 'l, j M',
 								__( 'Tuesday, 07 April 2013', 'mstw-loc-domain' ) => 'l, d F Y',
 								__( 'Tuesday, 7 April 2013', 'mstw-loc-domain' ) => 'l, j F Y',
 								__( 'Tues, 07 Apr', 'mstw-loc-domain' ) => 'D, d M',
