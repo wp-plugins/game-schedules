@@ -325,7 +325,7 @@ function mstw_gs_build_form_field( $args ) {
 	$defaults = array(
 		'id'      => 'default_field', // the ID of the setting in our options array, and the ID of the HTML form element
 		'title'   => 'Default Field',  // the label for the HTML form element
-		'desc'    => 'This is a default description.', // the description displayed under the HTML form element
+		'desc'    => '', // the description displayed under the HTML form element
 		'default'     => '',  // the default value for this setting
 		'type'    => 'text', // the HTML form element to use
 		'section' => '', // settings section to which this setting belongs
