@@ -3,11 +3,10 @@ Contributors: MarkODonnell
 Donate link: http://shoalsummitsolutions.com
 Tags: sports,games,schedule,sports teams,team schedule,countdown timer  
 Requires at least: 3.3.1
-Tested up to: 3.5.1
+Tested up to: 3.7.1
 Stable tag: 3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-
 
 Manages multiple sports team schedules. Includes shortcodes and widgets to display schedules and a countdown timer to the next game.
 
@@ -15,41 +14,40 @@ Manages multiple sports team schedules. Includes shortcodes and widgets to displ
 
 Welcome to the MSTW Game Schedules Plugin from [Shoal Summit Solutions](http://shoalsummitsolutions.com/).
 
-The MSTW Game Schedules plugin manages multiple sports team schedules including: game dates and times, opponents, locations, results, and links to media (print stories or video on games). It features a countdown timer from the current time to then next game or next home game. Shortcodes and widgets are available to display both the schedule tables and countdown timers.
+The MSTW Game Schedules plugin manages multiple sports team schedules including: game dates and times, opponents, locations, results, and links to media (print stories or video on games). It features a countdown timer from the current time to then next game or next home game. Shortcodes and widgets are available to display schedule tables, sliders, and countdown timers.
 
 = NEW IN VERSION 4.0 =
-There are SIX NEW FEATURES in the front and back ends of version 4.0:
+There are numerous NEW FEATURES in the front and back ends of version 4.0:
 
-* Re-purpose data fields via show/hide and re-label display settings
-* New schedule slider view (via shortcode) [screenshot-8]
-* Supports a complete suite of custom time and date formats via PHP date format strings
-* Supports a new team structure which allows the inclusion of team logos in schedule tables and sliders
-* Color settings admin screen so the colors of displays can be controlled without editing CSS files
-* Display next N games from current date in schedule tables ([shortcode] and widget)
+* New [mstw_gs_slider] shortcode providing a schedule slider [screenshot-8] 
+* The ability to display team logos on schedule tables and schedule sliders [screenshot-8]
+* Re-purpose data fields via show/hide and re-label display settings. (Similar to what can be done in the other MSTW Plugins.)
+* Supports a complete suite of custom time and date formats via native PHP date format strings
+* Color settings admin screen so that display colors can be controlled without editing CSS files
+* Display next N games from current date in schedule tables (the [mstw_gs_table] shortcode and widget)
 * Filter allowing developers to control user access to the Game Schedules admin menu items
 
 = Front-end features for Website visitors =
 The following features enhance the site user experience:
 
-* Schedules (Table) Widget - displays schedules (in tabular format) on pages and posts.
-* Schedules Widget - displays (abbreviated) schedule tables in widget-enabled areas.
-* Countdown Timer Shortcode - displays countdown timers to the next game on pages or posts.
-* Countdown Timer Widget - displays countdown timers in widget-enabled areas.
+* Schedules Slider -displays scheduled games in a slider format
+* Schedules Table - displays full schedules in tabular format
+* Countdown Timer - displays countdown timer to the next game
+* Team Logos - can now be shown on all of the above displays
 
 = Back-end features for Website Admins =
 The following plugin features enhance the website admin experience:
 
-* Integration with [Game Locations Plugin](http://wordpress.org/extend/plugins/game-locations/) - makes it even easier to enter game locations and link them to maps and driving directions.
+* Sort the All Games table by schedule ID. This frequently requested functionality makes life much nicer for admins with many schedules.
+* Integration with [Game Locations Plugin](http://wordpress.org/extend/plugins/game-locations/) - makes it easy to enter game locations and link them to maps and enue websites.
 * Unlimited Number of Schedules - may be created, so historical schedules and results can be saved and future schedules can be advertised.
 * Import Schedule from CSV Files - allows an administrator to upload schedules from CSV format files.
-* Plugin Stylesheet - allows an administrator to style schedule and countdown timers shortcode and widget displays via one simple, well-documented CSS stylesheet (css/mstw-gs-style.css).
-* Internationalization - the plugin is fully internationalized (as of v 3.0) and Croatian, Spanish, and Swiss German translations are included with the distribution. (Many thanks to Juraj, Roberto, and Chris!)
+* Plugin Stylesheet - allows an administrator to style schedule and countdown timers shortcode and widget displays via one simple, well-documented CSS stylesheet (css/mstw-gs-style.css). In version 4.0, CSS tags are available to style each display individually by team. See the examples on [the MSTW development website](http://shoalsummitsolutions.com/dev/)
+* Internationalization (I18n) - the plugin is fully internationalized (as of v 3.0) and Croatian, Spanish, Swiss German, and Finnish translations are included with the distribution. (Many thanks to Juraj, Roberto, Chris, and Lauri!)
 
 = Notes =
 
-* There is no singular post template in this release. A single game view, complete with helmets/team logos and all the information is available in the schedules is planned for version 3.1. It is waiting for the sport and team concepts to be fully fleshed out in the My Sports Team Website (MSTW) Framework.
-* The Game Schedule plugin is the second in a set of plugins supporting the My Sports Team Website (MSTW) framework; a framework for sports team websites. Others include Game Locations and Team Rosters, which are both available now on [WordPress.org](http://wordpress.org/extend/plugins). [Learn more about MSTW](http://shoalsummitsolutions.com/my-sports-team-website/).
-
+* The Game Schedule plugin is the second in a set of plugins supporting the My Sports Team Website (MSTW) framework for sports team websites. Others include Game Locations, Team Rosters, Coaching Staffs, and League Standings, which are all available on [WordPress.org](http://wordpress.org/extend/plugins). [Learn more about MSTW](http://shoalsummitsolutions.com/my-sports-team-website/).
 
 
 = Helpful Links =
