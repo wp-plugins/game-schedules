@@ -87,7 +87,7 @@ Team logos require use of the new Teams and Schedules Custom Data Types. While t
 Sure. The software doesn't know or care that the entries are "games". The references are to "game schedule" and "sched_games", only because that was original purpose of the plugin. Note however that it has no 'calendar' features, it just provides a simple list of events as a table.  
 
 = Can I set up separate schedules for different teams and/or different seasons? =
-Yes. A unique schedule ID defines each schedule. It is the primary argument for shortcodes and the primary option for the widgets. For all practical purposes, you can set up many schedules as you want. So for example schedule 1 could be the varsity in 2012, schedule 2 the JV in 2012, schedule 3 the frosh in 2012, and schedules 4-6 could be the same teams in 2013.
+Yes. A unique schedule ID defines each schedule. It is the primary argument for shortcodes and the primary option for the widgets. For all practical purposes, you can set up many schedules as you want. So for example schedule '2012-varsity' could be the varsity schedule 2012, schedule '2' the JV in 2012, schedule 'frosh-basketball' the frosh in 2012, and schedules 4-6 could be the same teams in 2013. (Schedule ID's must be in WordPress 'slug format'. I suggest using descriptive slugs, but numbers would work just fine.)
 
 = I live in Split, Croatia (or wherever). Does the plugin support other languages? =
 The plugin supports localization as of version 2.0. If you happen to live in Split, you're in luck. A Croatian translation is contained in the /lang directory. (Thanks Juraj!) A Spanish translation was added in version 2.4. (Thanks Roberto!) A Swiss German version is new to version 3.0. (Thanks Chris!) These translation files may need to be updated for version 3.0 and all its new features. A Finnish version will be added to the next release after 3.0, it is in the trunk now. (Thanks Lauri!) =NOTE:= Many more strings have been added in version 4.0 on both the front and back ends, so these translations need to be updated.
@@ -142,8 +142,9 @@ Another MAJOR UPGRADE with significant new functionality requested by users incl
 
 * Added a new shortcode, [mstw_gs_slider], which displays a schedule slider
 * Added the ability to show team logos on schedule sliders and tables. Created two new CDT's - Teams and Schedules - to support this capability
-* Integrated Game Locations into the new Teams CDT
+* Added the ability to display multiple team schedules on one schedule table or slider.
 * Added the ability to display the next N games in a schedule to the [mstw_gs_table] shortcode and the widget (by setting the first date-time to 'now'
+* Integrated Game Locations into the new Teams CPT
 * Re-organized (expanded) Display Settings into a tabbed admin screen
 * Added the ability to show/hide data fields and custom data field labels so they can be re-purposed
 * Admin screens now display any customized data field labels, rather than the defaults
