@@ -3,7 +3,7 @@
 Plugin Name: Game Schedule
 Plugin URI: http://wordpress.org/extend/plugins/
 Description: The Game Schedule Plugin defines a custom type - Scheduled Games - for use in the MySportTeamWebite framework. Generations a game schedule (html table) using a shortcode.
-Version: 3.0
+Version: 4.0
 Author: Mark O'Donnell
 Author URI: http://shoalsummitsolutions.com
 */
