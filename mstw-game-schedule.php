@@ -1304,7 +1304,7 @@ function mstw_gs_build_countdown( $attribs ) {
 									'meta_key' => '_mstw_gs_unix_dtg',
 									'order' => 'ASC' 
 									)
-							);						
+							);	
 					
 		if( $posts ) {
 			// find the next game
@@ -1316,8 +1316,11 @@ function mstw_gs_build_countdown( $attribs ) {
 			
 			if ( $next_game_id < 0 ) {
 			//return '<h3>NEXT GAME ID: ' . $next_game_id . '</h3>';
-				return "<h3>" . __( 'No games later than ', mstw-loc-domain) . date( 'Y-m-d H:i:s', current_time( 'timestamp' ) ) . 
-					__( ' found on schedule ', 'mstw-loc-domain' ) . $sched_slug . "</h3>\n";
+				//return "<h3>" . __( 'No games later than ', mstw-loc-domain) . date( 'Y-m-d H:i:s', current_time( 'timestamp' ) ) . 
+				//	__( ' found on schedule ', 'mstw-loc-domain' ) . $sched_slug . "</h3>\n";
+				$games_to_show = $attribs['games_to_show'];
+				$games_to_show = ( $games_to_show == '' or $games_to_show == -1 ) ? 3 : $games_to_show;
+				$posts = array_slice( $posts, -1*$games_to_show );
 			}
 			$mstw_gs_slider = mstw_gs_build_slider( $posts, $attribs, $next_game_number+1 );
 			
