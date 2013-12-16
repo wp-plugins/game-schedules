@@ -906,7 +906,7 @@
 						
 			update_post_meta( $post_id, '_mstw_gs_opponent_link', esc_url( $_POST['mstw_gs_opponent_link'] ) );
 
-			update_post_meta( $post_id, '_mstw_gs_gl_location', $_POST['_mstw_gs_gl_location'] );
+			update_post_meta( $post_id, '_mstw_gs_gl_location', $_POST['mstw_gs_gl_location'] );
 				
 			$game_location_title = ( $_POST['_mstw_gs_gl_location'] != '' ? sanitize_text_field( get_the_title( $_POST['mstw_gs_gl_location'] ) ) : '' );
 			
@@ -961,7 +961,7 @@
 		
 			update_post_meta( $post_id, 'schedule_id', sanitize_title( $_POST['schedule_id'], 'not-specified' ) );
 			
-			update_post_meta( $post_id, 'schedule_team', $_POST['schedule_id'] );
+			update_post_meta( $post_id, 'schedule_team', $_POST['schedule_team'] );
 		}
 	
 		return;
