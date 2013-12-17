@@ -20,7 +20,9 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
+	// Turn off error reporting
+	//error_reporting(0);
+	
 	// ----------------------------------------------------------------
 	// Load the admin utils if necessary; die if file can't be loaded
 	//
