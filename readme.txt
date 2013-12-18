@@ -139,9 +139,9 @@ otherwise Wordpress overwrites the ALERTS set by PHP.INI`
 
 = 4.0.1 =
 Bug fixes:
-
 * Problem with Schedule DB entries, Team selection from Teams DB being ignored
 * Problem with Game entries, Location selection from Locations Plugin DB being ignored
+* Problem with table and slider opponent name formats being mixed up (cut and paste error)
 
 = 4.0 =
 Another MAJOR UPGRADE with significant new functionality requested by users including:
