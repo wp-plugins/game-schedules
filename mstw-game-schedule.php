@@ -3,14 +3,14 @@
 Plugin Name: Game Schedule
 Plugin URI: http://wordpress.org/extend/plugins/
 Description: The Game Schedule Plugin defines a custom type - Scheduled Games - for use in the MySportTeamWebite framework. Generations a game schedule (html table) using a shortcode.
-Version: 4.0
+Version: 4.0.1
 Author: Mark O'Donnell
 Author URI: http://shoalsummitsolutions.com
 */
 
 /*
 Game Schedule (Wordpress Plugin)
-Copyright (C) 2012 Mark O'Donnell
+Copyright (C) 2012-13 Mark O'Donnell
 Contact me at http://shoalsummitsolutions.com
 
 This program is free software: you can redistribute it and/or modify
@@ -718,6 +718,7 @@ function mstw_gs_delete_plugin_options() {
 		
 		$show_entry_logo = ( $entry_type == "slider" ? $options['show_slider_logos'] : $options['show_table_logos'] );
 		$team_logo_url = ( $entry_type == "slider" ? get_post_meta( $team_ID, 'team_alt_logo', true ) : get_post_meta( $team_ID, 'team_logo', true ) );
+		$opponent_format = ( $entry_type == 'slider' ? $options['slider_opponent_format'] : $options['table_opponent_format'] );
 		
 		//is an entry for the opponent in the TEAMS DB specfied?
 		//no team ID entry ('----') is stored as -1
@@ -734,7 +735,7 @@ function mstw_gs_delete_plugin_options() {
 			$team_full_mascot = get_post_meta( $team_ID, 'team_full_mascot', true );
 			$team_short_mascot = ( trim( $team_short_mascot ) == '' ? $team_full_mascot : $team_short_mascot );
 			
-			switch ( $options['table_opponent_format'] ) {
+			switch ( $opponent_format ) {
 				case 'short-name':
 					$opponent_entry .= $team_short_name;
 					break;
@@ -984,6 +985,7 @@ function mstw_gs_delete_plugin_options() {
 					$home_venue_street = get_post_meta( $home_team_venue_id, '_mstw_gl_street', true );					
 					$home_venue_city = get_post_meta( $home_team_venue_id, '_mstw_gl_city', true );
 					$home_venue_state = get_post_meta( $home_team_venue_id, '_mstw_gl_state', true );
+					$home_venue_zip = get_post_meta( $home_team_venue_id, '_mstw_gl_zip', true );
 					$home_venue_url = get_post_meta( $home_team_venue_id, '_mstw_gl_venue_url', true );
 					$home_venue_map_url = get_post_meta( $home_team_venue_id, '_mstw_gl_custom_url', true );
 					//check the link setting
@@ -1532,7 +1534,7 @@ function mstw_gs_build_countdown( $attribs ) {
 	}
 	
 	//================================================================================
-	// MSTW_GS_GET_NEXT GAME
+	// MSTW_GS_GET_NEXT_GAME
 	//	Finds the next game AFTER a specified date time group
 	// Args:
 	//	$games = an array of game posts
@@ -1556,7 +1558,7 @@ function mstw_gs_build_countdown( $attribs ) {
 	function mstw_gs_get_next_game( $games, $dtg ) {
 		// No game has been found (yet)
 		$retval = array( 'next_game_id' 	=> -1,
-						 'next_game_nbr'	=> -1,
+						 'next_game_number'	=> -1,
 						 'next_game_dtg'	=> -1,
 						 'next_game_opponent'	=> '-1',
 						 ); 

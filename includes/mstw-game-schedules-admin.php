@@ -1529,7 +1529,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 				'type' => 'color', 
 				'id' => 'gs_tbl_hdr_bkgd_color',
 				'name' => 'mstw_gs_color_options[gs_tbl_hdr_bkgd_color]',
-				'value' => $options['gs_tbl_hdr_bkgd_color'],
+				'value' => $options['gs_tbl_hdr_bkgd_color'], //mstw_gs_admin_safe_ref( $options, 'gs_tbl_hdr_bkgd_color' ),
 				'title'	=> __( 'Header Background Color:', 'mstw-loc-domain' ),
 				'page' => $display_on_page,
 				'section' => $page_section,
@@ -2446,7 +2446,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 								// and the ID of the HTML form element
 								'id' => 'table_opponent_format',
 								// the label for the HTML form element
-								'title'	=> __( 'Opponent Name Format in schedule TABLES:', 'mstw-loc-domain' ),
+								'title'	=> __( 'Opponent Name Format in Schedule TABLES:', 'mstw-loc-domain' ),
 								// the description displayed under the HTML form element
 								'desc'	=> __( '(Default: Full Name Only)', 'mstw-loc-domain' ),
 								// the default value for this setting
@@ -2466,14 +2466,14 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 								// page section in which to display HTML control
 								'section' => $page_section,
 							),
-							// OPPONENT NAME FORMAT FOR SLIDER TABLES
+						// OPPONENT NAME FORMAT FOR SLIDERS
 						array( 	// the HTML form element to use
 								'type'    => 'select-option', 
 								// the ID of the setting in options array, 
 								// and the ID of the HTML form element
 								'id' => 'slider_opponent_format',
 								// the label for the HTML form element
-								'title'	=> __( 'Opponent Name Format in schedule SLIDERS:', 'mstw-loc-domain' ),
+								'title'	=> __( 'Opponent Name Format in Schedule SLIDERS:', 'mstw-loc-domain' ),
 								// the description displayed under the HTML form element
 								'desc'	=> __( '(Default: Full Name Only)', 'mstw-loc-domain' ),
 								// the default value for this setting
@@ -2485,9 +2485,9 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 													__( 'Full Name & Mascot', 'mstw-loc-domain' ) => 'full-name-mascot',
 													),
 								// name of HTML form element
-								'name'	=> 'mstw_gs_options[table_opponent_format]',
+								'name'	=> 'mstw_gs_options[slider_opponent_format]',
 								// current value of field
-								'value'	=> $options['table_opponent_format'],
+								'value'	=> $options['slider_opponent_format'],
 								// page on which to display HTML control
 								'page' => $display_on_page,
 								// page section in which to display HTML control
@@ -2565,8 +2565,8 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 	//-----------------------------------------------------------------	
 	// 	Main section instructions and controls	
 	// 	
-	function mstw_gs_main_inst( ) {
-		echo '<p>' . __( 'Enter your display settings. ', 'mstw-loc-domain' ) .'</p>';
+	function mstw_gs_data_fields_inst( ) {
+		echo '<p>' . __( 'Settings to control the visibility of data fields & table columns as well as to change their labels to "re-purpose" the fields. ', 'mstw-loc-domain' ) .'</p>';
 		/* Just in case we add some colors someday
 		'<br/>' . __( 'All color values are in hex, starting with a hash(#), followed by either 3 or 6 hex digits. For example, #123abd or #1a2.', 'mstw-loc-domain' ) .  '</p>';
 		*/

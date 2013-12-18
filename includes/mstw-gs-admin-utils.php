@@ -34,6 +34,7 @@
  *  9. 	mstw_gs_build_form_field() - helper function for registering admin form field settings
  *  10.	mstw_gs_display_form_field() - helper function for building HTML for all admin form fields
  *  11. mstw_gs_get_admin_defaults() - admin defaults differ from front side defaults
+ *  12. mstw_gs_admin_safe_ref() - stops errors with using undefined associative array references
 
  *---------------------------------------------------------*/
  
@@ -451,7 +452,7 @@ function mstw_gs_build_form_field( $args ) {
 		
 		// pass the standard value if the option is not yet set in the database
 		if ( !isset( $options[$id] ) && 'type' != 'checkbox' ) {
-			$options[$id] = $default;
+			$options[$id] = ( isset( $default ) ? $default : 'default_field' );
 		}
 		
 		// Additional field class. Output only if the class is defined in the $args()
