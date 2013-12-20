@@ -24,6 +24,13 @@
 	//error_reporting(0);
 	
 	// ----------------------------------------------------------------
+	// Prevents uninitialized string errors 
+	//
+	function mstw_gs_safe_ref( $array, $index ) {
+		return ( isset( $array[$index] ) ? $array[$index] : '' );
+	}
+	
+	// ----------------------------------------------------------------
 	// Load the admin utils if necessary; die if file can't be loaded
 	//
 	if ( is_admin( ) and !function_exists( 'mstw_gs_admin_utils_loaded' ) ) {
@@ -294,6 +301,7 @@
 		$std_size = 30;
 		
 		$admin_fields = array(  'team_full_name' => array (
+									'type'	=> 'text',
 									'value' => $team_full_name,
 									'label' => __( 'Team Full Name:', 'mstw-loc-domain' ),
 									'maxlength' => $std_length,
@@ -301,6 +309,7 @@
 									'notes' => 'E.g., "San Francisco" or "California"',
 									),
 								'team_short_name' => array (
+									'type'	=> 'text',
 									'value' => $team_short_name,
 									'label' => 'Team Short Name:',
 									'maxlength' => $std_length,
@@ -308,6 +317,7 @@
 									'notes' => 'E.g., "SF" or "Cal". If not specified, full name will be used in it\'s place.',
 									),
 								'team_full_mascot' => array (
+									'type'	=> 'text',
 									'value' => $team_full_mascot,
 									'label' => 'Team Full Mascot:',
 									'maxlength' => $std_length,
@@ -315,6 +325,7 @@
 									'notes' => 'E.g., "49ers" or "Golden Bears"',
 									),
 								'team_short_mascot' => array (
+									'type'	=> 'text',
 									'value' => $team_short_mascot,
 									'label' => 'Team Short Mascot:',
 									'maxlength' => $std_length,
@@ -322,6 +333,7 @@
 									'notes' => 'E.g., "Niners" or "Bears". If not specified, full mascot name will be used in it\'s place.',
 								),
 								'team_link' => array (
+									'type'	=> 'text',
 									'value' => $team_link,
 									'label' => 'Team Link:',
 									'maxlength' => 256,
@@ -329,6 +341,7 @@
 									'notes' => 'E.g., "http://49ers.com" or "http://calbears.com"',
 									),
 								'team_logo' => array (
+									'type'	=> 'text',
 									'value' => $team_logo,
 									'label' => 'Team Table Logo:',
 									'maxlength' => 256,
@@ -336,6 +349,7 @@
 									'notes' => 'Provide full path to file (uploaded to media library, for example). Recommended size 41x28px.',
 									),
 								'team_alt_logo' => array (
+									'type'	=> 'text',
 									'value' => $team_alt_logo,
 									'label' => 'Team Slider Logo:',
 									'maxlength' => 256,
@@ -392,11 +406,12 @@
 		$std_size = 30;
 		
 		$admin_fields = array(  'schedule_id' => array (
-									'value' => $schedule_id,
-									'label' => __( 'Unique Schedule ID:', 'mstw-loc-domain' ),
+									'type' 		=> 'text',
+									'value' 	=> $schedule_id,
+									'label' 	=> __( 'Unique Schedule ID:', 'mstw-loc-domain' ),
 									'maxlength' => $std_length,
-									'size' => $std_size,
-									'notes' => 'Will be converted to WP \'slug\' format(128 character max) E.g., "2013 Varsity Football" will be converted to "2013-varsity-football"',
+									'size' 		=> $std_size,
+									'notes' 	=> 'Will be converted to WP \'slug\' format(128 character max) E.g., "2013 Varsity Football" will be converted to "2013-varsity-football"',
 									),
 							);
 							
@@ -745,7 +760,7 @@
 									'label' =>  $media_label . ' ' . __( 'URL 1:', 'mstw-loc-domain' ),
 									'maxlength' => 256,
 									'size' => 30,
-									'notes' => _( 'URL for ', 'mstw-loc-domain' ) . $media_label . __( ' link 1.', 'mstw-loc-domain' ),
+									'notes' => __( 'URL for ', 'mstw-loc-domain' ) . $media_label . __( ' link 1.', 'mstw-loc-domain' ),
 								),
 								'mstw_gs_media_label_2' => array (
 									'type' => 'text',
@@ -761,7 +776,7 @@
 									'label' =>  $media_label . ' ' . __( 'URL 2:', 'mstw-loc-domain' ),
 									'maxlength' => 256,
 									'size' => 30,
-									'notes' => _( 'URL for ', 'mstw-loc-domain' ) . $media_label . __( ' link 2.', 'mstw-loc-domain' ),
+									'notes' => __( 'URL for ', 'mstw-loc-domain' ) . $media_label . __( ' link 2.', 'mstw-loc-domain' ),
 								),
 								'mstw_gs_media_label_3' => array (
 									'type' => 'text',
@@ -822,7 +837,8 @@
 			echo "<td><select id='gs_opponent_team' name='gs_opponent_team'>";
 			//$selected = ( empty( $gs_opponent_team ) or $gs_opponent_team == -1 ) ? 'selected="selected"' : '';
 			
-			echo "<option value='-1' " . $selected . "> ---- </option>";
+			//echo "<option value='-1' " . $selected . "> ---- </option>";
+			echo "<option value='-1'> ---- </option>";
 			foreach( $teams as $team ) {
 				$selected = ( $current_team == $team->ID ) ? 'selected="selected"' : '';
 				echo "<option value='" . $team->ID . "'" . $selected . ">" . get_the_title( $team->ID ) . "</option>";
@@ -843,128 +859,129 @@
 
 	function mstw_gs_save_meta( $post_id ) {
 		// Process scheduled_game updates
-		
-		// SCHEDULED_GAMES POST TYPE
-		if ( $_POST['post_type'] == 'scheduled_games' ) {
-			//First verify the metadata required by the shortcode is set. If not, set defaults
-			
-			// SCHEDULE ID
-			// If schedule id was not set, default to 1 :: could happen!
-			if ( isset( $_POST['mstw_gs_sched_id'] ) ) {
-				$mstw_id = sanitize_title( $_POST['mstw_gs_sched_id'], '1' );
-			}
-			else {  //$_POST['mstw_gs_sched_id'] is not set
-				$mstw_id = '1';
-			}
-			update_post_meta( $post_id, '_mstw_gs_sched_id', $mstw_id );
+		if( isset( $_POST['post_type'] ) ) {
+			// SCHEDULED_GAMES POST TYPE
+			//echo '$_POST:<pre>';
+			//print_r( $_POST );
+			//echo '</pre>';
+			//die("Done");
+			if ( $_POST['post_type'] == 'scheduled_games' ) {
+				//First verify the metadata required by the shortcode is set. If not, set defaults
 				
-			// YEAR
-			// If game year was not set, default to the current year :: could happen!
-			$mstw_year = strip_tags( trim( $_POST[ 'mstw_gs_sched_year' ] ) );
-			if ($mstw_year == '') {
-				$mstw_year = date('Y');
-			}
-			//update_post_meta( $post_id, '_mstw_gs_sched_year', $mstw_year );
-			
-			// MONTH
-			// Month is a pulldown, we should be good
-			$mstw_month = strip_tags( trim( $_POST[ 'mstw_gs_game_month' ] ) );
-			//update_post_meta( $post_id, '_mstw_gs_game_month', $mstw_month );
-			
-			// DAY
-			// Day is a pulldown, we should be good!
-			$mstw_day = strip_tags( trim( $_POST[ 'mstw_gs_game_day' ] ) );
-			//update_post_meta( $post_id, '_mstw_gs_game_day', $mstw_day );
-			
-			//$date_only_str = $mstw_year . '-' . $mstw_month . '-' . $mstw_day;
-			
-			$date_only_str = strip_tags( trim( $_POST[ 'gs_game_date' ] ) );
-			//$unix_date = strtotime( $date_only_str );
-			//update_post_meta( $post_id, '_mstw_gs_unix_date', $unix_date );
-			
-			$game_time_hrs = strip_tags( trim( $_POST[ 'game_time_hrs' ] ) );
-			$game_time_mins = strip_tags( trim( $_POST[ 'game_time_mins' ] ) );
-			
-			$game_time_tba = strip_tags( trim( $_POST[ 'game_time_tba' ] ) );
-			update_post_meta( $post_id, '_mstw_gs_game_time_tba', $game_time_tba );
-			
-			if ( $game_time_tba != '' ) {
-				$game_time_hrs = $game_time_mins = '00';
-			}
-			
-			$mstw_time = $game_time_hrs . ':' . $game_time_mins;
-			
-			$full_dtg_str = $date_only_str . ' ' . $mstw_time;
-			$unix_dtg = strtotime( $full_dtg_str );
-			update_post_meta( $post_id, '_mstw_gs_unix_dtg', $unix_dtg );
-						
-			// Okay, we should be good to update the database
-					
-			update_post_meta( $post_id, '_mstw_gs_opponent', sanitize_text_field( $_POST['mstw_gs_opponent'] ) );
-		
-			// New in 4.0 for MSTW Teams CPT entries
-			//
-			update_post_meta( $post_id, 'gs_opponent_team', $_POST['gs_opponent_team'] );
-						
-			update_post_meta( $post_id, '_mstw_gs_opponent_link', esc_url( $_POST['mstw_gs_opponent_link'] ) );
-
-			update_post_meta( $post_id, '_mstw_gs_gl_location', $_POST['mstw_gs_gl_location'] );
+				// SCHEDULE ID
+				// If schedule id was not set, default to 1 :: could happen!
+				if ( isset( $_POST['mstw_gs_sched_id'] ) ) {
+					$mstw_id = sanitize_title( $_POST['mstw_gs_sched_id'], '1' );
+				}
+				else {  //$_POST['mstw_gs_sched_id'] is not set
+					$mstw_id = '1';
+				}
+				update_post_meta( $post_id, '_mstw_gs_sched_id', $mstw_id );
 				
-			$game_location_title = ( $_POST['_mstw_gs_gl_location'] != '' ? sanitize_text_field( get_the_title( $_POST['mstw_gs_gl_location'] ) ) : '' );
+				$date_only_str = strip_tags( trim( $_POST[ 'gs_game_date' ] ) );
+				//$unix_date = strtotime( $date_only_str );
+				//update_post_meta( $post_id, '_mstw_gs_unix_date', $unix_date );
+				$game_time_hrs = mstw_gs_safe_ref( $_POST, 'game_time_hrs' );
+				$game_time_hrs = strip_tags( trim( $game_time_hrs ) );
+				$game_time_mins = mstw_gs_safe_ref( $_POST, 'game_time_mins' );
+				$game_time_mins = strip_tags( trim( $game_time_mins ) );
+				$game_time_tba = mstw_gs_safe_ref( $_POST, 'game_time_tba' );
+				$game_time_tba = strip_tags( trim( $game_time_tba ) );
+				update_post_meta( $post_id, '_mstw_gs_game_time_tba', $game_time_tba );
+				
+				if ( $game_time_tba != '' ) {
+					$game_time_hrs = $game_time_mins = '00';
+				}
+				
+				$mstw_time = $game_time_hrs . ':' . $game_time_mins;
+				
+				$full_dtg_str = $date_only_str . ' ' . $mstw_time;
+				$unix_dtg = strtotime( $full_dtg_str );
+				update_post_meta( $post_id, '_mstw_gs_unix_dtg', $unix_dtg );
+							
+				// Okay, we should be good to update the database
+				$mstw_gs_opponent = mstw_gs_safe_ref( $_POST, 'mstw_gs_opponent' );		
+				
+				update_post_meta( $post_id, '_mstw_gs_opponent', sanitize_text_field( $mstw_gs_opponent ) );
 			
-			update_post_meta( $post_id, '_mstw_gs_gl_loc_title', $game_location_title );
-			
-			update_post_meta( $post_id, '_mstw_gs_location', sanitize_text_field( $_POST['mstw_gs_location'] ) );
-	
-			update_post_meta( $post_id, '_mstw_gs_location_link', esc_url( $_POST['mstw_gs_location_link'] ) );		
+				// New in 4.0 for MSTW Teams CPT entries
+				//
+				$gs_opponent_team = mstw_gs_safe_ref( $_POST, 'gs_opponent_team' );
+				update_post_meta( $post_id, 'gs_opponent_team', $gs_opponent_team );
+				
+				$mstw_gs_opponent_link = mstw_gs_safe_ref( $_POST, 'mstw_gs_opponent_link' );				
+				update_post_meta( $post_id, '_mstw_gs_opponent_link', esc_url( $mstw_gs_opponent_link ) );
 
-			update_post_meta( $post_id, '_mstw_gs_home_game', strip_tags( $_POST['mstw_gs_home_game'] ) );
-					
-			update_post_meta( $post_id, '_mstw_gs_game_time',  strip_tags( $_POST['mstw_gs_game_time'] ) );
-					
-			update_post_meta( $post_id, '_mstw_gs_game_result', sanitize_text_field( $_POST['mstw_gs_game_result'] ) );
-	
-			update_post_meta( $post_id, '_mstw_gs_media_label_1', sanitize_text_field( $_POST['mstw_gs_media_label_1'] ) );
+				$mstw_gs_gl_location = mstw_gs_safe_ref( $_POST, 'mstw_gs_gl_location' );
+				update_post_meta( $post_id, '_mstw_gs_gl_location', $mstw_gs_gl_location );
+				
+				$game_location_title = mstw_gs_safe_ref( $_POST, 'game_location_title' );
+				//$game_location_title = ( $_POST['_mstw_gs_gl_location'] != '' ? sanitize_text_field( get_the_title( $_POST['mstw_gs_gl_location'] ) ) : '' );
+				update_post_meta( $post_id, '_mstw_gs_gl_loc_title', sanitize_text_field( $game_location_title ) );
+				
+				$mstw_gs_location = mstw_gs_safe_ref( $_POST, 'mstw_gs_location' );
+				update_post_meta( $post_id, '_mstw_gs_location', sanitize_text_field( $mstw_gs_location ) );
+				
+				$mstw_gs_location_link = mstw_gs_safe_ref( $_POST, 'mstw_gs_location_link' );
+				update_post_meta( $post_id, '_mstw_gs_location_link', esc_url( $mstw_gs_location_link ) );		
+				
+				$mstw_gs_home_game = mstw_gs_safe_ref( $_POST, 'mstw_gs_home_game' );
+				update_post_meta( $post_id, '_mstw_gs_home_game', strip_tags( $mstw_gs_home_game ) );
+				
+				$mstw_gs_game_time = mstw_gs_safe_ref( $_POST, 'mstw_gs_game_time' );				
+				update_post_meta( $post_id, '_mstw_gs_game_time',  strip_tags( $mstw_gs_game_time ) );
+				
+				$mstw_gs_game_result = mstw_gs_safe_ref( $_POST, 'mstw_gs_game_result' );
+				update_post_meta( $post_id, '_mstw_gs_game_result', sanitize_text_field( $mstw_gs_game_result ) );
 		
-			update_post_meta( $post_id, '_mstw_gs_media_label_2', sanitize_text_field( $_POST['mstw_gs_media_label_2'] ) );
-		
-			update_post_meta( $post_id, '_mstw_gs_media_label_3', sanitize_text_field( $_POST['mstw_gs_media_label_3'] ) );
-		
-			update_post_meta( $post_id, '_mstw_gs_media_url_1', esc_url( $_POST['mstw_gs_media_url_1'] ) );
-		
-			update_post_meta( $post_id, '_mstw_gs_media_url_2', esc_url( $_POST['mstw_gs_media_url_2'] ) );
-		
-			update_post_meta( $post_id, '_mstw_gs_media_url_3', esc_url( $_POST['mstw_gs_media_url_3'] ) );
-		}
-		
-		// MSTW_GS_TEAMS POST TYPE
-		else if ( $_POST['post_type'] == 'mstw_gs_teams' ) {
-		
-			update_post_meta( $post_id, 'team_full_name', sanitize_text_field( $_POST['team_full_name'] ) );
-	
-			update_post_meta( $post_id, 'team_short_name', sanitize_text_field( $_POST['team_short_name'] ) );
-		
-			update_post_meta( $post_id, 'team_full_mascot', sanitize_text_field( $_POST['team_full_mascot'] ) );
-		
-			update_post_meta( $post_id, 'team_short_mascot', sanitize_text_field( $_POST['team_short_mascot'] ) );
+				$mstw_gs_media_label_1 = mstw_gs_safe_ref( $_POST, 'mstw_gs_media_label_1' );
+				update_post_meta( $post_id, '_mstw_gs_media_label_1', sanitize_text_field( $mstw_gs_media_label_1 ) );
 			
-			update_post_meta( $post_id, 'team_home_venue', $_POST['team_home_venue'] );
-					
-			update_post_meta( $post_id, 'team_link', esc_url( $_POST['team_link'] ) );
-
-			update_post_meta( $post_id, 'team_logo', esc_url( $_POST['team_logo'] ) );
-					
-			update_post_meta( $post_id, 'team_alt_logo', esc_url( $_POST['team_alt_logo'] ) );
-
-		}
-	
-		// MSTW_GS_SCHEDULES POST TYPE
-		else if ( $_POST['post_type'] == 'mstw_gs_schedules' ) {
-		
-			update_post_meta( $post_id, 'schedule_id', sanitize_title( $_POST['schedule_id'], 'not-specified' ) );
+				$mstw_gs_media_label_2 = mstw_gs_safe_ref( $_POST, 'mstw_gs_media_label_2' );
+				update_post_meta( $post_id, '_mstw_gs_media_label_2', sanitize_text_field( $mstw_gs_media_label_2 ) );
 			
-			update_post_meta( $post_id, 'schedule_team', $_POST['schedule_team'] );
-		}
+				$mstw_gs_media_label_3 = mstw_gs_safe_ref( $_POST, 'mstw_gs_media_label_3' );
+				update_post_meta( $post_id, '_mstw_gs_media_label_3', sanitize_text_field( $mstw_gs_media_label_3 ) );
+			
+				$mstw_gs_media_url_1 = mstw_gs_safe_ref( $_POST, 'mstw_gs_media_url_1' );
+				update_post_meta( $post_id, '_mstw_gs_media_url_1', esc_url( $mstw_gs_media_url_1 ) );
+			
+				$mstw_gs_media_url_2 = mstw_gs_safe_ref( $_POST, 'mstw_gs_media_url_2' );
+				update_post_meta( $post_id, '_mstw_gs_media_url_2', esc_url( $mstw_gs_media_url_2 ) );
+			
+				$mstw_gs_media_url_3 = mstw_gs_safe_ref( $_POST, 'mstw_gs_media_url_3' );
+				update_post_meta( $post_id, '_mstw_gs_media_url_3', esc_url( $mstw_gs_media_url_3 ) );
+			}
+			
+			// MSTW_GS_TEAMS POST TYPE
+			else if ( $_POST['post_type'] == 'mstw_gs_teams' ) {
+			
+				update_post_meta( $post_id, 'team_full_name', sanitize_text_field( $_POST['team_full_name'] ) );
+		
+				update_post_meta( $post_id, 'team_short_name', sanitize_text_field( $_POST['team_short_name'] ) );
+			
+				update_post_meta( $post_id, 'team_full_mascot', sanitize_text_field( $_POST['team_full_mascot'] ) );
+			
+				update_post_meta( $post_id, 'team_short_mascot', sanitize_text_field( $_POST['team_short_mascot'] ) );
+				
+				update_post_meta( $post_id, 'team_home_venue', $_POST['team_home_venue'] );
+						
+				update_post_meta( $post_id, 'team_link', esc_url( $_POST['team_link'] ) );
+
+				update_post_meta( $post_id, 'team_logo', esc_url( $_POST['team_logo'] ) );
+						
+				update_post_meta( $post_id, 'team_alt_logo', esc_url( $_POST['team_alt_logo'] ) );
+
+			}
+		
+			// MSTW_GS_SCHEDULES POST TYPE
+			else if ( $_POST['post_type'] == 'mstw_gs_schedules' ) {
+			
+				update_post_meta( $post_id, 'schedule_id', sanitize_title( $_POST['schedule_id'], 'not-specified' ) );
+				
+				update_post_meta( $post_id, 'schedule_team', $_POST['schedule_team'] );
+			}
+		} //End: if( isset( _$POST['post_type] )
 	
 		return;
 		
@@ -1048,7 +1065,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 				}
 				else {
 					//echo $game_timestamp;
-					echo( date( $mstw_admin_date_format, $game_timestamp ) );
+					echo( date( $mstw_admin_date_format, intval( $game_timestamp ) ) );
 				}
 				break;
 			
@@ -1063,7 +1080,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 				else {
 					//echo $game_timestamp;
 					//printf( '%s', date( $mstw_admin_time_format, $game_timestamp ) );
-					echo( date( $mstw_admin_time_format, $game_timestamp ) );
+					echo( date( $mstw_admin_time_format, intval( $game_timestamp ) ) );
 				}
 				break;	
 
@@ -1529,7 +1546,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 				'type' => 'color', 
 				'id' => 'gs_tbl_hdr_bkgd_color',
 				'name' => 'mstw_gs_color_options[gs_tbl_hdr_bkgd_color]',
-				'value' => $options['gs_tbl_hdr_bkgd_color'], //mstw_gs_admin_safe_ref( $options, 'gs_tbl_hdr_bkgd_color' ),
+				'value' => mstw_gs_safe_ref( $options, 'gs_tbl_hdr_bkgd_color' ), //$options['gs_tbl_hdr_bkgd_color'], 
 				'title'	=> __( 'Header Background Color:', 'mstw-loc-domain' ),
 				'page' => $display_on_page,
 				'section' => $page_section,
@@ -1537,7 +1554,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 				'type' => 'color', 
 				'id' => 'gs_tbl_hdr_text_color',
 				'name' => 'mstw_gs_color_options[gs_tbl_hdr_text_color]',
-				'value' => $options['gs_tbl_hdr_text_color'],
+				'value' => mstw_gs_safe_ref( $options, 'gs_tbl_hdr_text_color' ), //$options['gs_tbl_hdr_text_color'],
 				'title'	=> __( 'Header Text Color:', 'mstw-loc-domain' ),
 				'page' => $display_on_page,
 				'section' => $page_section,
@@ -1546,7 +1563,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 				'type' => 'color', 
 				'id' => 'gs_tbl_border_color',
 				'name' => 'mstw_gs_color_options[gs_tbl_border_color]',
-				'value' => $options['gs_tbl_border_color'],
+				'value' => mstw_gs_safe_ref( $options, 'gs_tbl_border_color' ), //$options['gs_tbl_border_color'],
 				'title'	=> __( 'Table Border Color:', 'mstw-loc-domain' ),
 				'page' => $display_on_page,
 				'section' => $page_section,
@@ -1555,7 +1572,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 				'type' => 'color', 
 				'id' => 'gs_tbl_odd_bkgd_color',
 				'name' => 'mstw_gs_color_options[gs_tbl_odd_bkgd_color]',
-				'value' => $options['gs_tbl_odd_bkgd_color'],
+				'value' => mstw_gs_safe_ref( $options, 'gs_tbl_odd_bkgd_color' ), //$options['gs_tbl_odd_bkgd_color'],
 				'title'	=> __( 'Odd Row Background Color:', 'mstw-loc-domain' ),
 				'page' => $display_on_page,
 				'section' => $page_section,
@@ -1564,7 +1581,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 				'type' => 'color', 
 				'id' => 'gs_tbl_odd_text_color',
 				'name' => 'mstw_gs_color_options[gs_tbl_odd_text_color]',
-				'value' => $options['gs_tbl_odd_text_color'],
+				'value' => mstw_gs_safe_ref( $options, 'gs_tbl_odd_text_color' ), //$options['gs_tbl_odd_text_color'],
 				'title'	=> __( 'Odd Row Text Color:', 'mstw-loc-domain' ),
 				'page' => $display_on_page,
 				'section' => $page_section,
@@ -1573,7 +1590,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 				'type' => 'color', 
 				'id' => 'gs_tbl_even_bkgd_color',
 				'name' => 'mstw_gs_color_options[gs_tbl_even_bkgd_color]',
-				'value' => $options['gs_tbl_even_bkgd_color'],
+				'value' => mstw_gs_safe_ref( $options, 'gs_tbl_even_bkgd_color' ), //$options['gs_tbl_even_bkgd_color'],
 				'title'	=> __( 'Even Row Background Color:', 'mstw-loc-domain' ),
 				'page' => $display_on_page,
 				'section' => $page_section,
@@ -1582,7 +1599,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 				'type' => 'color', 
 				'id' => 'gs_tbl_even_text_color',
 				'name' => 'mstw_gs_color_options[gs_tbl_even_text_color]',
-				'value' => $options['gs_tbl_even_text_color'],
+				'value' => mstw_gs_safe_ref( $options, 'gs_tbl_even_text_color' ), //$options['gs_tbl_even_text_color'],
 				'title'	=> __( 'Even Row Text Color:', 'mstw-loc-domain' ),
 				'page' => $display_on_page,
 				'section' => $page_section,
@@ -1591,7 +1608,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 				'type' => 'color', 
 				'id' => 'gs_tbl_home_bkgd_color',
 				'name' => 'mstw_gs_color_options[gs_tbl_home_bkgd_color]',
-				'value' => $options['gs_tbl_home_bkgd_color'],
+				'value' => mstw_gs_safe_ref( $options, 'gs_tbl_home_bkgd_color' ), //$options['gs_tbl_home_bkgd_color'],
 				'title'	=> __( 'Home Game (row) Background Color:', 'mstw-loc-domain' ),
 				'page' => $display_on_page,
 				'section' => $page_section,
@@ -1600,7 +1617,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 				'type' => 'color', 
 				'id' => 'gs_tbl_home_text_color',
 				'name' => 'mstw_gs_color_options[gs_tbl_home_text_color]',
-				'value' => $options['gs_tbl_home_text_color'],
+				'value' => mstw_gs_safe_ref( $options, 'gs_tbl_home_text_color' ), //$options['gs_tbl_home_text_color'],
 				'title'	=> __( 'Home Game (row) Text Color:', 'mstw-loc-domain' ),
 				'page' => $display_on_page,
 				'section' => $page_section,
@@ -1635,7 +1652,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			'type' => 'color', 
 			'id' => 'gs_cdt_game_time_color',
 			'name' => 'mstw_gs_color_options[gs_cdt_game_time_color]',
-			'value' => $options['gs_cdt_game_time_color'],
+			'value' => mstw_gs_safe_ref( $options, 'gs_cdt_game_time_color' ), //$options['gs_cdt_game_time_color'],
 			'title'	=> __( 'Game Time Text Color:', 'mstw-loc-domain' ),
 			'desc'	=> '',
 			'default' => '',
@@ -1647,7 +1664,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			'type' => 'color', 
 			'id' => 'gs_cdt_opponent_color',
 			'name' => 'mstw_gs_color_options[gs_cdt_opponent_color]',
-			'value' => $options['gs_cdt_opponent_color'],
+			'value' => mstw_gs_safe_ref( $options, 'gs_cdt_opponent_color' ), //$options['gs_cdt_opponent_color'],
 			'title'	=> __( 'Opponent Text Color:', 'mstw-loc-domain' ),
 			'desc'	=> '',
 			'default' => '',
@@ -1659,7 +1676,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			'type' => 'color', 
 			'id' => 'gs_cdt_location_color',
 			'name' => 'mstw_gs_color_options[gs_cdt_location_color]',
-			'value' => $options['gs_cdt_location_color'],
+			'value' => mstw_gs_safe_ref( $options, 'gs_cdt_location_color' ), //$options['gs_cdt_location_color'],
 			'title'	=> __( 'Location Text Color:', 'mstw-loc-domain' ),
 			'desc'	=> '',
 			'default' => '',
@@ -1671,7 +1688,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			'type' => 'color',
 			'id' => 'gs_cdt_intro_color',
 			'name' => 'mstw_gs_color_options[gs_cdt_intro_color]',
-			'value' => $options['gs_cdt_intro_color'],
+			'value' => mstw_gs_safe_ref( $options, 'gs_cdt_intro_color' ), //$options['gs_cdt_intro_color'],
 			'title'	=> __( 'Intro Text Color:', 'mstw-loc-domain' ),
 			'desc'	=> '',
 			'default' => '',
@@ -1683,7 +1700,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			'type' => 'color', 
 			'id' => 'gs_cdt_countdown_color',
 			'name' => 'mstw_gs_color_options[gs_cdt_countdown_color]',
-			'value' => $options['gs_cdt_countdown_color'],
+			'value' => mstw_gs_safe_ref( $options, 'gs_cdt_countdown_color' ), //$options['gs_cdt_countdown_color'],
 			'title'	=> __( 'Countdown Text Color:', 'mstw-loc-domain' ),
 			'desc'	=> '',
 			'default' => '',
@@ -1695,7 +1712,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			'type' => 'color', 
 			'id' => 'gs_cdt_countdown_bkgd_color',
 			'name' => 'mstw_gs_color_options[gs_cdt_countdown_bkgd_color]',
-			'value' => $options['gs_cdt_countdown_bkgd_color'],
+			'value' => mstw_gs_safe_ref( $options, 'gs_cdt_countdown_bkgd_color' ), //$options['gs_cdt_countdown_bkgd_color'],
 			'title'	=> __( 'Countdown Background Color:', 'mstw-loc-domain' ),
 			'desc'	=> '',
 			'default' => '',
@@ -1732,7 +1749,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			'type' => 'color', 
 			'id' => 'gs_sldr_hdr_bkgd_color',
 			'name' => 'mstw_gs_color_options[gs_sldr_hdr_bkgd_color]',
-			'value' => $options['gs_sldr_hdr_bkgd_color'],
+			'value' => mstw_gs_safe_ref( $options, 'gs_sldr_hdr_bkgd_color' ), //$options['gs_sldr_hdr_bkgd_color'],
 			'title'	=> __( 'Header Background Color:', 'mstw-loc-domain' ),
 			'desc'	=> '',
 			'default' => '',
@@ -1744,7 +1761,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			'type' => 'color', 
 			'id' => 'gs_sldr_game_block_bkgd_color',
 			'name' => 'mstw_gs_color_options[gs_sldr_game_block_bkgd_color]',
-			'value' => $options['gs_sldr_game_block_bkgd_color'],
+			'value' => mstw_gs_safe_ref( $options, 'gs_sldr_game_block_bkgd_color' ), //$options['gs_sldr_game_block_bkgd_color'],
 			'title'	=> __( 'Game Block Background Color:', 'mstw-loc-domain' ),
 			'desc'	=> '',
 			'default' => '',
@@ -1756,7 +1773,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			'type' => 'color', 
 			'id' => 'gs_sldr_hdr_text_color',
 			'name' => 'mstw_gs_color_options[gs_sldr_hdr_text_color]',
-			'value' => $options['gs_sldr_hdr_text_color'],
+			'value' => mstw_gs_safe_ref( $options, 'gs_sldr_hdr_text_color' ), //$options['gs_sldr_hdr_text_color'],
 			'title'	=> __( 'Header Text Color:', 'mstw-loc-domain' ),
 			'desc'	=> '',
 			'default' => '',
@@ -1768,7 +1785,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			'type' => 'color', 
 			'id' => 'gs_sldr_hdr_divider_color',
 			'name' => 'mstw_gs_color_options[gs_sldr_hdr_divider_color]',
-			'value' => $options['gs_sldr_hdr_divider_color'],
+			'value' => mstw_gs_safe_ref( $options, 'gs_sldr_hdr_divider_color' ), //$options['gs_sldr_hdr_divider_color'],
 			'title'	=> __( 'Header Divider (line) Color:', 'mstw-loc-domain' ),
 			'desc'	=> '',
 			'default' => '',
@@ -1780,7 +1797,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			'type' => 'color', 
 			'id' => 'gs_sldr_game_date_color',
 			'name' => 'mstw_gs_color_options[gs_sldr_game_date_color]',
-			'value' => $options['gs_sldr_game_date_color'],
+			'value' => mstw_gs_safe_ref( $options, 'gs_sldr_game_date_color' ), //$options['gs_sldr_game_date_color'],
 			'title'	=> __( 'Game Date Color:', 'mstw-loc-domain' ),
 			'desc'	=> '',
 			'default' => '',
@@ -1792,7 +1809,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			'type' => 'color', 
 			'id' => 'gs_sldr_game_opponent_color',
 			'name' => 'mstw_gs_color_options[gs_sldr_game_opponent_color]',
-			'value' => $options['gs_sldr_game_opponent_color'],
+			'value' => mstw_gs_safe_ref( $options, 'gs_sldr_game_opponent_color' ), //$options['gs_sldr_game_opponent_color'],
 			'title'	=> __( 'Opponent Color:', 'mstw-loc-domain' ),
 			'desc'	=> '',
 			'default' => '',
@@ -1804,7 +1821,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			'type' => 'color', 
 			'id' => 'gs_sldr_game_location_color',
 			'name' => 'mstw_gs_color_options[gs_sldr_game_location_color]',
-			'value' => $options['gs_sldr_game_location_color'],
+			'value' => mstw_gs_safe_ref( $options, 'gs_sldr_game_location_color' ), //$options['gs_sldr_game_location_color'],
 			'title'	=> __( 'Game Location Color:', 'mstw-loc-domain' ),
 			'desc'	=> '',
 			'default' => '',
@@ -1816,7 +1833,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			'type' => 'color', 
 			'id' => 'gs_sldr_game_time_color',
 			'name' => 'mstw_gs_color_options[gs_sldr_game_time_color]',
-			'value' => $options['gs_sldr_game_time_color'],
+			'value' => mstw_gs_safe_ref( $options, 'gs_sldr_game_time_color' ), //$options['gs_sldr_game_time_color'],
 			'title'	=> __( 'Game Time Color:', 'mstw-loc-domain' ),
 			'desc'	=> '',
 			'default' => '',
@@ -1828,7 +1845,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			'type' => 'color', 
 			'id' => 'gs_sldr_game_links_color',
 			'name' => 'mstw_gs_color_options[gs_sldr_game_links_color]',
-			'value' => $options['gs_sldr_game_links_color'],
+			'value' => mstw_gs_safe_ref( $options, 'gs_sldr_game_links_color' ), //$options['gs_sldr_game_links_color'],
 			'title'	=> __( 'Game Links Color:', 'mstw-loc-domain' ),
 			'desc'	=> '',
 			'default' => '',
