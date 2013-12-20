@@ -54,9 +54,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 	// ----------------------------------------------------------------
 	// Set up localization
 	//
-	add_action( 'init', 'mstw_load_localization' );
+	add_action( 'init', 'mstw_gs_load_localization' );
 		
-	function mstw_load_localization( ) {
+	function mstw_gs_load_localization( ) {
 		load_plugin_textdomain( 'mstw-loc-domain', false, dirname( plugin_basename( __FILE__ ) ) . '/lang/' );
 	} 
 	
@@ -456,7 +456,7 @@ function mstw_gs_delete_plugin_options() {
 		//$output .= '<pre>ATTRIBS:' . print_r( $attribs, true ) . '</pre>';
 		//return $output;
 			
-		$mstw_gs_sched_tab = mstw_gs_build_sched_tab( $attribs ); //$sched, $show_media, $first_dtg, $last_dtg, $games_to_show );
+		$mstw_gs_sched_tab = mstw_gs_build_sched_tab( $attribs );
 		
 		return $output . $mstw_gs_sched_tab;
 	}
@@ -468,7 +468,7 @@ function mstw_gs_delete_plugin_options() {
 // 	Loops through the Game Schedules Custom posts and formats them into a pretty table.
 // ARGUMENTS:
 // 	$args - the display settings and shortcode arguments, properly combined by mstw_gs_shortcode_handler()
-//----------------------------------------------------------------------------------------
+//
 	function mstw_gs_build_sched_tab( $args ) {
 	
 		$output = ''; //This is the return string
