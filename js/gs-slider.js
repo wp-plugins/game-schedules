@@ -21,9 +21,13 @@ jQuery(function($) {
 	
 	$('#gs-slider-left-arrow').click(function(){
 	
+		//alert( 'BEFORE: left_indent= ' + left_indent + ' /slide_distance= ' + slide_distance + ' /' );
+	
 		left_indent = Math.min( left_indent+slide_distance, left_stop );
 
 		$('#schedule-slider').css( {'left' : left_indent } );
+		
+		//alert( 'AFTER: left_indent= ' + left_indent + ' /slide_distance= ' + slide_distance + ' /' );
 			
 	});
 });
