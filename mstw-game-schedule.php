@@ -1311,22 +1311,31 @@ function mstw_gs_build_countdown( $attribs ) {
 		if( $posts ) {
 			// find the next game
 			$next_game = mstw_gs_get_next_game( $posts, current_time( 'timestamp' ) );
-			
-			//$next_game_id = $next_game['next_game_id'];
-			
+
+			//pulls $next_game_number and $next_game_id
 			extract( $next_game, EXTR_OVERWRITE );
 			
-			if ( $next_game_id < 0 ) {
-			//return '<h3>NEXT GAME ID: ' . $next_game_id . '</h3>';
-				//return "<h3>" . __( 'No games later than ', mstw-loc-domain) . date( 'Y-m-d H:i:s', current_time( 'timestamp' ) ) . 
-				//	__( ' found on schedule ', 'mstw-loc-domain' ) . $sched_slug . "</h3>\n";
-				$games_to_show = $attribs['games_to_show'];
-				$games_to_show = ( $games_to_show == '' or $games_to_show == -1 ) ? 3 : $games_to_show;
-				$posts = array_slice( $posts, -1*$games_to_show );
-			}
-			$mstw_gs_slider = mstw_gs_build_slider( $posts, $attribs, $next_game_number+1 );
+			$games_to_show = $attribs['games_to_show'];
 			
-		} else {
+			$games_to_show = ( $games_to_show == '' or $games_to_show == -1 ) ? 3 : $games_to_show;
+			$nbr_of_games = count( $posts );
+			
+			// if $next_game_id == -2 no games were found in the schedule, which should never happen due to the if( $posts ) check above
+			// if $next_game_id == -1 no games were found in the schedule after the current time
+			if ( $next_game_id == -2 ) {
+				return "<h3>" . __( 'No games found on schedule ', 'mstw-loc-domain' ) . $sched_slug . "</h3>\n";
+			} 
+			else if ($next_game_id == -1 ) {
+				$next_game_number = $nbr_of_games - $games_to_show;
+			}
+			
+			//Ya never know when there's only 2 games on a schedule
+			$next_game_number = max( 0, min( $next_game_number, $nbr_of_games - $games_to_show ) );
+			
+			$mstw_gs_slider = mstw_gs_build_slider( $posts, $attribs, $next_game_number+1 );
+				
+		} 
+		else {
 			return "<h3>" . __( 'No games found on schedule ', 'mstw-loc-domain' ) . $sched_slug . "</h3>\n";
 		}
 		
@@ -1347,9 +1356,6 @@ function mstw_gs_build_countdown( $attribs ) {
 	function mstw_gs_build_slider( $games, $atts, $game_number ) { // $schedule_title_label ) {
 	
 	    //return '<pre>' . print_r( $atts, true ) . '</pre>';
-	
-		// Development placeholders for settings and args
-		//$game_number = 5;
 		
 		$sched_ids = explode( ',', $atts['sched'] );
 		

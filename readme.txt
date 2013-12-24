@@ -4,7 +4,7 @@ Donate link: http://shoalsummitsolutions.com
 Tags: sports,games,schedule,sports teams,team schedule,countdown timer  
 Requires at least: 3.3.1
 Tested up to: 3.7.1
-Stable tag: 4.0
+Stable tag: 4.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,6 +13,8 @@ Manages multiple sports team schedules. Includes shortcodes and widgets to displ
 == Description ==
 
 Welcome to the MSTW Game Schedules Plugin from [Shoal Summit Solutions](http://shoalsummitsolutions.com/).
+
+**Note that version 4.0.1 is a maintenance build that corrects a number of bugs. Please review the change log.**
 
 The MSTW Game Schedules plugin manages multiple sports team schedules including: game dates and times, opponents, locations, results, and links to media (print stories or video on games). It features a countdown timer from the current time to then next game or next home game. Shortcodes and widgets are available to display schedule tables, sliders, and countdown timers.
 
@@ -138,7 +140,8 @@ otherwise Wordpress overwrites the ALERTS set by PHP.INI`
 == Changelog ==
 
 = 4.0.1 =
-Bug fixes:
+Lots of clean-up intended to suppress PHP Notices and Warnings plus bug fixes:
+* Problem with Schedule slider at the end of a season
 * Problem with Schedule DB entries, Team selection from Teams DB being ignored
 * Problem with Game entries, Location selection from Locations Plugin DB being ignored
 * Problem with table and slider opponent name formats being mixed up (cut and paste error)
