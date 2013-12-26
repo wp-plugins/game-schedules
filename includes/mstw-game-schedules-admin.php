@@ -996,11 +996,11 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 		
 		$options = get_option( 'mstw_gs_options' );
 		
-		$date_label = ( $options['date_label'] == '' ? __( 'Date', 'mstw-loc-domain' ) : $options['date_label'] );
-		$opponent_label = ( $options['opponent_label'] == '' ? __( 'Opponent', 'mstw-loc-domain' ) : $options['opponent_label'] );
-		$location_label = ( $options['location_label'] == '' ? __( 'Location', 'mstw-loc-domain' ) : $options['location_label'] );
-		$time_label = ( $options['time_label'] == '' ? __( 'Time', 'mstw-loc-domain' ) : $options['time_label'] );
-		$media_label = ( $options['media_label'] == '' ? __( 'Media', 'mstw-loc-domain' ) : $options['media_label'] );
+		$date_label = ( $options['date_label'] == '' ? __( 'Date', 'mstw-loc-domain' ) : __( $options['date_label'], 'mstw-loc-domain' ) );
+		$opponent_label = ( $options['opponent_label'] == '' ? __( 'Opponent', 'mstw-loc-domain' ) : __( $options['opponent_label'], 'mstw-loc-domain' ) );
+		$location_label = ( $options['location_label'] == '' ? __( 'Location', 'mstw-loc-domain' ) : __( $options['location_label'], 'mstw-loc-domain' ) );
+		$time_label = ( $options['time_label'] == '' ? __( 'Time', 'mstw-loc-domain' ) : __( $options['time_label'], 'mstw-loc-domain' ) );
+		$media_label = ( $options['media_label'] == '' ? __( 'Media', 'mstw-loc-domain' ) : __( $options['media_label'], 'mstw-loc-domain' ) );
 
 		$columns = array(
 			'cb' => '<input type="checkbox" />',
