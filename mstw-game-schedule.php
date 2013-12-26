@@ -54,10 +54,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 	// ----------------------------------------------------------------
 	// Set up localization
 	//
-	add_action( 'init', 'mstw_gs_load_localization' );
+	add_action( 'plugins_loaded', 'mstw_gs_load_localization' );
 		
 	function mstw_gs_load_localization( ) {
 		load_plugin_textdomain( 'mstw-loc-domain', false, dirname( plugin_basename( __FILE__ ) ) . '/lang/' );
+		//echo dirname( plugin_basename( __FILE__ ) ) . '/lang/';
+		//die();
 	} 
 	
 	// ----------------------------------------------------------------
@@ -546,21 +548,21 @@ function mstw_gs_delete_plugin_options() {
 			$output .= '<table class="mstw-gs-table">'; 
 			$output .= "<thead class='mstw-gs-table-head mstw-gs-table-head_" . $scheds[0] . "'><tr>";
 			if( $show_date ) { 
-				$output .= '<th>'. $date_label . '</th>';
+				$output .= '<th>' . __( $date_label, 'mstw-loc-domain' ) . '</th>'; //'<th>'. $date_label . '</th>';
 			}
 			
-			$output .= '<th>'. $opponent_label . '</th>';
+			$output .= '<th>'. __( $opponent_label, 'mstw-loc-domain' ) . '</th>';
 			
 			if( $show_location ) {
-				$output .= '<th>'. $location_label . '</th>';
+				$output .= '<th>'. __( $location_label, 'mstw-loc-domain' ) . '</th>';
 			}
 			
 			if( $show_time ) {
-				$output .= '<th>'. $time_label . '</th>';
+				$output .= '<th>'. __( $time_label, 'mstw-loc-domain' ) . '</th>';
 			}
 			
 			if ( $show_media > 0 ) { 
-				$output .= '<th>'.  $media_label . '</th>';
+				$output .= '<th>'.  __( $media_label, 'mstw-loc-domain' ) . '</th>';
 			}
 			
 			$output .= '</tr></thead>';
@@ -1818,12 +1820,12 @@ class mstw_gs_sched_widget extends WP_Widget {
         	<table class="mstw-gs-sw-tab mstw-gs-sw-tab-<?php echo $sched_id; ?>">
         	<thead class="mstw-gs-sw-tab-head mstw-gs-sw-tab-head-<?php echo $sched_id; ?>"><tr>
 				<?php if( $options['show_date'] == 1 ) { ?>
-					<th><?php echo $options['date_label']; ?></th>
+					<th><?php _e( $options['date_label'], 'mstw-loc-domain' ); ?></th>
 				<?php } ?>
 				<?php if( $options['opponent_label'] == "" ) { ?>
 					<th><?php _e( 'Opponent', 'mstw-loc-domain' ); ?></th>
 				<?php } else {?>
-					<th><?php echo $options['opponent_label']; ?></th>
+					<th><?php _e( $options['opponent_label'], 'mstw-loc-domain' ); ?></th>
 				<?php } ?>
 				
 					
