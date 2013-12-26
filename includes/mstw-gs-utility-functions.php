@@ -59,7 +59,7 @@
 				'intro'				=> __( 'Time to kickoff', 'mstw-loc-domain' ),
 				
 				//default slider shortcode arguments
-				'title'				=> 'Schedule',
+				'title'				=> __( 'Schedule', 'mstw-loc-domain' ),
 				'link_label' 		=> '',
 				'link' 				=>'',
 
