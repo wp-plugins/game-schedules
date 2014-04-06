@@ -409,11 +409,23 @@ mstw-gs-sw-odd td a:hover {
 	color: #AA0000;	/*49er red*/
 }
 
+.mstw-gs-cdt-dtg.mstw-gs-cdt-dtg_49ers-2014 {
+	color: #AA0000;	/*49er red*/
+}
+
  .mstw-gs-cdt-opponent.mstw-gs-cdt-opponent_49ers, .mstw-gs-cdt-opponent.mstw-gs-cdt-opponent_49ers a {
 	color: #AA0000;	/*49er red*/
 }
 
+ .mstw-gs-cdt-opponent.mstw-gs-cdt-opponent_49ers-2014, .mstw-gs-cdt-opponent.mstw-gs-cdt-opponent_49ers-2014 a {
+	color: #AA0000;	/*49er red*/
+}
+
 .mstw-gs-cdt-location.mstw-gs-cdt-location_49ers, .mstw-gs-cdt-location.mstw-gs-cdt-location_49ers a {
+	color: #C8AA76; /*49er gold*/
+}
+
+.mstw-gs-cdt-location.mstw-gs-cdt-location_49ers-2014, .mstw-gs-cdt-location.mstw-gs-cdt-location_49ers-2014 a {
 	color: #C8AA76; /*49er gold*/
 }
  
@@ -421,7 +433,16 @@ mstw-gs-sw-odd td a:hover {
 	color: #AA0000;	/*49er red*/
 }
 
+.mstw-gs-cdt-intro.mstw-gs-cdt-intro_49ers-2014 {
+	color: #AA0000;	/*49er red*/
+}
+
 .mstw-gs-cdt-countdown.mstw-gs-cdt-countdown_49ers {
+	color: #AA0000;	/*49er red*/
+	background-color: #C8AA76; /*49er gold*/
+}
+
+.mstw-gs-cdt-countdown.mstw-gs-cdt-countdown_49ers-2014 {
 	color: #AA0000;	/*49er red*/
 	background-color: #C8AA76; /*49er gold*/
 }
