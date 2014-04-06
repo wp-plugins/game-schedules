@@ -20,9 +20,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-	// Turn off error reporting
-	//error_reporting(0);
-	
+		
 	// ----------------------------------------------------------------
 	// Prevents uninitialized string errors 
 	//
@@ -33,8 +31,11 @@
 	// ----------------------------------------------------------------
 	// Load the admin utils if necessary; die if file can't be loaded
 	//
-	if ( is_admin( ) and !function_exists( 'mstw_gs_admin_utils_loaded' ) ) {
-		require_once 'mstw-gs-admin-utils.php';
+	if ( is_admin( ) ) {
+		//die( 'You are an admin!' );
+		require 'mstw-gs-admin-utils.php';
+	} else {
+		die( 'You are not an admin!' );
 	}
 	
 	// ----------------------------------------------------------------
@@ -387,7 +388,14 @@
 				echo "</tr>";
 				
 			}
-		} //End: if (is_plugin_active) 
+		} //End: Game Locations plugin is active
+		else { //Game Locations plugin is not active
+		?>
+			<tr align="top">
+				<th>Install the <a href='http://wordpress.org/game-locations' target='_blank'>MSTW Game Locations plugin</a> to use this feature.</th>
+			</tr>
+		<?php
+		}
 		?>
 		
 		</table>
@@ -411,7 +419,7 @@
 									'label' 	=> __( 'Unique Schedule ID:', 'mstw-loc-domain' ),
 									'maxlength' => $std_length,
 									'size' 		=> $std_size,
-									'notes' 	=> 'Will be converted to WP \'slug\' format(128 character max) E.g., "2013 Varsity Football" will be converted to "2013-varsity-football"',
+									'notes' 	=> __( 'Will be converted to WP \'slug\' format(128 character max) E.g., "2013 Varsity Football" will be converted to "2013-varsity-football"', 'mstw-loc-domain' ),
 									),
 							);
 							
@@ -580,14 +588,16 @@
 	   <table class="form-table">
 	   
 	   <?php
-	   $admin_fields = array( 	'mstw_gs_sched_id' => array (
-									'type' => 'text',
-									'value' => $mstw_gs_sched_id,
-									'label' => __( 'Schedule ID:', 'mstw-loc-domain' ),
-									'maxlength' => 128,
-									'size' => 30,
-									'notes' => 'Will be converted to WP \'slug\' format. E.g., "2013 Varsity Football" will be converted to "2013-varsity-football". (128 character max)',
-								),
+	   mstw_gs_build_schedule_input( $mstw_gs_sched_id );
+	   
+	   $admin_fields = array( 	//'mstw_gs_sched_id' => array (
+								//'type' => 'text',
+								//'value' => $mstw_gs_sched_id,
+								//'label' => __( 'Schedule ID:', 'mstw-loc-domain' ),
+								//'maxlength' => 128,
+								//'size' => 30,
+								//'notes' => 'This is deprecated, and is here for backward compatibility only. It will be converted to WP "slug" format. E.g., "2013 Varsity Football" will be converted to "2013-varsity-football". (128 character max)',
+								//),
 								'gs_game_date' => array (
 									'type' => 'text',
 									'value' => date( 'Y-m-d', $mstw_gs_unix_dtg ),
@@ -641,7 +651,7 @@
 					}
 					?>
 				</select>
-			<br/><span class='description'>If TBA is anything other than '---', then it is used for the game time whether or not a time is entered.</span></td>
+			<br/><span class='description'><?php _e( 'If TBA is anything other than "---", then it is used for the game time whether or not a time is entered.', 'mstw-loc-domain' ) ?></span></td>
 			<!--<td><?php //echo '$curr_hrs:$curr_mins: ' . $curr_hrs .':' . $curr_mins; ?> </td>-->
 		</tr>
 		
@@ -823,6 +833,40 @@
 	<?php        	
 	}
 	
+	//-----------------------------------------------------------
+	//	Creates a dropdown menu of existing schedules
+	//	Called from mstw_gs_create_games_ui()
+	//
+	
+	function mstw_gs_build_schedule_input( $current_sched ) {
+			
+		$scheds = get_posts(array( 'numberposts' => -1,
+						  'post_type' => 'mstw_gs_schedules',
+						  'orderby' => 'title',
+						  'order' => 'ASC' 
+						));						
+
+		if( $scheds ) {
+			echo '<tr valign="top">';
+			echo '<th>' . __( 'Select Schedule:', 'mstw-loc-domain' ) . '</th>';
+			echo "<td><select id='mstw_gs_sched_id' name='mstw_gs_sched_id'>";
+			
+			echo "<option value='-1'> ---- </option>";
+			foreach( $scheds as $sched ) {
+				//$post_data = get_post($post->ID, ARRAY_A);
+				$slug = $sched->post_name;
+				$selected = ( $current_sched == $slug ) ? 'selected="selected"' : '';
+				echo "<option value='" . $slug . "'" . $selected . ">" .  get_the_title( $sched->ID ) . "</option>";
+			}
+			
+			echo "</select>\n";
+			//echo "<br/><span class='description'>Let's see if this works ... current_sched: " . $current_sched . " ... slug: " . $slug . "</span></td>\n";
+			echo "</tr>\n";
+			
+		}
+		
+	} //End: function mstw_gs_build_schedule_input
+	
 	function mstw_gs_build_teams_input( $current_team ) {
 			
 		$teams = get_posts(array( 'numberposts' => -1,
@@ -858,6 +902,12 @@
 	add_action( 'save_post', 'mstw_gs_save_meta' );
 
 	function mstw_gs_save_meta( $post_id ) {
+	
+		// check if this is an auto save routine. 
+		// If it is our form has not been submitted, so don't do anything
+		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) 
+			return $post_id;
+			
 		// Process scheduled_game updates
 		if( isset( $_POST['post_type'] ) ) {
 			// SCHEDULED_GAMES POST TYPE
@@ -870,13 +920,25 @@
 				
 				// SCHEDULE ID
 				// If schedule id was not set, default to 1 :: could happen!
-				if ( isset( $_POST['mstw_gs_sched_id'] ) ) {
+				
+				//echo 'Schedule ID: "' . $_POST['mstw_gs_sched_id'] . '"' . "\n";
+				
+				//$logic = ( $_POST['mstw_gs_sched_id'] != -1 ? 1 : 0 );
+				//echo 'logic check: ' . $logic . "\n";
+				//echo 'isset( $_POST[mstw_gs_sched_id]: ' . isset( $_POST['mstw_gs_sched_id'] );
+				//die();
+				if ( isset( $_POST['mstw_gs_sched_id'] ) and 
+					 !empty( $_POST['mstw_gs_sched_id'] ) and 
+					( $_POST['mstw_gs_sched_id'] != -1 ) ) {
 					$mstw_id = sanitize_title( $_POST['mstw_gs_sched_id'], '1' );
+					update_post_meta( $post_id, '_mstw_gs_sched_id', $mstw_id );
 				}
-				else {  //$_POST['mstw_gs_sched_id'] is not set
-					$mstw_id = '1';
+				else {  //Throw an error and exit
+					//$mstw_id = sanitize_title( $_POST['mstw_gs_sched_id'], '1' );
+					add_action( 'admin_notices', 'mstw_gs_no_schedule_notice' );
+					//die( 'No schedule' );
+					return;
 				}
-				update_post_meta( $post_id, '_mstw_gs_sched_id', $mstw_id );
 				
 				$date_only_str = strip_tags( trim( $_POST[ 'gs_game_date' ] ) );
 				//$unix_date = strtotime( $date_only_str );
@@ -986,6 +1048,19 @@
 		return;
 		
 	} //End: mstw_gs_save_meta()
+	
+	// ----------------------------------------------------------------
+	// Display admin notice if no schedule is set
+	// Called by admin_notices hook set in mstw_gs_save_meta( )
+	//
+	function mstw_gs_no_schedule_notice( ) {
+		//print the message
+		echo '<div id="message">
+			<p>metabox as errors on save message here!!!</p>
+			</div>';
+		//make sure to remove notice after its displayed so its only displayed when needed.
+		remove_action('admin_notices', 'mstw_gs_no_schedule_notice');
+	} //End: mstw_gs_no_schedule_notice( )
 
 // ----------------------------------------------------------------
 // Set up the All Games table
@@ -1005,16 +1080,16 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 		$columns = array(
 			'cb' => '<input type="checkbox" />',
 			'title' => __( 'Title', 'mstw-loc-domain' ),
-			'sched_id' => __( 'Schedule', 'mstw-loc-domain' ),
+			'sched_id' => __( 'Schedule ID', 'mstw-loc-domain' ),
 			//'sched_year' => __( 'Year', 'mstw-loc-domain' ),
-			'game_date' => $date_label,
-			'game_time' => $time_label,
+			'game_date' => __( 'Date', 'mstw-loc-domain' ), //$date_label,
+			'game_time' => __( 'Time', 'mstw-loc-domain' ), //$time_label,
 			'opponent' => $opponent_label,
-			'opponent_link' => $opponent_label . ' ' . __( 'Link', 'mstw-loc-domain' ),
+			//'opponent_link' => $opponent_label . ' ' . __( 'Link', 'mstw-loc-domain' ),
 			'game_result' => __( 'Result', 'mstw-loc-domain' ),
-			'gl_location' => $location_label,
-			'location' => __( 'Custom', 'mstw-loc-domain' ) . ' ' . $location_label,
-			'location_link' => __( 'Custom', 'mstw-loc-domain' ) . ' ' .  $location_label . ' ' . __( 'Link', 'mstw-loc-domain' ),
+			//'gl_location' => $location_label,
+			//'location' => __( 'Custom', 'mstw-loc-domain' ) . ' ' . $location_label,
+			//'location_link' => __( 'Custom', 'mstw-loc-domain' ) . ' ' .  $location_label . ' ' . __( 'Link', 'mstw-loc-domain' ),
 			
 			/* 'debug' => __('Debug-Remove') */
 		);
@@ -1101,11 +1176,14 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 			case 'opponent' :
 				// Get the post meta
 				$mstw_gs_opponent = get_post_meta( $post_id, '_mstw_gs_opponent', true );
+				$mstw_gs_opponent_team = get_post_meta( $post_id, 'gs_opponent_team', true );
 
-				if ( empty( $mstw_gs_opponent ) )
-					_e( 'No Opponent', 'mstw-loc-domain' );
-				else
+				if ( !empty( $mstw_gs_opponent_team ) and ( $mstw_gs_opponent_team != -1 ) )
+					printf( '%s', get_the_title( $mstw_gs_opponent_team ) );
+				else if ( !empty( $mstw_gs_opponent ) )
 					printf( '%s', $mstw_gs_opponent );
+				else
+					_e( 'No Opponent', 'mstw-loc-domain' );
 
 				break;
 
@@ -1374,7 +1452,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 		$capability = apply_filters( 'mstw_gs_user_capability', 'edit_others_posts', 'display_settings_menu_item' );
 		$page = add_submenu_page( 	'edit.php?post_type=scheduled_games', 
 							'Game Schedule Settings', 	//page title
-							'Display Settings', 		//menu title
+							__( 'Display Settings', 'mstw-loc-domain' ), 		//menu title
 							$capability, 			// Capability required to see this option.
 							'mstw_gs_settings', 		// Slug name to refer to this menu
 							'mstw_gs_option_page' );	// Callback to output content
@@ -1394,6 +1472,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 		add_submenu_page(	'edit.php?post_type=scheduled_games',
 							'Import Schedule from CSV File',	//page title
 							'CSV Schedule Import',				//menu title
+							__( 'CSV Schedule Import', 'mstw-loc-domain' ), 		//menu title
 							$capability,						//capability to access
 							'mstw_gs_csv_import',				//slug name for menu
 							array( $plugin, 'form' )			//callback to display menu
