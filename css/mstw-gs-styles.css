@@ -5,6 +5,12 @@
  ************************************************************
  */
  
+ p.sample-code {
+	margin-bottom: .25em;
+	font-family: serif;
+	color: #A9A9A9;  /* dark gray */
+	font-size: .8em;
+ }
  
 /******************************************************
  * Styles for ALL OF GAME SCHEDULES (gs)           
