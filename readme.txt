@@ -139,6 +139,10 @@ otherwise Wordpress overwrites the ALERTS set by PHP.INI`
 
 == Changelog ==
 
+= 4.1 =
+Clean-up and new features.
+* Added CSS tags to allow COLUMNS in schedule tables to be customized.
+
 = 4.0.1 =
 Lots of clean-up intended to suppress PHP Notices and Warnings plus bug fixes:
 * Problem with Schedule slider at the end of a season

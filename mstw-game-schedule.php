@@ -484,10 +484,6 @@ function mstw_gs_delete_plugin_options() {
 			return '<h3>' . __( 'No schedule specified.', 'mstw-loc-domain' ) . '</h3>';
 		}
 		
-		// DO WE REALLY NEED THIS?
-		// Get the admin options settings
-		//$options = get_option( 'mstw_gs_options' );
-		
 		//$output .= '<pre>mstw_gs_build_tab: $args:' . print_r( $args, true ) . '</pre>';
 		//$output .= '<pre>ATTRIBS:' . print_r( $attribs, true ) . '</pre>';
 		//return $output;
@@ -548,21 +544,22 @@ function mstw_gs_delete_plugin_options() {
 			$output .= '<table class="mstw-gs-table">'; 
 			$output .= "<thead class='mstw-gs-table-head mstw-gs-table-head_" . $scheds[0] . "'><tr>";
 			if( $show_date ) { 
-				$output .= '<th>' . __( $date_label, 'mstw-loc-domain' ) . '</th>'; //'<th>'. $date_label . '</th>';
+				$label = sanitize_title( $date_label );
+				$output .= "<th class='col-1'>" . __( $date_label, 'mstw-loc-domain' ) . '</th>'; //'<th>'. $date_label . '</th>';
 			}
 			
-			$output .= '<th>'. __( $opponent_label, 'mstw-loc-domain' ) . '</th>';
+			$output .= '<th class="col-2">'. __( $opponent_label, 'mstw-loc-domain' ) . '</th>';
 			
 			if( $show_location ) {
-				$output .= '<th>'. __( $location_label, 'mstw-loc-domain' ) . '</th>';
+				$output .= '<th class="col-3">'. __( $location_label, 'mstw-loc-domain' ) . '</th>';
 			}
 			
 			if( $show_time ) {
-				$output .= '<th>'. __( $time_label, 'mstw-loc-domain' ) . '</th>';
+				$output .= '<th class="col-4">'. __( $time_label, 'mstw-loc-domain' ) . '</th>';
 			}
 			
 			if ( $show_media > 0 ) { 
-				$output .= '<th>'.  __( $media_label, 'mstw-loc-domain' ) . '</th>';
+				$output .= '<th class="col-5">'.  __( $media_label, 'mstw-loc-domain' ) . '</th>';
 			}
 			
 			$output .= '</tr></thead>';
@@ -585,7 +582,12 @@ function mstw_gs_delete_plugin_options() {
 					$row_class .= ' mstw-gs-home';
 				
 				$row_tr = '<tr class="' . $row_class . '">';
-				$row_td = '<td class="' . $row_class . '">'; 
+				//$row_td = '<td class="' . $row_class . '">';
+				$td_1 = '<td class="' . $row_class . ' col-1">';
+				$td_2 = '<td class="' . $row_class . ' col-2">';
+				$td_3 = '<td class="' . $row_class . ' col-3">';
+				$td_4 = '<td class="' . $row_class . ' col-4">';
+				$td_5 = '<td class="' . $row_class . ' col-5">';
 				
 				// create the row
 				$row_string = $row_tr;			
@@ -593,22 +595,18 @@ function mstw_gs_delete_plugin_options() {
 				// column 1: Build the game date in a specified format
 				if ( $show_date ) {
 					$new_date_string = mstw_date_loc( $dtg_format, (int)get_post_meta( $post->ID, '_mstw_gs_unix_dtg', true ) );
-					//$new_date_string = $mstw_gs_dtg_format;
-					
-					//$new_date_string = date( $mstw_gs_dtg_format, get_post_meta( $post->ID, '_mstw_gs_unix_date', true) );
-					
-					$row_string = $row_string. $row_td . $new_date_string . '</td>';
-					//$row_string = $row_string. $row_td . get_post_meta( $post->ID, '_mstw_gs_unix_date', true ) . '</td>';
+
+					$row_string = $row_string. $td_1 . $new_date_string . '</td>';	
 				}
 				
 				// column 2: create the opponent entry ALWAYS SHOWN
 				$opponent_entry = mstw_gs_build_opponent_entry( $post, $args, "table" );
-				$row_string =  $row_string . $row_td . $opponent_entry . '</td>';
+				$row_string =  $row_string . $td_2 . $opponent_entry . '</td>';
 				
 				// column 3: create the location entry
 				if ( $show_location ) {
 					$location_entry = mstw_gs_build_location_entry( $post, $args );
-					$row_string =  $row_string . $row_td . $location_entry . '</td>';
+					$row_string =  $row_string . $td_3 . $location_entry . '</td>';
 				}
 				
 				// column 4: create the time/results entry
@@ -620,7 +618,7 @@ function mstw_gs_delete_plugin_options() {
 					// If there is a game result, stick it in and we're done
 					$game_result = get_post_meta( $post->ID, '_mstw_gs_game_result', true); 
 					if ( $game_result != '' ) {
-						$row_string .=  $row_td . $game_result . '</td>';
+						$row_string .=  $td_4 . $game_result . '</td>';
 					}
 					else {	
 						// There's no game result, so add a game time
@@ -629,14 +627,13 @@ function mstw_gs_delete_plugin_options() {
 						
 						if ( $time_is_tba != '' ) {	
 							//Time is TBA. Stick it in and we're done
-							$row_string .=  $row_td . $time_is_tba . '</td>';
+							$row_string .=  $td_4 . $time_is_tba . '</td>';
 						}
 						else {	
 							//Time is not TBA. Build the time string from the unix timestamp
 							$unix_dtg = get_post_meta( $post->ID, '_mstw_gs_unix_dtg', true );
 							$time_str = date( $time_format, $unix_dtg );
-							//$row_string .=  $row_td . $unix_dtg . '</td>';
-							$row_string .=  $row_td . $time_str . '</td>';
+							$row_string .=  $td_4 . $time_str . '</td>';
 						}	
 					}
 				}
@@ -644,7 +641,7 @@ function mstw_gs_delete_plugin_options() {
 				// column 5: create the media listings in a pretty format 
 				
 				if( $show_media > 0 ) { //if ( $show_media ) {
-					$media_links = $row_td . "";
+					$media_links = $td_5 . "";
 					
 					$mstw_media_label_1 = trim( get_post_meta($post->ID, '_mstw_gs_media_label_1', true ) );
 					if ( $mstw_media_label_1 <> "" ) {
