@@ -484,6 +484,9 @@ function mstw_gs_delete_plugin_options() {
 			return '<h3>' . __( 'No schedule specified.', 'mstw-loc-domain' ) . '</h3>';
 		}
 		
+		//This changes if and only if last_dtg == now
+		$sort_order = 'ASC';
+		
 		//$output .= '<pre>mstw_gs_build_tab: $args:' . print_r( $args, true ) . '</pre>';
 		//$output .= '<pre>ATTRIBS:' . print_r( $attribs, true ) . '</pre>';
 		//return $output;
@@ -501,22 +504,22 @@ function mstw_gs_delete_plugin_options() {
 		}
 		else { 
 			$first_dtg = strtotime( $first_dtg );
-		}
-				
+		}		
 		$first_dtg = ( $first_dtg <= 0 ? 1 : $first_dtg );
 		
-		$last_dtg = strtotime( $last_dtg );
+		if ( $last_dtg == 'now' ) {
+			$sort_order = 'DESC';
+			$last_dtg = time( );
+		}
+		else { 
+			$last_dtg = strtotime( $last_dtg );
+		}
 		//echo '<p> last_dtg_str: ' . $last_dtg_str . ' last_dtg_int: ' . $last_dtg. '</p>';
 		//echo '<p> reverse it: ' . date( 'Y m d' , $last_dtg ) . '</p>';
-		
-		$last_dtg = ( $last_dtg <= 0 ? PHP_INT_MAX : $last_dtg );
-		
-		//if ( $last_dtg <= 0 ) {  //strtotime() failed
-		//	$last_dtg = PHP_INT_MAX;
-		//}	
+		$last_dtg = ( $last_dtg <= 0 ? PHP_INT_MAX : $last_dtg );	
 		
 		// Get the games posts
-		$posts = get_posts(array( 'numberposts' => $games_to_show,
+		$posts = get_posts( array( 'numberposts' => $games_to_show,
 								  'post_type' => 'scheduled_games',
 								  'meta_query' => array(
 													'relation' => 'AND',
@@ -535,8 +538,8 @@ function mstw_gs_delete_plugin_options() {
 								  
 								  'orderby' => 'meta_value', 
 								  'meta_key' => '_mstw_gs_unix_dtg',
-								  'order' => 'ASC' 
-								));						
+								  'order' => $sort_order 
+								) );						
 		
 		if ( $posts ) {
 			// Make table of posts
