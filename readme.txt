@@ -142,6 +142,7 @@ otherwise Wordpress overwrites the ALERTS set by PHP.INI`
 = 4.1 =
 Clean-up and new features.
 * Added CSS tags to allow COLUMNS in schedule tables to be customized.
+* Added last_dtg=now, which provides the ability to display the last N results.
 
 = 4.0.1 =
 Lots of clean-up intended to suppress PHP Notices and Warnings plus bug fixes:
