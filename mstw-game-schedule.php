@@ -688,7 +688,8 @@ function mstw_gs_delete_plugin_options() {
 					$row_string .= $media_links . '</td>';  //			Should have a </tr> here??
 				}
 				
-				$output = $output . $row_string;
+				//$output = $output . $row_string;
+				$output .= $row_string . '</tr>';
 				
 				$row_cnt = 1- $row_cnt;  // Get the styles right
 				
@@ -830,7 +831,7 @@ function mstw_gs_delete_plugin_options() {
 		$venue_format = $options['venue_format'];	//Name only  or City, ST (name)
 		$venue_link_format = $options['venue_link_format']; //None, venue link, map link
 	
-		$location_entry = "TBA"; //default return value
+		$location_entry = ""; //default return value
 		
 		//location entry in game post
 		$location = get_post_meta( $post->ID, '_mstw_gs_location', true );
@@ -1477,10 +1478,17 @@ function mstw_gs_build_countdown( $attribs ) {
 			
 			$location_entry = mstw_gs_build_location_entry( $game, $options );
 			
-			$ret .= "<div class='location location" . $css_tag . " pad'>\n";
-				//$ret .= "@ " . get_post_meta( $game->ID, '_mstw_gs_location', true );
-				$ret .= "@ " . $location_entry;
-			$ret .= "</div> <!--end .location-->\n";
+			if( trim( $location_entry ) != '' and !empty( $location_entry ) ) {
+				$ret .= "<div class='location location" . $css_tag . " pad'>\n";
+					//$ret .= "@ " . get_post_meta( $game->ID, '_mstw_gs_location', true );
+				if( $location_entry[0] != '&' ) {
+					$ret .= "@ ";
+				}
+					
+				$ret .= $location_entry;
+					
+				$ret .= "</div> <!--end .location-->\n";
+			}
 			
 			$ret .= "<div class='time-result time-result" . $css_tag . " pad'>\n";
 			
