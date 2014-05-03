@@ -4,7 +4,7 @@ Donate link: http://shoalsummitsolutions.com
 Tags: sports,games,schedule,sports teams,team schedule,countdown timer  
 Requires at least: 3.3.1
 Tested up to: 3.9
-Stable tag: 4.0.1
+Stable tag: 4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,88 +18,33 @@ The MSTW Game Schedules plugin manages multiple sports team schedules including:
 
 * Schedule tables can now display the last N results from the current time.
 * New CSS tags (by team) allow COLUMNS in schedule tables to be customized.
+* Added contextual help to Display Settings admin screen.
 
 = Notes =
 
-* The Game Schedule plugin is the second in a set of plugins supporting the My Sports Team Website (MSTW) framework for sports team websites. Others include Game Locations, Team Rosters, Coaching Staffs, and League Standings, which are all available on [WordPress.org](http://wordpress.org/extend/plugins). [Learn more about MSTW](http://shoalsummitsolutions.com/my-sports-team-website/).
+* The Game Schedule plugin is part of the My Sports Team Website (MSTW) framework for sports team and league websites. Others include Game Locations, Team Rosters, Coaching Staffs, and League Standings, which are all available on [WordPress.org](http://wordpress.org/extend/plugins). [Learn more about MSTW](http://shoalsummitsolutions.com/my-sports-team-website/).
 
 
 = Helpful Links =
-
-* [**Read the complete user's manual at shoalsummitsolutions.com -»**](http://shoalsummitsolutions.com/category/gs-plugin)
+* [**See what the plugin and do for your website on the MSTW Dev Site -»**](http://dev.shoalsummitsolutions.com/)
+* [**Read the user's manual at shoalsummitsolutions.com -»**](http://shoalsummitsolutions.com/category/gs-plugin)
 
 == Installation ==
 
-**NOTES**
+**IMPORTANT!**
 
 1. *If you are upgrading, please read the upgrade notes. You shouldn't lose schedule data but you COULD easily lose and changes you've made to the plugin stylesheet.*
-
 2. *Upon installation make sure the WP default timezone is set correctly in the Wordpress Settings->General screen.*
 
-The **AUTOMATED** way:
+All the normal installation methods for WordPress plugins work:
 
-1. Go to the Plugins->Installed plugins page in Wordpress Admin.
-2. Click on Add New.
-3. Search for Game Schedules.
-4. Click Install Now.
-5. Activate the plugin.
-6. Use the new Games menu to create and manage your schedules.
-
-The **MANUAL** way:
-
-1. Download the plugin from the wordpress site.
-2. Copy the entire /mstw-game-schedule/ directory into your /wp-content/plugins/ directory.
-3. Go to the Wordpress Admin Plugins page and activate the plugin.
-4. Use the new Games menu to create and manage your schedules.
+1. Go to the Plugins->Installed plugins screen in Wordpress Admin. Click on Add New. Search for Game Schedules. Install it.
+2. Download the plugin (.zip file) from WordPress.org. Go to the Plugins->Installed plugins screen in Wordpress Admin. Click on Add New. Click on the Upload link. Find the downloaded .zip file on your computer. Install it.
+3. Download the plugin (.zip file) from WordPress.org. Unzip the file. Upload the extracted plugin folder to your website's wp-content/plugins directory using an FTP client or your hosting provider's file manager app. Activate it on the Plugins->Installed plugins screen in WordPress Admin.
 
 == Frequently Asked Questions ==
 
-= How do I get the team logos to work in my schedule tables and sliders? =
-Team logos require use of the new Teams and Schedules Custom Data Types. While there is quite a bit of setup required to enable these new cool features, the setup work then makes it very easy to enter games. Please read the full documentation on [shoalsummitsolutions.com](http://shoalsummitsolutions.com/category/users-manuals/gs-plugin/).
-
-= Why is the plugin called "Game Schedules"? Couldn't I use it for other event schedules? =
-Sure. The software doesn't know or care that the entries are "games". The references are to "game schedule" and "sched_games", only because that was original purpose of the plugin. Note however that it has no 'calendar' features, it just provides a simple list of events as a table.
-
-= Can I set up separate schedules for different teams and/or different seasons? =
-Yes. A unique schedule ID defines each schedule. It is the primary argument for shortcodes and the primary option for the widgets. For all practical purposes, you can set up many schedules as you want. So for example schedule '2012-varsity' could be the varsity schedule 2012, schedule '2' the JV in 2012, schedule 'frosh-basketball' the frosh in 2012, and schedules 4-6 could be the same teams in 2013. (Schedule ID's must be in WordPress 'slug format'. I suggest using descriptive slugs, but numbers would work just fine.)
-
-= Can I build schedules for entire leagues with this plugin? =
-While many team schedules can be created and displayed, each display, whether it be a schedule table, slider, or countdown timer, is for ONE team's schedule.  The plugin will not display a schedule for an entire league at this time. 
-
-= I live in Split, Croatia (or wherever). Does the plugin support other languages? =
-The plugin supports WordPress localization (translation) as of version 2.0. Several translations are included in the /lang directory, including Croatian (Thanks Juraj!), Spanish (Thanks Roberto!), German (Thanks Chris!), and Finnish (Thanks Lauri!).
-
-= How do I change the look (text colors, background colors, etc.) of the schedule or the countdown timer? =
-A rich set of color controls are available on the Display Settings admin screen. You can also edit the plugin's stylesheet, mstw-gs-styles.css, located in the game-schedule/css directory. It is short, simple, and well documented. Styling tags are provided so if you have multiple teams on one site each schedule and slider can be customized for each team. For example, see [the examples on the MSTW dev site](http://dev.shoalsummitsolutions.com).
-
-= How do I change the date-time group formats for my locale? =
-Seven custom time and date formats are available on the Display Settings Admin page. If you can't live with one of those seven formats, you can specify a custom date format using the php date() function format strings.
-
-= The formats are right, but my dates and times or the countdown time are not still not correct. What's wrong? =
-The date and time displays on both the user and the admin pages as well as the countdown timer are driven by the default WordPress time zone, which is set on the WordPress Settings->General screen. *It is important that you set the correct timezone in the WordPress Settings -> General Settings BEFORE entering any schedule data.*
-
-= What can I do if I have more than three media links? =
-If you are that popular, why not create one media link on the schedule that goes to a page of all your links? Or, you can hack the plugin code. I've considered a setting for "number of media links" (the JV and Frosh teams typically have none, at least in San Diego), but that's low on my list right now. (BTW, you can use the "media links" for any purpose you wish by relabeling the column.)
-
-= Can I display more than one schedule on a single page by using multiple shortcodes? =
-Yes. You can display multiple schedule tables and countdown timers on a single page using the [shortcodes].
-
-= All my data for a game got "zero'ed out" when editing it, what happened? =
-Either: 
-
-* You edited a game, updated it, and when you exited the game editor, it asked if you really wanted to leave the page because there were unsaved changes. Knowing that you already saved the changes, you clicked on "leave this page". Wrong! In this case you may not know best, just stay on the page and save the game again.
-* You entered some really bad data for a game. Just delete the game and re-enter it.
-* Gremlins.
-
-= I keep getting weird PHP error messages on the page with the short code. Any idea what's up?  =
-First, look closely, they are probably "Warnings" and/or "Notices", not "Errors", or the site would stop. I am slowly weeding them out of the code. If everything seems to be working okay except for these annoying messages, you might want to turn them off on your WordPress site. To do so, edit wp-config.php and add the following lines:
-  
-> `error_reporting(0);`
-
-> `@ini_set(‘display_errors’, 0);`
-
-otherwise WordPress overwrites the ALERTS set by PHP.INI`. [Please refer to this post for more information on this issue](http://dev.shoalsummitsolutions.com).
-
+[The FAQs may be found here.](http://shoalsummitsolutions.com/gs-faq/)
 
 == Screenshots ==
 
@@ -112,16 +57,26 @@ otherwise WordPress overwrites the ALERTS set by PHP.INI`. [Please refer to this
 7. CSV Import screen (admin)
 8. Sample schedule slider (via [mstw_gs_slider] shortcode)
 
+== Upgrade Notice ==
+
+The current version of Game Schedules has been tested on WP 3.9 with the Twentyeleven theme. If you use older version of WordPress, good luck! If you are using a newer version, please let me know how the plugin works, especially if you encounter problems.
+
+Upgrading to this version of Game Schedules should not impact any existing schedules. (But backup your DB before you upgrade, just in case. :) **NOTE that it will overwrite the css folder and the plugin's stylesheet - mstw-gs-styles.css.** So if you've made modifications to the stylesheet, you may want to move them to a safe location before installing the new version of the plugin. Also, you should re-test your display settings; some may need to be reset. An effort was made to change as little as possible, but the display settings may not be 100% backward compatible.
+
 == Changelog ==
 
 = 4.1 =
-Clean-up and new features.
+Bug fixes, clean-up, and some new features.
+
+* Cleaned up Schedules, Teams, and Games admin screens to properly handle missing required data elements.
 * Added CSS tags to allow COLUMNS in schedule tables to be customized.
 * Added last_dtg=now, which provides the ability to display the last N results.
-* Corrected several (non-fatal) errors throughout the plugin.
+* Added contextual help to the Display Settings admin screen.
+* Continued work on removing all non-fatal PHP notices and warnings.
 
 = 4.0.1 =
 Lots of clean-up intended to suppress PHP Notices and Warnings plus bug fixes:
+
 * Problem with Schedule slider at the end of a season
 * Problem with Schedule DB entries, Team selection from Teams DB being ignored
 * Problem with Game entries, Location selection from Locations Plugin DB being ignored
@@ -189,9 +144,3 @@ Fixed a bug (related to translation) that was causing dates to drift a month off
 
 = 1.0 =
 * Initial release.
-
-== Upgrade Notice ==
-
-The current version of Game Schedules was developed and tested one WordPress 3.7.1. If you use older version of WordPress, good luck! Much of the plugin was originally developed on 3.4.x so that might work okay. (No guarantees.) If you are using a newer version of WP, please let me know how the plugin works, especially if you encounter problems.
-
-Upgrading to this version of Game Schedules should not impact any existing schedules. (But backup your DB before you upgrade, just in case. :) **NOTE that it will overwrite the css folder and the plugin's stylesheet - mstw-gs-styles.css.** So if you've made modifications to the stylesheet, you may want to move them to a safe location before installing the new version of the plugin. Also, you should test your display settings; some may need to be reset. An effort was made to change as little as possible, but the display settings may not be 100% backward compatible.
