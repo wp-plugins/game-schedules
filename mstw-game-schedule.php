@@ -238,7 +238,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 // --------------------------------------------------------------------------------
 // Set-up Action and Filter Hooks for the Settings on the admin side
 //
-register_activation_hook(__FILE__, 'mstw_gs_set_defaults');
+// register_activation_hook(__FILE__, 'mstw_gs_set_defaults');
 register_uninstall_hook(__FILE__, 'mstw_gs_delete_plugin_options');
 
 // --------------------------------------------------------------------------------
@@ -337,6 +337,9 @@ function mstw_gs_delete_plugin_options() {
 			
 		register_post_type( 'scheduled_games', $args);
 		
+		//add_action( 'load-post-new.php', 'mstw_gs_settings_help' );
+		//add_action( 'load-post.php', 'mstw_gs_settings_help' );
+		
 		//----------------------------------------------------------------------------
 		// register mstw_gs_teams post type
 		//
@@ -427,7 +430,7 @@ function mstw_gs_delete_plugin_options() {
 		$dtg_options = get_option( 'mstw_gs_dtg_options' );
 		//$output .= '<pre>OPTIONS:' . print_r( $dtg_options, true ) . '</pre>';
 		//$options = get_option( 'mstw_gs_options' );
-		$options = array_merge( $base_options, $dtg_options );
+		$options = array_merge( (array)$base_options, (array)$dtg_options );
 		//$output .= '<pre>OPTIONS:' . print_r( $options, true ) . '</pre>';
 		// Remove all keys with empty values
 		foreach ( $options as $k=>$v ) {
@@ -1264,7 +1267,7 @@ function mstw_gs_build_countdown( $attribs ) {
 		// get the options set in the admin screen
 		$base_options = get_option( 'mstw_gs_options' );
 		$dtg_options = get_option( 'mstw_gs_dtg_options' );
-		$options = array_merge( $base_options, $dtg_options );
+		$options = array_merge( (array)$base_options, (array)$dtg_options );
 		//$output = '<pre>OPTIONS:' . print_r( $options, true ) . '</pre>';
 		//return $output;
 	
