@@ -48,7 +48,7 @@
 		//Base defaults
 		$defaults = array(
 				//default schedule table shortcode arguments
-				'sched' => 1,  // This is used for cdt & slider shortcodes too
+				'sched' => '', //1,  // This is used for cdt & slider shortcodes too
 				'first_dtg' => '1970:01:01 00:00:00',	// first php dtg
 				'last_dtg' => '2038:01:19 00:00:00', 	// last php dtg (roughly)
 				'games_to_show' => -1,
@@ -77,7 +77,7 @@
 				'slider_opponent_format'	=> 'full-name',
 				'show_table_logos'		=> 'name-only', //Hide Logos
 				'show_slider_logos'		=> 'name-only', //Hide Logos
-				'venue_format'			=> 'city-name-state', //Show (location) name only
+				'venue_format'			=> 'name-only', //Show (location) name only
 				'venue_link_format'		=> 'no-link', //No Link
 				);
 				

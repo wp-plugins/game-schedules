@@ -58,9 +58,9 @@
 			return $value;
 		} //End function process_option()
 
-		/*-------------------------------------------------------------
-		 * Builds the user interface for CSV Import screen
-		 *-----------------------------------------------------------*/
+		//-------------------------------------------------------------
+		// Builds the user interface for CSV Import screen
+		//
 		function form( ) {
 			
 			$opt_sched_id = $this->process_option( 'csv_importer_sched_id', 0, $_POST );
@@ -74,21 +74,22 @@
 
 			<div class="wrap">
 				<?php echo get_screen_icon(); ?>
-				<h2>Import CSV</h2>
+				<h2><?php _e( 'Import CSV', 'mstw-loc-domain' ); ?></h2>
 				<form class="add:the-list: validate" method="post" enctype="multipart/form-data">
 					<!-- Enter the schedule ID via text ... for now -->
 					<table class='form-table'>				
 						<tr>  <!-- Team ID input field -->
-							<td><label for="opt_sched_id">Select a team/schedule (ID) to input:</label></td>
-							<td><input size="8" name="csv_importer_sched_id" id="opt_sched_id" type="text" value="<?php echo esc_attr( $opt_sched_id ); ?>"/>
-							<br/><span class='description'>Use an existing team ID or a new one. Team ID will be created if it does not exist.</span></td>
+							<td><label for="opt_sched_id"><?php _e( 'Select a team/schedule (ID) to input:', 'mstw-loc-domain'); ?></label></td>
+							<!-- <td><input size="8" name="csv_importer_sched_id" id="opt_sched_id" type="text" value="<?php echo esc_attr( $opt_sched_id ); ?>"/> -->
+							<td><?php $this->build_schedule_id_ctrl( ); ?>
+							<br/><span class='description'><?php _e( 'You must select an existing schedule. To import a new schedule, create it first through the Schedules menu.', 'mstw-loc-domain' ); ?></span></td>
 						</tr>
 						<tr>  <!-- CSV file selection field -->
-							<td><label for="csv_import">Upload file:</label></td>
+							<td><label for="csv_import"><?php _e( 'Upload file:', 'mstw-loc-domain' ); ?></label></td>
 							<td><input name="csv_import" id="csv_import" type="file" value="" aria-required="true" /></td>
 						</tr>
 						<tr> <!-- Submit button -->
-						<td colspan="2" class="submit"><input type="submit" class="button" name="submit" value="Import" /></td>
+						<td colspan="2" class="submit"><input type="submit" class="button" name="submit" value="<?php _e( 'Import', 'mstw-loc-domain' ); ?>"/></td>
 						</tr>
 					</table>
 				</form>
@@ -96,6 +97,39 @@
 			<!-- end of form HTML -->
 		<?php
 		} //End of function form()
+		
+		//-------------------------------------------------------------
+		// Builds dropdown for schedule ID's
+		//
+		function build_schedule_id_ctrl( ) {	
+			$scheds = get_posts(array( 'numberposts' => -1,
+							  'post_type' => 'mstw_gs_schedules',
+							  'orderby' => 'title',
+							  'order' => 'ASC' 
+							));						
+
+			if( $scheds ) {
+				echo "<select id='opt_sched_id' name='csv_importer_sched_id'>";
+				
+				echo "<option value='-1'> ---- </option>";
+				foreach( $scheds as $sched ) {
+					//$post_data = get_post($post->ID, ARRAY_A);
+					$slug = $sched->post_name;
+					//$selected = ( $current_sched == $slug ) ? 'selected="selected"' : '';
+					//echo "<option value='" . $slug . "'" /*. $selected */ . ">" .  get_the_title( $sched->ID ) . "</option>";
+					echo "<option value='$slug'>" .  get_the_title( $sched->ID ) . "</option>";
+				}
+				
+				echo "</select>\n";
+				//echo "<br/><span class='description'>Let's see if this works ... current_sched: " . $current_sched . " ... slug: " . $slug . "</span></td>\n";
+			}
+			else {
+			?>
+				<label><?php _e( 'No schedules available. Enter one through the Schedules menu before importing it.', 'mstw-loc-domain'); ?></label>
+			<?php
+			}
+		
+		} //End: function build_import_schedule_id
 
 		
 		/*-------------------------------------------------------------

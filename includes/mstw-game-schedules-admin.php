@@ -184,9 +184,9 @@
 	// Create admin page tabs
 	//
 	function mstw_gs_admin_tabs( $current_tab = 'fields-columns-tab' ) {
-		$tabs = array( 	'files-columns-tab' => 'Fields/Columns', 
-						'date-time-tab' => 'Date/Time Formats', 
-						'colors-tab' => 'Colors', 
+		$tabs = array( 	'files-columns-tab' => __( 'Fields/Columns', 'mstw-loc-domain' ),
+						'date-time-tab' => __( 'Date/Time Formats', 'mstw-loc-domain' ),
+						'colors-tab' => __( 'Colors', 'mstw-loc-domain' ),
 						);
 		//echo '<div id="icon-themes" class="icon32"><br></div>';
 		echo '<h2 class="nav-tab-wrapper">';
@@ -307,55 +307,55 @@
 									'label' => __( 'Team Full Name:', 'mstw-loc-domain' ),
 									'maxlength' => $std_length,
 									'size' => $std_size,
-									'notes' => 'E.g., "San Francisco" or "California"',
+									'notes' => __( 'E.g., "San Francisco" or "California"', 'mstw-loc-domain' ),
 									),
 								'team_short_name' => array (
 									'type'	=> 'text',
 									'value' => $team_short_name,
-									'label' => 'Team Short Name:',
+									'label' => __( 'Team Short Name:', 'mstw-loc-domain' ),
 									'maxlength' => $std_length,
 									'size' => $std_size,
-									'notes' => 'E.g., "SF" or "Cal". If not specified, full name will be used in it\'s place.',
+									'notes' => __( 'E.g., "SF" or "Cal". If not specified, full name will be used in it\'s place.', 'mstw-loc-domain' ),
 									),
 								'team_full_mascot' => array (
 									'type'	=> 'text',
 									'value' => $team_full_mascot,
-									'label' => 'Team Full Mascot:',
+									'label' => __( 'Full Team Mascot:', 'mstw-loc-domain' ),
 									'maxlength' => $std_length,
 									'size' => $std_size,
-									'notes' => 'E.g., "49ers" or "Golden Bears"',
+									'notes' => __( 'E.g., "49ers" or "Golden Bears"', 'mstw-loc-domain' ),
 									),
 								'team_short_mascot' => array (
 									'type'	=> 'text',
 									'value' => $team_short_mascot,
-									'label' => 'Team Short Mascot:',
+									'label' => __( 'Short Team Mascot:', 'mstw-loc-domain' ),
 									'maxlength' => $std_length,
 									'size' => $std_size,
-									'notes' => 'E.g., "Niners" or "Bears". If not specified, full mascot name will be used in it\'s place.',
+									'notes' => __( 'E.g., "Niners" or "Bears". If not specified, full mascot name will be used in it\'s place.', 'mstw-loc-domain' ),
 								),
 								'team_link' => array (
 									'type'	=> 'text',
 									'value' => $team_link,
-									'label' => 'Team Link:',
+									'label' => __( 'Team Link:', 'mstw-loc-domain' ),
 									'maxlength' => 256,
 									'size' => $std_size,
-									'notes' => 'E.g., "http://49ers.com" or "http://calbears.com"',
+									'notes' => __( 'E.g., "http://49ers.com" or "http://calbears.com"', 'mstw-loc-domain' ),
 									),
 								'team_logo' => array (
 									'type'	=> 'text',
 									'value' => $team_logo,
-									'label' => 'Team Table Logo:',
+									'label' => __( 'Team Table Logo:', 'mstw-loc-domain' ),
 									'maxlength' => 256,
 									'size' => $std_size,
-									'notes' => 'Provide full path to file (uploaded to media library, for example). Recommended size 41x28px.',
+									'notes' => __( 'Provide full path to file (uploaded to media library, for example). Recommended size 41x28px.', 'mstw-loc-domain' ),
 									),
 								'team_alt_logo' => array (
 									'type'	=> 'text',
 									'value' => $team_alt_logo,
-									'label' => 'Team Slider Logo:',
+									'label' => __( 'Team Slider Logo:', 'mstw-loc-domain' ),
 									'maxlength' => 256,
 									'size' => $std_size,
-									'notes' => 'Provide full path to file (uploaded to media library, for example). Recommended size 125x125px.',
+									'notes' => __( 'Provide full path to file (uploaded to media library, for example). Recommended size 125x125px.', 'mstw-loc-domain' ),
 									),
 							);
 							
@@ -384,7 +384,7 @@
 					echo "<option value='" . $loc->ID . "'" . $selected . ">" . get_the_title( $loc->ID ) . "</option>";
 				}
 				echo "</select>\n";     
-				echo "<br><span class='description'>Note: this setting requires that the Game Locations plugin is activated.</span></td>";
+				echo "<br><span class='description'>" . __('Note: this setting requires that the Game Locations plugin is activated.', 'mstw-loc-domain' ) . "</span></td>";
 				echo "</tr>";
 				
 			}
@@ -419,41 +419,53 @@
 									'label' 	=> __( 'Unique Schedule ID:', 'mstw-loc-domain' ),
 									'maxlength' => $std_length,
 									'size' 		=> $std_size,
-									'notes' 	=> __( 'Will be converted to WP \'slug\' format(128 character max) E.g., "2013 Varsity Football" will be converted to "2013-varsity-football"', 'mstw-loc-domain' ),
+									'notes' 	=> __( 'Will be converted to WP "slug" format(128 character max) E.g., "2013 Varsity Football" will be converted to "2013-varsity-football."', 'mstw-loc-domain' ),
 									),
 							);
 							
-		
-		echo "<table class='form-table'>\n";
-		
-		mstw_gs_build_admin_edit_screen( $admin_fields ); 
-		
-		$teams = get_posts(array( 'numberposts' => -1,
-						  'post_type' => 'mstw_gs_teams',
-						  'orderby' => 'title',
-						  'order' => 'ASC' 
-						));						
-	
-		if( $teams ) {
-			echo "<tr valign='top'>\n";
-			echo "<th>Schedule For:</th>\n";
-			echo "<td><select id='schedule_team' name='schedule_team'>\n";
-			
-			$selected = ( empty( $schedule_team ) or $schedule_team == -1 ) ? 'selected="selected"' : '';
-			echo "<option value='-1' " . $selected . "> ---- </option>\n";
-				
-			foreach( $teams as $team ) {
-				$selected = ( $schedule_team == $team->ID ) ? 'selected="selected"' : '';
-				echo "<option value='" . $team->ID . "'" . $selected . ">" . get_the_title( $team->ID ) . "</option>\n";
-			}
-			
-			echo "</select>\n";
-			echo "<br/><span class='description'>Selected team (from the Teams DB) will be the home team for this schedule.</span></td>\n";
-			echo "</tr>\n";
-			
-		}
 		?>
 		
+		<table class='form-table'>
+		
+			<?php mstw_gs_build_admin_edit_screen( $admin_fields );
+		
+			//-----------------------------------------------------------
+			// control to assign team to schedule
+			//
+			$teams = get_posts(array( 'numberposts' => -1,
+							  'post_type' => 'mstw_gs_teams',
+							  'orderby' => 'title',
+							  'order' => 'ASC' 
+							));	
+			?>	
+			
+			<tr valign='top'>
+				<th>Schedule For:</th>
+				<td>
+					<?php
+					if( $teams ) {
+						echo "<select id='schedule_team' name='schedule_team'>\n";
+						
+						$selected = ( empty( $schedule_team ) or $schedule_team == -1 ) ? 'selected="selected"' : '';
+						echo "<option value='-1' " . $selected . "> ---- </option>\n";
+							
+						foreach( $teams as $team ) {
+							$selected = ( $schedule_team == $team->ID ) ? 'selected="selected"' : '';
+							echo "<option value='" . $team->ID . "'" . $selected . ">" . get_the_title( $team->ID ) . "</option>\n";
+						}
+						
+						echo "</select>\n";
+						echo "<br/><span class='description'>" . __( 'Selected team (from the Teams DB) will be the home team for this schedule.', 'mstw-loc-domain' ) . "</span>\n";
+						
+						
+					}
+					else { //no teams in DB
+						echo "<label>Create a Team via the Teams menu to assign it to a schedule.</label>";
+					}
+					
+					?>
+				</td>
+			</tr>
 		</table>
 	<?php 
 	}
@@ -588,23 +600,18 @@
 	   <table class="form-table">
 	   
 	   <?php
-	   mstw_gs_build_schedule_input( $mstw_gs_sched_id );
+	   if( !mstw_gs_build_schedule_input( $mstw_gs_sched_id ) ) {
+			echo "</table>\n";
+			return;
+	   }
 	   
-	   $admin_fields = array( 	//'mstw_gs_sched_id' => array (
-								//'type' => 'text',
-								//'value' => $mstw_gs_sched_id,
-								//'label' => __( 'Schedule ID:', 'mstw-loc-domain' ),
-								//'maxlength' => 128,
-								//'size' => 30,
-								//'notes' => 'This is deprecated, and is here for backward compatibility only. It will be converted to WP "slug" format. E.g., "2013 Varsity Football" will be converted to "2013-varsity-football". (128 character max)',
-								//),
-								'gs_game_date' => array (
-									'type' => 'text',
-									'value' => date( 'Y-m-d', $mstw_gs_unix_dtg ),
-									'label' => $game_date_label,
-									'maxlength' => 128,
-									'size' => 30,
-									'notes' => '',
+	   $admin_fields = array( 	'gs_game_date' => array (
+								'type' => 'text',
+								'value' => date( 'Y-m-d', $mstw_gs_unix_dtg ),
+								'label' => $game_date_label,
+								'maxlength' => 128,
+								'size' => 30,
+								'notes' => '',
 								),
 							);
 		
@@ -673,7 +680,7 @@
 									'label' =>  $opponent_label . ' ' . __( 'Link:', 'mstw-loc-domain' ),
 									'maxlength' => 256,
 									'size' => 30,
-									'notes' => 'Link to a website for the opponent (your choice, maybe the team website or school website.',
+									'notes' => __( 'Link to a website for the opponent (your choice, maybe the team website or school website.', 'mstw-loc-domain' ),
 								),
 								//
 								//'mstw_gs_home_game' => array (
@@ -692,7 +699,7 @@
 		?>
 		
 		<tr valign="top">
-			<th scope="row"><label for="mstw_gs_home_game" >Home Game?</label></th>
+			<th scope="row"><label for="mstw_gs_home_game" ><?php _e( 'Home Game?', 'mstw-loc-domain'); ?></label></th>
 			<td><input type="checkbox" name="mstw_gs_home_game" value="home" <?php checked( $mstw_gs_home_game, 'home', true )?> /></td>
 		</tr>
 		 
@@ -720,7 +727,7 @@
 					echo "<option value='" . $loc->ID . "'" . $selected . ">" . get_the_title( $loc->ID ) . "</option>";
 				}
 				echo "</select>\n";
-				echo "<br/><span class='description'>Note: this setting requires that the Game Locations plugin is activated. It is preferred to using the custom location and link settings below.</span></td>\n";
+				echo "<br/><span class='description'>" . __( 'Note: this setting requires that the Game Locations plugin is activated. It is preferred to using the custom location and link settings below.', 'mstw-loc-domain' ) . "</span></td>\n";
 				echo "</tr>\n";
 				
 			}
@@ -811,7 +818,7 @@
 		?>
 		
 		<tr valign="top">
-			<th scope="row"><label for="mstw_gs_unix_date" >UNIX Date (Info Only):</label></th>
+			<th scope="row"><label for="mstw_gs_unix_date" ><?php _e( 'UNIX Date (Info Only):', 'mstw-loc-domain' ); ?></label></th>
 			<td>
 				<?php echo mstw_date_loc( 'Y-m-d', (int)esc_attr( $mstw_gs_unix_dtg ) );?>
 				<!--<input maxlength="60" size="30" name="mstw_gs_unix_date"
@@ -820,7 +827,7 @@
 		</tr>
 		
 		<tr valign="top">
-			<th scope="row"><label for="mstw_gs_unix_dtg" >UNIX Date-Time (Info Only):</label></th>
+			<th scope="row"><label for="mstw_gs_unix_dtg" ><?php _e( 'UNIX Date-Time (Info Only):', 'mstw-loc-domain' ); ?></label></th>
 			<td>
 				<?php echo mstw_date_loc( 'Y-m-d H:i', (int)esc_attr( $mstw_gs_unix_dtg ) ); ?>
 				<!--<input maxlength="60" size="30" name="mstw_gs_unix_dtg"
@@ -839,17 +846,19 @@
 	//
 	
 	function mstw_gs_build_schedule_input( $current_sched ) {
-			
+		$retval = 1; //no problems
+		
 		$scheds = get_posts(array( 'numberposts' => -1,
 						  'post_type' => 'mstw_gs_schedules',
 						  'orderby' => 'title',
 						  'order' => 'ASC' 
 						));						
 
+		echo '<tr valign="top">';
+		echo '<th>' . __( 'Select Schedule:', 'mstw-loc-domain' ) . '</th>';
+		echo '<td>';
 		if( $scheds ) {
-			echo '<tr valign="top">';
-			echo '<th>' . __( 'Select Schedule:', 'mstw-loc-domain' ) . '</th>';
-			echo "<td><select id='mstw_gs_sched_id' name='mstw_gs_sched_id'>";
+			echo "<select id='mstw_gs_sched_id' name='mstw_gs_sched_id'>";
 			
 			echo "<option value='-1'> ---- </option>";
 			foreach( $scheds as $sched ) {
@@ -859,11 +868,16 @@
 				echo "<option value='" . $slug . "'" . $selected . ">" .  get_the_title( $sched->ID ) . "</option>";
 			}
 			
-			echo "</select>\n";
-			//echo "<br/><span class='description'>Let's see if this works ... current_sched: " . $current_sched . " ... slug: " . $slug . "</span></td>\n";
-			echo "</tr>\n";
-			
+			echo "</select>\n";	
 		}
+		else {
+			echo "<label>" . __( 'No schedules found. Create a schedule through the Schedules menu before assigning a game to it.', 'mstw-loc-domain' ) . "</label>";
+			$retval = 0; //No schedules. Tell caller not to build the rest of the page.
+		}
+		//echo "<br/><span class='description'>Let's see if this works ... current_sched: " . $current_sched . " ... slug: " . $slug . "</span></td>\n";
+		echo "</td></tr>\n";
+		
+		return( $retval );
 		
 	} //End: function mstw_gs_build_schedule_input
 	
@@ -889,7 +903,7 @@
 			}
 			
 			echo "</select>\n";
-			echo "<br/><span class='description'>If set, this setting will override Opponent and Opponent Link. It is also the only way to add logos to the various displays.</span></td>\n";
+			echo "<br/><span class='description'>" . __( 'If set, this setting will override Opponent and Opponent Link. It is also the only way to add logos to the various displays.', 'mstw-loc-domain' ) . "</span></td>\n";
 			echo "</tr>\n";
 			
 		}
@@ -930,7 +944,7 @@
 				if ( isset( $_POST['mstw_gs_sched_id'] ) and 
 					 !empty( $_POST['mstw_gs_sched_id'] ) and 
 					( $_POST['mstw_gs_sched_id'] != -1 ) ) {
-					$mstw_id = sanitize_title( $_POST['mstw_gs_sched_id'], '1' );
+					$mstw_id = sanitize_title( $_POST['mstw_gs_sched_id'] );
 					update_post_meta( $post_id, '_mstw_gs_sched_id', $mstw_id );
 				}
 				else {  //Throw an error and exit
@@ -1069,22 +1083,18 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 
 	function mstw_gs_edit_games_columns( $columns ) {	
 		
-		$options = get_option( 'mstw_gs_options' );
+		$options = (array)get_option( 'mstw_gs_options'); //, mstw_gs_get_defaults( ) );
 		
-		$date_label = ( $options['date_label'] == '' ? __( 'Date', 'mstw-loc-domain' ) : __( $options['date_label'], 'mstw-loc-domain' ) );
-		$opponent_label = ( $options['opponent_label'] == '' ? __( 'Opponent', 'mstw-loc-domain' ) : __( $options['opponent_label'], 'mstw-loc-domain' ) );
-		$location_label = ( $options['location_label'] == '' ? __( 'Location', 'mstw-loc-domain' ) : __( $options['location_label'], 'mstw-loc-domain' ) );
-		$time_label = ( $options['time_label'] == '' ? __( 'Time', 'mstw-loc-domain' ) : __( $options['time_label'], 'mstw-loc-domain' ) );
-		$media_label = ( $options['media_label'] == '' ? __( 'Media', 'mstw-loc-domain' ) : __( $options['media_label'], 'mstw-loc-domain' ) );
+		$new_options = wp_parse_args( (array)$options, mstw_gs_get_defaults( ) );
 
 		$columns = array(
 			'cb' => '<input type="checkbox" />',
 			'title' => __( 'Title', 'mstw-loc-domain' ),
 			'sched_id' => __( 'Schedule ID', 'mstw-loc-domain' ),
 			//'sched_year' => __( 'Year', 'mstw-loc-domain' ),
-			'game_date' => __( 'Date', 'mstw-loc-domain' ), //$date_label,
-			'game_time' => __( 'Time', 'mstw-loc-domain' ), //$time_label,
-			'opponent' => $opponent_label,
+			'game_date' => $new_options['date_label'], //__( 'Date', 'mstw-loc-domain' ), //$date_label,
+			'game_time' => $new_options['time_label'], //__( 'Time', 'mstw-loc-domain' ), //$time_label,
+			'opponent' => $new_options['opponent_label'], //$opponent_label,
 			//'opponent_link' => $opponent_label . ' ' . __( 'Link', 'mstw-loc-domain' ),
 			'game_result' => __( 'Result', 'mstw-loc-domain' ),
 			//'gl_location' => $location_label,
@@ -1374,7 +1384,7 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 
 	function mstw_gs_edit_schedules_columns( $columns ) {	
 		
-		$options = get_option( 'mstw_gs_options' );
+		//$options = get_option( 'mstw_gs_options' );
 
 		$columns = array(
 			'cb' => '<input type="checkbox" />',
@@ -1451,11 +1461,20 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 		// the settings menu
 		$capability = apply_filters( 'mstw_gs_user_capability', 'edit_others_posts', 'display_settings_menu_item' );
 		$page = add_submenu_page( 	'edit.php?post_type=scheduled_games', 
-							'Game Schedule Settings', 	//page title
+							__( 'Game Schedule Settings', 'mstw-loc-domain' ),	//page title
 							__( 'Display Settings', 'mstw-loc-domain' ), 		//menu title
 							$capability, 			// Capability required to see this option.
 							'mstw_gs_settings', 		// Slug name to refer to this menu
 							'mstw_gs_option_page' );	// Callback to output content
+		/*					
+		$page = add_options_page( 'Game Schedule Settings', 
+									'Display Settings',
+									'manage-options',
+									'mstw_gs_settings',
+									'mstw_gs_option_page' );							
+		*/						
+							
+		add_action( "load-$page", 'mstw_gs_settings_help' );
 							
 		/*$page = add_submenu_page( 	'edit.php?post_type=scheduled_games', 
 							'Game Schedule Color Settings', 	//page title
@@ -1470,14 +1489,90 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 		$plugin = new MSTW_GS_ImporterPlugin;
 		$capability = apply_filters( 'mstw_gs_user_capability', 'edit_others_posts', 'csv_import_menu_item' );
 		add_submenu_page(	'edit.php?post_type=scheduled_games',
-							'Import Schedule from CSV File',	//page title
-							'CSV Schedule Import',				//menu title
-							__( 'CSV Schedule Import', 'mstw-loc-domain' ), 		//menu title
+							__('Import Schedule from CSV File', 'mstw-loc-domain' ),	//page title
+							__( 'CSV Schedule Import',	'mstw-loc-domain' ),			//menu title
 							$capability,						//capability to access
 							'mstw_gs_csv_import',				//slug name for menu
 							array( $plugin, 'form' )			//callback to display menu
 						);
 	}
+	
+	//-------------------------------------------------------------------------------
+	// Callback to add help to screen
+	//	
+	function mstw_gs_settings_help( ) {
+		//die( 'In mstw_gs_settings_help' );
+		
+		$screen = get_current_screen( );
+		if ( 'post' === $screen->base && 'scheduled-games' !== $screen->post_type ) return;
+
+		$sidebar = '<p><strong>' . __( 'For more information:', 'mstw-loc-domain' ) . '</strong></p>' .
+			'<p><a href="http://shoalsummitsolutions.com/category/users-manuals/gs-plugin/" target="_blank">' . __( 'Game Schedules Full Documentation', 'mstw-loc-domain' ) . '</a></p>' .
+			'<p><a href="http://dev.shoalsummitsolutions.com" target="_blank">' . __( 'See Game Schedules in Action', 'mstw-loc-domain' ) . '</a></p>' .
+			'<p><a href="http://wordpress.org/plugins/game-schedules/" target="_blank">' . __( 'Game Schedules on WordPress.org', 'mstw-loc-domain' ) . '</a></p>';
+		
+		$tabs = array(
+			array(
+				'title'    => __( 'Data Fields & Columns', 'mstw-loc-domain' ),
+				'id'       => 'fields-columns-help',
+				'callback'  => 'mstw_gs_fields_columns_options_help'
+				),
+			array(
+				'title'    => 'Date/Time Formats',
+				'id'       => 'date-time-help',
+				'callback'  => 'mstw_gs_date_time_options_help'
+				),
+			array(
+				'title'		=> 'Colors',
+				'id'		=> 'colors-help',
+				'callback'	=> 'mstw_gs_color_options_help'
+				),
+		);
+
+
+		foreach( $tabs as $tab ) {
+			$screen->add_help_tab( $tab );
+		}
+			
+			
+		//$screen->add_help_tab( array(
+		//	'title' => __( 'Overview', 'mstw-loc-domain' ),
+		//	'id' => 'theme-options-help',
+		//	'content' => $help,
+		//	)
+		//);
+
+		$screen->set_help_sidebar( $sidebar );
+
+	}
+	
+	//----------------------------------------------------------------------------
+	// help tab content
+	//
+	function mstw_gs_fields_columns_options_help( ) {
+		$help = '<h3><strong>' . __( 'Data Fields & Columns Settings:', 'mstw-loc-domain' ) . '</strong></h3>' .
+				'<p>' . __('This screen controls the visibility of data fields and the corresponding columns, the field/column labels, and some format elements of both the schedule tables, schedule sliders, and countdown timers. ', 'mstw-loc-domain' ) . "</p>\n" .
+				'<p>' . __('Note that these settings apply to ALL schedule tables, sliders, and timers on the site. To control individual tables, sliders, and timers, set the corresponding arguments in the shortcodes.', 'mstw-loc-domain' ) . "</p>\n" .
+				'<p><a href="http://shoalsummitsolutions.com/category/users-manuals/gs-plugin/" target="_blank">' . __( 'See the Game Schedules Users Manual for more documentation.', 'mstw-loc-domain' ) . "</a></p>\n";
+		echo $help;
+	}
+	
+	function mstw_gs_color_options_help( ) {
+		$help = '<h3><strong>' . __( 'Color Settings:', 'mstw-loc-domain' ) . '</strong></h3>' .
+				'<p>' . __('This screen controls the default colors for the schedule tables, sliders, and countdown timers.  These global defaults are very useful for setting the colors of all displays, especially if your site is for a single team or organization. Note that these settings apply to ALL schedule tables and sliders on the website.', 'mstw-loc-domain' ) . "</p>\n" .
+				'<p>' . __('Unique CSS tags are provided for each team, allowing control of individual tables, sliders, and countdown timers. Using these tags, different color schemes can be applied to different. To do so, the plugin\'s stylesheet - mstw-gs-styles.css - must be edited. An admin with a knowledge of CSS can simply inspect the HTML elements in a browser and style them as desired. Those not experienced with CSS, may find some of the tutorials and code snippets on <a href="http://shoalsummitsolutions.com" target="_blank">ShoalSummitSolutions.com</a> may be of use. <br/> <a href="http://dev.shoalsummitsolutions.com/schedule-test/" target="_blank">Examples are provided on the MSTW plugin development site.</a>', 'mstw-loc-domain' ) . "</p>\n" .
+				'<p><a href="http://shoalsummitsolutions.com/category/users-manuals/gs-plugin/" target="_blank">' . __( 'See the Game Schedules Users Manual for more documentation.', 'mstw-loc-domain' ) . "</a></p>\n";
+		echo $help;
+	}
+	
+	function mstw_gs_date_time_options_help( ) {
+		$help = '<h3><strong>' . __( 'Date/Time Settings:', 'mstw-loc-domain' ) . '</strong></h3>' .
+				'<p>' . __('This screen controls the date time formats for the schedule tables, sliders, and countdown timers, as well as the admin screens. There are a number of built-in formats and the capability to provide any custom format. ', 'mstw-loc-domain' ) . "</p>\n" .
+				'<p>' . __('Note that these settings apply to ALL schedule tables, sliders, and timers on the site. To control individual tables, sliders, or timers, set the corresponding arguments in the shortcodes.', 'mstw-loc-domain' ) . "</p>\n" .
+				'<p><a href="http://shoalsummitsolutions.com/category/users-manuals/gs-plugin/" target="_blank">' . __( 'See the Game Schedules Users Manual for more documentation.', 'mstw-loc-domain' ) . "</a></p>\n";
+		echo $help;
+	}
+	
 
 // ----------------------------------------------------------------	
 // 	Render the Display Setttings page
