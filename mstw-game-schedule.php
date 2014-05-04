@@ -6,6 +6,7 @@ Description: The Game Schedule Plugin defines a custom type - Scheduled Games - 
 Version: 4.1
 Author: Mark O'Donnell
 Author URI: http://shoalsummitsolutions.com
+Text Domain: mstw-loc-domain
 */
 
 /*
