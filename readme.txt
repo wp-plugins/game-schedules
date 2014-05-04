@@ -72,6 +72,7 @@ Bug fixes, clean-up, and some new features.
 * Added CSS tags to allow COLUMNS in schedule tables to be customized.
 * Added last_dtg=now, which provides the ability to display the last N results.
 * Added contextual help to the Display Settings admin screen.
+* Added previously missing and new strings to lang/default.pot
 * Continued work on removing all non-fatal PHP notices and warnings.
 
 = 4.0.1 =
