@@ -392,6 +392,7 @@ function mstw_gs_delete_plugin_options() {
 			'supports' 			=> array(
 										'title'
 										),
+			//'supports' 			=> false,
 			//'capabilities'		=> array(
 			//							'edit_posts',
 			//							),
