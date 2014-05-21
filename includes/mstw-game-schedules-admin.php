@@ -39,6 +39,48 @@
 	}
 	
 	// ----------------------------------------------------------------
+	// Schedule CPT's will have the ID field as their post_name (slug)
+	//
+	add_filter('name_save_pre', 'mstw_gs_save_name');
+	
+	function mstw_gs_save_name( $post_name ) {
+        if ( $_POST['post_type'] == 'mstw_gs_schedules' ) {
+			if ( isset( $_POST['schedule_id'] ) and !empty( $_POST['schedule_id'] ) ) {
+				$post_name = sanitize_title( $_POST['schedule_id'] );
+			}
+			else if ( isset( $_POST['title'] ) and !empty( $_POST['title'] ) ) {
+				$post_name = sanitize_title( $_POST['title'] );
+			}
+			else {
+				$post_name = 'not-specified';
+			}
+		} //End if ( $_POST['post_type'] == 'mstw_gs_schedules' )
+        
+        return $post_name;
+	}
+	
+	// ----------------------------------------------------------------
+	// Remove edit permalink line for the mstw_gs_schedules CPT
+	//
+	add_filter( 'get_sample_permalink_html', 'mstw_gs_remove_permalink_line', 15, 4 );
+
+	function mstw_gs_remove_permalink_line( $return, $id, $new_title, $new_slug ) {
+		// Remove the line for the mstw_gs_schedules post type only
+		return 'mstw_gs_schedules' === get_post_type( $id ) ? '' : $return;
+		
+		//return $return;
+	}
+	
+	// ----------------------------------------------------------------
+	// Remove Get Shortline button for the mstw_gs_schedules CPT
+	//
+	add_filter( 'pre_get_shortlink', 'mstw_gs_remove_shortlink_button', 10, 2 );
+	
+	function mstw_gs_remove_shortlink_button ( $false, $post_id ) {
+		return 'mstw_gs_schedules' === get_post_type( $post_id ) ? '' : $false;
+	}
+	
+	// ----------------------------------------------------------------
 	// Load the the CSV Importer; don't die if file can't be loaded
 	//
 	if( is_admin( ) ) {
@@ -178,6 +220,8 @@
 						
 		add_meta_box('mstw-gs-meta', 'Schedule', 'mstw_gs_create_schedules_ui', 
 						'mstw_gs_schedules', 'normal', 'high' );
+						
+		remove_meta_box( 'slugdiv', 'mstw_gs_schedules', 'normal' );
 	}
 	
 	// ----------------------------------------------------------------
@@ -374,7 +418,7 @@
 	
 			if( $locations ) {
 				echo '<tr valign="top">';
-				echo '<th>Team Home Venue:</th>';
+				echo '<th>' . __( 'Team Home Venue:', 'mstw-loc-domain' ) . '</th>';
 				echo "<td><select id='team_home_venue' name='team_home_venue'>";
 				$selected = ( empty( $team_home_venue ) or $team_home_venue == -1 ) ? 'selected="selected"' : '';
 				echo "<option value='-1' " . $selected . "> ---- </option>";
@@ -392,7 +436,7 @@
 		else { //Game Locations plugin is not active
 		?>
 			<tr align="top">
-				<th>Install the <a href='http://wordpress.org/game-locations' target='_blank'>MSTW Game Locations plugin</a> to use this feature.</th>
+				<th><?php printf( '%s <a href="http://wordpress.org/game-locations" target="_blank">%s</a> %s', __('Install the', 'mstw-loc-domain' ), __( 'MSTW Game Locations plugin',  'mstw-loc-domain' ), __( 'to use this feature.', 'mstw-loc-domain') )?></th>
 			</tr>
 		<?php
 		}
@@ -551,7 +595,10 @@
 		//global $mstw_gs_months; 
 		//global $mstw_gs_days;
 		
-		$options = get_option( 'mstw_gs_options' );
+		//$options = get_option( 'mstw_gs_options' );
+		//$defaults = mstw_gs_get_defaults( );
+		
+		$options = wp_parse_args( get_option( 'mstw_gs_options' ), mstw_gs_get_defaults( ) );
 							  				  
 		// Retrieve the metadata values if they exist
 		$mstw_gs_sched_id = get_post_meta( $post->ID, '_mstw_gs_sched_id', true );
@@ -1115,7 +1162,9 @@ add_filter( 'manage_edit-scheduled_games_columns', 'mstw_gs_edit_games_columns' 
 	function mstw_gs_manage_games_columns( $column, $post_id ) {
 		global $post;
 		
-		$options = get_option( 'mstw_gs_dtg_options' );
+		//$options = get_option( 'mstw_gs_dtg_options' );
+		$options = wp_parse_args( get_option( 'mstw_gs_dtg_options' ), mstw_gs_get_dtg_defaults( ) );
+		
 		$mstw_admin_date_format = $options['admin_date_format'];
 		$mstw_admin_time_format = $options['admin_time_format'];
 		
