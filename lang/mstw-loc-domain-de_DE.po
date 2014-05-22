@@ -1,0 +1,1370 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Game Schedules\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/game-schedules\n"
+"POT-Creation-Date: 2013-12-13 21:36:42+00:00\n"
+"PO-Revision-Date: Tue Feb 11 2014 21:05:18 GMT+0100 (Mitteleuropäische Zeit)\n"
+"Last-Translator: Anders Lind <lind@erding-mallards.de>\n"
+"Language-Team: mallard66 <LL@li.org>\n"
+"Language: German\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Loco - https://localise.biz/\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;__:1;"
+"_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;_x:1,2c;"
+"_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;esc_attr__:1;"
+"esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;esc_html_x:1,2c;"
+"comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Loco-Target-Locale: de_DE"
+
+#. Translation not shown in dropdown.
+#: ../includes/mstw-gs-admin-utils.php:142 ../includes/mstw-gs-admin-utils.php:347
+#, fuzzy
+msgid "Show"
+msgstr "Anzeigen"
+
+#. Translation not shown in dropdown.
+#: ../includes/mstw-gs-admin-utils.php:143 ../includes/mstw-gs-admin-utils.php:348
+#, fuzzy
+msgid "Hide"
+msgstr "Verstecken"
+
+#: ../mstw-game-schedule.php:321
+msgid "Game Schedules"
+msgstr "Spielpläne"
+
+#: ../mstw-game-schedule.php:322
+msgid "Game"
+msgstr "Spiel"
+
+#: ../mstw-game-schedule.php:323
+msgid "Games"
+msgstr "Spiele"
+
+#: ../mstw-game-schedule.php:324
+msgid "Add New Game"
+msgstr "Neues Spiel hinzufügen"
+
+#: ../mstw-game-schedule.php:325
+msgid "Add Game"
+msgstr "Spiel hinzufügen"
+
+#: ../mstw-game-schedule.php:326
+msgid "Edit Game"
+msgstr "Spiel bearbeiten"
+
+#: ../mstw-game-schedule.php:327
+msgid "New Game"
+msgstr "Neues Spiel"
+
+#: ../mstw-game-schedule.php:330
+msgid "Search Games"
+msgstr "Spiel suchen"
+
+#: ../mstw-game-schedule.php:331
+msgid "No Games Found"
+msgstr "Keine Spiele gefunden"
+
+#: ../mstw-game-schedule.php:332
+msgid "No Games Found In Trash"
+msgstr "Kein Spiel im Papierkorb gefunden"
+
+#: ../mstw-game-schedule.php:357 ../mstw-game-schedule.php:359
+msgid "Teams"
+msgstr "Mannschaften"
+
+#: ../mstw-game-schedule.php:358
+msgid "Team"
+msgstr "Mannschaft"
+
+#: ../mstw-game-schedule.php:360
+msgid "Add New Team"
+msgstr "Neue Mannschaft hinzufügen"
+
+#: ../mstw-game-schedule.php:361
+msgid "Add Team"
+msgstr "Neue Mannschaft"
+
+#: ../mstw-game-schedule.php:362
+msgid "Edit Team"
+msgstr "Mannschaft bearbeiten"
+
+#: ../mstw-game-schedule.php:363
+msgid "New Team"
+msgstr "Neue Mannschaft"
+
+#: ../mstw-game-schedule.php:366
+msgid "Search Teams"
+msgstr "Mannschaft suchen"
+
+#: ../mstw-game-schedule.php:367
+msgid "No Teams Found"
+msgstr "Keine Mannschaften gefunden"
+
+#: ../mstw-game-schedule.php:368
+msgid "No Teams Found In Trash"
+msgstr "Keine Mannschaften im Papierkorb gefunden"
+
+#: ../mstw-game-schedule.php:393 ../mstw-game-schedule.php:395
+msgid "Schedules"
+msgstr "Spielpläne"
+
+#: ../mstw-game-schedule.php:394 ../includes/mstw-game-schedules-admin.php:1008
+msgid "Schedule"
+msgstr "Spielplan"
+
+#: ../mstw-game-schedule.php:396
+msgid "Add New Schedule"
+msgstr "Neuer Spielplan hinzufügen"
+
+#: ../mstw-game-schedule.php:397
+msgid "Add Schedule"
+msgstr "Spielplan hinzufügen"
+
+#: ../mstw-game-schedule.php:398
+msgid "Edit Schedule"
+msgstr "Spielplan bearbeiten"
+
+#: ../mstw-game-schedule.php:399
+msgid "New Schedule"
+msgstr "Neuer Spielplan"
+
+#: ../mstw-game-schedule.php:402
+msgid "Search Schedules"
+msgstr "Spielplan suchen"
+
+#: ../mstw-game-schedule.php:403
+msgid "No Schedules Found"
+msgstr "Kein Spielplan gefunden"
+
+#: ../mstw-game-schedule.php:404
+msgid "No Schedules Found In Trash"
+msgstr "Kein Spielplan im Papierkorb gefunden"
+
+#: ../mstw-game-schedule.php:482
+msgid "No schedule specified."
+msgstr "Kein Spielplan angegeben."
+
+#: ../mstw-game-schedule.php:698
+msgid "No scheduled games found for "
+msgstr "Keine geplante Spiele gefunden für "
+
+#: ../mstw-game-schedule.php:1182
+msgid "No home games found."
+msgstr "Keine Heimspiele gefunden."
+
+#: ../mstw-game-schedule.php:1185
+msgid "No games found."
+msgstr "Keine Spiele gefunden."
+
+#: ../mstw-game-schedule.php:1326 ../mstw-game-schedule.php:1339
+msgid "No games found on schedule "
+msgstr "Keine Spiele im Spielplan gefunden."
+
+#: ../mstw-game-schedule.php:1614
+msgid "years"
+msgstr "Jahre"
+
+#: ../mstw-game-schedule.php:1616
+msgid "months"
+msgstr "Monate"
+
+#: ../mstw-game-schedule.php:1618
+msgid "days"
+msgstr "Tage"
+
+#: ../mstw-game-schedule.php:1620
+msgid "hours"
+msgstr "Stunden"
+
+#: ../mstw-game-schedule.php:1622
+msgid "minutes"
+msgstr "Minuten"
+
+#: ../mstw-game-schedule.php:1824 ../includes/mstw-gs-utility-functions.php:69 ../includes/mstw-gs-csv-import-class.php:248 ../includes/mstw-game-schedules-admin.php:575 ../includes/mstw-game-schedules-admin.php:1000
+msgid "Opponent"
+msgstr "Gegner"
+
+#: ../mstw-game-schedule.php:1889
+msgid "No Scheduled Games Found"
+msgstr "Keine geplante Spiele gefunden."
+
+#: ../mstw-game-schedule.php:2053
+msgid "Mon"
+msgstr "Mo"
+
+#: ../mstw-game-schedule.php:2054
+msgid "Tue"
+msgstr "Di"
+
+#: ../mstw-game-schedule.php:2055
+msgid "Wed"
+msgstr "Mi"
+
+#: ../mstw-game-schedule.php:2056
+msgid "Thr"
+msgstr "Do"
+
+#: ../mstw-game-schedule.php:2057
+msgid "Fri"
+msgstr "Fr"
+
+#: ../mstw-game-schedule.php:2058
+msgid "Sat"
+msgstr "Sa"
+
+#: ../mstw-game-schedule.php:2059
+msgid "Sun"
+msgstr "So"
+
+#: ../mstw-game-schedule.php:2063
+msgid "Monday"
+msgstr "Montag"
+
+#: ../mstw-game-schedule.php:2064
+msgid "Tuesday"
+msgstr "Dienstag"
+
+#: ../mstw-game-schedule.php:2065
+msgid "Wednesday"
+msgstr "Mittwoch"
+
+#: ../mstw-game-schedule.php:2066
+msgid "Thursday"
+msgstr "Donnerstag"
+
+#: ../mstw-game-schedule.php:2067
+msgid "Friday"
+msgstr "Freitag"
+
+#: ../mstw-game-schedule.php:2068
+msgid "Saturday"
+msgstr "Samstag"
+
+#: ../mstw-game-schedule.php:2069
+msgid "Sunday"
+msgstr "Sonntag"
+
+#: ../mstw-game-schedule.php:2073
+msgid "January"
+msgstr "Januar"
+
+#: ../mstw-game-schedule.php:2074
+msgid "February"
+msgstr "Februar"
+
+#: ../mstw-game-schedule.php:2075
+msgid "March"
+msgstr "März"
+
+#: ../mstw-game-schedule.php:2076
+msgid "April"
+msgstr "April"
+
+#: ../mstw-game-schedule.php:2077 ../mstw-game-schedule.php:2092
+msgid "May"
+msgstr "Mai"
+
+#: ../mstw-game-schedule.php:2078
+msgid "June"
+msgstr "Juni"
+
+#: ../mstw-game-schedule.php:2079
+msgid "July"
+msgstr "Juli"
+
+#: ../mstw-game-schedule.php:2080
+msgid "August"
+msgstr "August"
+
+#: ../mstw-game-schedule.php:2081
+msgid "September"
+msgstr "September"
+
+#: ../mstw-game-schedule.php:2082
+msgid "October"
+msgstr "Oktober"
+
+#: ../mstw-game-schedule.php:2083
+msgid "November"
+msgstr "November"
+
+#: ../mstw-game-schedule.php:2084
+msgid "December"
+msgstr "Dezember"
+
+#: ../mstw-game-schedule.php:2088
+msgid "Jan"
+msgstr "Jan"
+
+#: ../mstw-game-schedule.php:2089
+msgid "Feb"
+msgstr "Feb"
+
+#: ../mstw-game-schedule.php:2090
+msgid "Mar"
+msgstr "Mär"
+
+#: ../mstw-game-schedule.php:2091
+msgid "Apr"
+msgstr "Apr"
+
+#: ../mstw-game-schedule.php:2093
+msgid "Jun"
+msgstr "Jun"
+
+#: ../mstw-game-schedule.php:2094
+msgid "Jul"
+msgstr "Jul"
+
+#: ../mstw-game-schedule.php:2095
+msgid "Aug"
+msgstr "Aug"
+
+#: ../mstw-game-schedule.php:2096
+msgid "Sep"
+msgstr "Sep"
+
+#: ../mstw-game-schedule.php:2097
+msgid "Oct"
+msgstr "Okt"
+
+#: ../mstw-game-schedule.php:2098
+msgid "Nov"
+msgstr "Nov"
+
+#: ../mstw-game-schedule.php:2099
+msgid "Dec"
+msgstr "Dez"
+
+#: ../includes/mstw-gs-utility-functions.php:57
+msgid "Countdown"
+msgstr "Countdown"
+
+#: ../includes/mstw-gs-utility-functions.php:59
+msgid "Time to kickoff"
+msgstr "Zeit bis zur Spielstart"
+
+#: ../includes/mstw-gs-utility-functions.php:68 ../includes/mstw-game-schedules-admin.php:999
+msgid "Date"
+msgstr "Datum"
+
+#: ../includes/mstw-gs-utility-functions.php:71 ../includes/mstw-game-schedules-admin.php:690 ../includes/mstw-game-schedules-admin.php:1001
+msgid "Location"
+msgstr "Spielort"
+
+#: ../includes/mstw-gs-utility-functions.php:73
+msgid "Time/Result"
+msgstr "Zeit/Ergebnis"
+
+#: ../includes/mstw-gs-utility-functions.php:75
+msgid "Media Links"
+msgstr "Medien-Links"
+
+#: ../includes/mstw-gs-csv-import-class.php:251
+msgid "Unknown"
+msgstr "Unbekannt"
+
+#: ../includes/mstw-gs-csv-import-class.php:293
+msgid "sched"
+msgstr "Plan"
+
+#: ../includes/mstw-gs-csv-import-class.php:294
+msgid "id"
+msgstr "ID"
+
+#: ../includes/mstw-gs-csv-import-class.php:295
+msgid "schedule"
+msgstr "Spielplan"
+
+#: ../includes/mstw-gs-csv-import-class.php:296
+msgid "schedule id"
+msgstr "Spielplan-ID"
+
+#: ../includes/mstw-gs-csv-import-class.php:300
+msgid "opponent"
+msgstr "Gegner"
+
+#: ../includes/mstw-gs-csv-import-class.php:304
+msgid "opponent link"
+msgstr "Gegner-Link"
+
+#: ../includes/mstw-gs-csv-import-class.php:308
+msgid "date"
+msgstr "Datum"
+
+#: ../includes/mstw-gs-csv-import-class.php:309
+msgid "game date"
+msgstr "Spieltag"
+
+#: ../includes/mstw-gs-csv-import-class.php:338
+msgid "time"
+msgstr "Zeit"
+
+#: ../includes/mstw-gs-csv-import-class.php:339
+msgid "game time"
+msgstr "Spielzeit"
+
+#: ../includes/mstw-gs-csv-import-class.php:379
+msgid "home"
+msgstr "Heim"
+
+#: ../includes/mstw-gs-csv-import-class.php:380
+msgid "home game"
+msgstr "Heimspiel"
+
+#: ../includes/mstw-gs-csv-import-class.php:391
+msgid "location"
+msgstr "Ort"
+
+#: ../includes/mstw-gs-csv-import-class.php:392
+msgid "game location"
+msgstr "Austragungsort"
+
+#: ../includes/mstw-gs-csv-import-class.php:396
+msgid "location link"
+msgstr "Orts-Link"
+
+#: ../includes/mstw-gs-csv-import-class.php:397
+msgid "game location link"
+msgstr "Austragungsort-Link"
+
+#: ../includes/mstw-gs-csv-import-class.php:401
+msgid "result"
+msgstr "Ergebnis"
+
+#: ../includes/mstw-gs-csv-import-class.php:402
+msgid "final score"
+msgstr "Endergebnis"
+
+#: ../includes/mstw-gs-csv-import-class.php:406
+msgid "media label 1"
+msgstr "Medien-Label 1"
+
+#: ../includes/mstw-gs-csv-import-class.php:410
+msgid "media url 1"
+msgstr "Medien-URL 1"
+
+#: ../includes/mstw-gs-csv-import-class.php:414
+msgid "media label 2"
+msgstr "Medien-Label 2"
+
+#: ../includes/mstw-gs-csv-import-class.php:418
+msgid "media url 2"
+msgstr "Medien-URL 2"
+
+#: ../includes/mstw-gs-csv-import-class.php:421
+msgid "media label 3"
+msgstr "Medien-Label 3"
+
+#: ../includes/mstw-gs-csv-import-class.php:425
+msgid "media url 3"
+msgstr "Medien-URL 3"
+
+#: ../includes/mstw-gs-admin-utils.php:212 ../includes/mstw-gs-admin-utils.php:232 ../includes/mstw-gs-admin-utils.php:276 ../includes/mstw-gs-admin-utils.php:353 ../includes/mstw-gs-admin-utils.php:371 ../includes/mstw-gs-admin-utils.php:394 ../includes/mstw-game-schedules-admin.php:1016 ../includes/mstw-game-schedules-admin.php:1017
+msgid "Custom"
+msgstr "Spezifisch"
+
+#: ../includes/mstw-gs-admin-utils.php:217 ../includes/mstw-gs-admin-utils.php:376
+msgid "07 Apr 2013"
+msgstr "07. Apr 2013"
+
+#: ../includes/mstw-gs-admin-utils.php:218 ../includes/mstw-gs-admin-utils.php:377
+msgid "7 Apr 2013"
+msgstr "7. Apr 2013"
+
+#: ../includes/mstw-gs-admin-utils.php:219 ../includes/mstw-gs-admin-utils.php:378
+msgid "Tues, 07 Apr 2013"
+msgstr "Di, 07. Apr 2013"
+
+#: ../includes/mstw-gs-admin-utils.php:220 ../includes/mstw-gs-admin-utils.php:379
+msgid "Tues, 7 Apr 13"
+msgstr "Di, 7. Apr 13"
+
+#: ../includes/mstw-gs-admin-utils.php:221 ../includes/mstw-gs-admin-utils.php:381
+msgid "Tuesday, 07 April 2013"
+msgstr "Dienstag, 07. April 2013"
+
+#: ../includes/mstw-gs-admin-utils.php:222 ../includes/mstw-gs-admin-utils.php:382
+msgid "Tuesday, 7 April 2013"
+msgstr "Dienstag, 7. April 2013"
+
+#: ../includes/mstw-gs-admin-utils.php:223 ../includes/mstw-gs-admin-utils.php:383
+msgid "Tues, 07 Apr"
+msgstr "Di, 07. Apr"
+
+#: ../includes/mstw-gs-admin-utils.php:224
+msgid "Tuesday, 07 Apr"
+msgstr "Dienstag, 07. Apr"
+
+#: ../includes/mstw-gs-admin-utils.php:225 ../includes/mstw-gs-admin-utils.php:384
+msgid "Tues, 7 Apr"
+msgstr "Di, 7. Apr"
+
+#: ../includes/mstw-gs-admin-utils.php:226 ../includes/mstw-gs-admin-utils.php:380
+msgid "Tuesday, 7 Apr"
+msgstr "Dienstag, 7. Apr"
+
+#: ../includes/mstw-gs-admin-utils.php:227 ../includes/mstw-gs-admin-utils.php:385
+msgid "07 Apr"
+msgstr "07. Apr"
+
+#: ../includes/mstw-gs-admin-utils.php:228 ../includes/mstw-gs-admin-utils.php:386
+msgid "7 Apr"
+msgstr "7. Apr"
+
+#: ../includes/mstw-gs-admin-utils.php:233 ../includes/mstw-gs-admin-utils.php:354
+msgid "Tuesday, 07 April 01:15 pm"
+msgstr "Dienstag, 07. April 01:15 pm"
+
+#: ../includes/mstw-gs-admin-utils.php:234 ../includes/mstw-gs-admin-utils.php:355
+msgid "Tuesday, 7 April 01:15 pm"
+msgstr "Dienstag, 7. April 01:15 pm"
+
+#: ../includes/mstw-gs-admin-utils.php:235 ../includes/mstw-gs-admin-utils.php:356
+msgid "Tuesday, 07 April 1:15 pm"
+msgstr "Dienstag, 07. April 1:15 pm"
+
+#: ../includes/mstw-gs-admin-utils.php:236 ../includes/mstw-gs-admin-utils.php:357
+msgid "Tuesday, 7 April 1:15 pm"
+msgstr "Dienstag, 7. April 1:15 pm"
+
+#: ../includes/mstw-gs-admin-utils.php:237 ../includes/mstw-gs-admin-utils.php:238 ../includes/mstw-gs-admin-utils.php:358 ../includes/mstw-gs-admin-utils.php:359
+msgid "Tuesday, 7 April 13:15"
+msgstr "Dienstag, 7. April 13:15"
+
+#: ../includes/mstw-gs-admin-utils.php:239 ../includes/mstw-gs-admin-utils.php:360
+msgid "07 April 13:15"
+msgstr "07. April 13:15"
+
+#: ../includes/mstw-gs-admin-utils.php:240 ../includes/mstw-gs-admin-utils.php:361
+msgid "7 April 13:15"
+msgstr "7. April 13:15"
+
+#: ../includes/mstw-gs-admin-utils.php:241 ../includes/mstw-gs-admin-utils.php:362
+msgid "07 April 01:15 pm"
+msgstr "07. April 01:15 pm"
+
+#: ../includes/mstw-gs-admin-utils.php:242 ../includes/mstw-gs-admin-utils.php:363
+msgid "7 April 01:15 pm"
+msgstr "7. April 01:15 pm"
+
+#: ../includes/mstw-gs-admin-utils.php:247 ../includes/mstw-gs-admin-utils.php:251
+msgid "Formats for"
+msgstr "Formate für"
+
+#: ../includes/mstw-gs-admin-utils.php:247
+msgid "7 April 2013 13:15"
+msgstr "7. April 2013 13:15"
+
+#: ../includes/mstw-gs-admin-utils.php:251
+msgid "7 April 2013"
+msgstr "7. April 2013"
+
+#: ../includes/mstw-gs-admin-utils.php:277 ../includes/mstw-gs-admin-utils.php:395
+msgid "08:00 (24hr)"
+msgstr "08:00 (24Std)"
+
+#: ../includes/mstw-gs-admin-utils.php:278 ../includes/mstw-gs-admin-utils.php:396
+msgid "8:00 (24hr)"
+msgstr "8:00 (24Std)"
+
+#: ../includes/mstw-gs-admin-utils.php:279 ../includes/mstw-gs-admin-utils.php:397
+msgid "08:00 am"
+msgstr "08:00 am"
+
+#: ../includes/mstw-gs-admin-utils.php:280 ../includes/mstw-gs-admin-utils.php:398
+msgid "08:00 AM"
+msgstr "08:00 AM"
+
+#: ../includes/mstw-gs-admin-utils.php:281 ../includes/mstw-gs-admin-utils.php:399
+msgid "8:00 am"
+msgstr "8:00 am"
+
+#: ../includes/mstw-gs-admin-utils.php:282 ../includes/mstw-gs-admin-utils.php:400
+msgid "8:00 AM"
+msgstr "8:00 AM"
+
+#: ../includes/mstw-gs-admin-utils.php:291
+msgid "Formats for eight in the morning"
+msgstr "Formate für acht Uhr morgens"
+
+#: ../includes/mstw-gs-admin-utils.php:366
+msgid "Formats for 7 April 2013 13:15."
+msgstr "Formate für den 7. April 2013 um 13:15"
+
+#: ../includes/mstw-gs-admin-utils.php:389
+msgid "Formats for 7 Apr 2013. Default: 2013-04-07"
+msgstr "Formate für den 7. April 2013. Vorgabe: 2013-04-07"
+
+#: ../includes/mstw-gs-admin-utils.php:403
+msgid "Formats for eight in the morning. Default: 08:00"
+msgstr "Formate für acht Uhr morgens. Vorgabe: 08:00"
+
+#: ../includes/mstw-game-schedules-admin.php:306
+msgid "Team Full Name:"
+msgstr "Kompletter Team-Name:"
+
+#: ../includes/mstw-game-schedules-admin.php:411
+msgid "Unique Schedule ID:"
+msgstr "Individuelle Spielplan-ID:"
+
+#: ../includes/mstw-game-schedules-admin.php:524
+msgid "TBA"
+msgstr "TBA"
+
+#: ../includes/mstw-game-schedules-admin.php:525
+msgid "T.B.A."
+msgstr "T.B.A."
+
+#: ../includes/mstw-game-schedules-admin.php:526
+msgid "TBD"
+msgstr "TBD"
+
+#: ../includes/mstw-game-schedules-admin.php:527
+msgid "T.B.D."
+msgstr "T.B.D."
+
+#: ../includes/mstw-game-schedules-admin.php:573
+msgid "Game Date"
+msgstr "Spieltag"
+
+#: ../includes/mstw-game-schedules-admin.php:574
+msgid "Game Time"
+msgstr "Spielzeit"
+
+#: ../includes/mstw-game-schedules-admin.php:576 ../includes/mstw-game-schedules-admin.php:1003
+msgid "Media"
+msgstr "Medien"
+
+#: ../includes/mstw-game-schedules-admin.php:586
+msgid "Schedule ID:"
+msgstr "Spielplan-ID:"
+
+#: ../includes/mstw-game-schedules-admin.php:663 ../includes/mstw-game-schedules-admin.php:736
+msgid "Link:"
+msgstr "Link:"
+
+#: ../includes/mstw-game-schedules-admin.php:703
+msgid " Select "
+msgstr " Wähle "
+
+#: ../includes/mstw-game-schedules-admin.php:703
+msgid " from Game Locations:"
+msgstr " aus Game Schedules:"
+
+#: ../includes/mstw-game-schedules-admin.php:731
+msgid ""
+"This setting WILL OVERRIDE any selection from the Game Locations dropdown. "
+"Therefore it should not be used if location is selected from Game Locations "
+"dropdown."
+msgstr ""
+"Diese Einstellung <strong>wird jeglicher Auswahl </strong> im Austragungsort-"
+"Aufklappmenü <strong>ersetzen</strong>. Daher sollte sie nicht verwendet werden,"
+" wenn Austragungsorte im Austragungsort-Aufklappmenü verwendet werden."
+
+#: ../includes/mstw-game-schedules-admin.php:739
+msgid ""
+"This could be a link to a map or to a venue website. It will override the Game "
+"Locations map link. "
+msgstr ""
+"Dies kann z.B. einen Link zu einer Karte oder zur Website der Veranstalter sein."
+" Was hier eingegeben wird, <strong>ersetz</strong>t den Karten-Link aus dem "
+"Game Locations-Plugin."
+
+#: ../includes/mstw-game-schedules-admin.php:744
+msgid "Game Result:"
+msgstr "Spielergebnis:"
+
+#: ../includes/mstw-game-schedules-admin.php:747
+msgid ""
+"If a result is entered here, it will replace the game time in all front end "
+"displays."
+msgstr ""
+"Wenn hier ein Ergebnis eingetragen wird, ersetzt dieses die Spielzeit in allen "
+"Frontend-Darstellungen."
+
+#: ../includes/mstw-game-schedules-admin.php:752
+msgid "Label 1:"
+msgstr "Beschriftung 1:"
+
+#: ../includes/mstw-game-schedules-admin.php:755 ../includes/mstw-game-schedules-admin.php:771 ../includes/mstw-game-schedules-admin.php:787
+msgid "This text will be displayed for "
+msgstr "Dieser Text wird angezeigt für "
+
+#: ../includes/mstw-game-schedules-admin.php:755
+msgid " link 1. If it is blank, NO LINKS WILL BE DISPLAYED."
+msgstr " Link 1. Wenn leer <strong>werden keine Links angezeigt.</strong>"
+
+#: ../includes/mstw-game-schedules-admin.php:760
+msgid "URL 1:"
+msgstr "URL 1:"
+
+#: ../includes/mstw-game-schedules-admin.php:763 ../includes/mstw-game-schedules-admin.php:779 ../includes/mstw-game-schedules-admin.php:795
+msgid "URL for "
+msgstr "URL für "
+
+#: ../includes/mstw-game-schedules-admin.php:763
+msgid " link 1."
+msgstr " Link 1."
+
+#: ../includes/mstw-game-schedules-admin.php:768
+msgid "Label 2:"
+msgstr "Beschriftung 2:"
+
+#: ../includes/mstw-game-schedules-admin.php:771
+msgid " link 2. If it is blank, #3 below will be ignored."
+msgstr " Link 1. Wenn leer, wird #3 (unten) ignoriert."
+
+#: ../includes/mstw-game-schedules-admin.php:776
+msgid "URL 2:"
+msgstr "URL 2:"
+
+#: ../includes/mstw-game-schedules-admin.php:779
+msgid " link 2."
+msgstr " Link 2."
+
+#: ../includes/mstw-game-schedules-admin.php:784
+msgid "Label 3:"
+msgstr "Beschriftung 3:"
+
+#: ../includes/mstw-game-schedules-admin.php:787 ../includes/mstw-game-schedules-admin.php:795
+msgid " link 3."
+msgstr " Link 3."
+
+#: ../includes/mstw-game-schedules-admin.php:792
+msgid "URL 3:"
+msgstr "URL 3:"
+
+#: ../includes/mstw-game-schedules-admin.php:836
+msgid "Select Opponent:"
+msgstr "Gegner auswählen:"
+
+#: ../includes/mstw-game-schedules-admin.php:1002
+msgid "Time"
+msgstr "Zeit"
+
+#: ../includes/mstw-game-schedules-admin.php:1007 ../includes/mstw-game-schedules-admin.php:1178 ../includes/mstw-game-schedules-admin.php:1303
+msgid "Title"
+msgstr "Titel"
+
+#: ../includes/mstw-game-schedules-admin.php:1013 ../includes/mstw-game-schedules-admin.php:1017
+msgid "Link"
+msgstr "Link"
+
+#: ../includes/mstw-game-schedules-admin.php:1014
+msgid "Result"
+msgstr "Ergebnis"
+
+#: ../includes/mstw-game-schedules-admin.php:1053
+msgid "No Schedule Defined"
+msgstr "Kein Spielplan definiert"
+
+#: ../includes/mstw-game-schedules-admin.php:1064
+msgid "No Game Date"
+msgstr "Kein Spieltag"
+
+#: ../includes/mstw-game-schedules-admin.php:1093
+msgid "No Game Result"
+msgstr "Kein Spielergebnis"
+
+#: ../includes/mstw-game-schedules-admin.php:1106
+msgid "No Opponent"
+msgstr "Kein Gegner"
+
+#: ../includes/mstw-game-schedules-admin.php:1118
+msgid "No Opponent Link"
+msgstr "Kein Gegner-Link"
+
+#: ../includes/mstw-game-schedules-admin.php:1130
+msgid "No Location from Game Locations Plugin"
+msgstr "Kein Spielort vom Austragungsort-Plugin"
+
+#: ../includes/mstw-game-schedules-admin.php:1142
+msgid "No Location"
+msgstr "Kein Austragungsort"
+
+#: ../includes/mstw-game-schedules-admin.php:1154
+msgid "No Location Link"
+msgstr "Kein Austragungsort-Link"
+
+#: ../includes/mstw-game-schedules-admin.php:1179
+msgid "Team Full Name"
+msgstr "Kompletter Team-Name"
+
+#: ../includes/mstw-game-schedules-admin.php:1180
+msgid "Team Short Name"
+msgstr "Abgekürzter Team-Name"
+
+#: ../includes/mstw-game-schedules-admin.php:1181
+msgid "Mascot Full Name"
+msgstr "Kompletter Maskottchen-Name"
+
+#: ../includes/mstw-game-schedules-admin.php:1182
+msgid "Mascot Short Name"
+msgstr "Abgekürzter Maskottchen-Name"
+
+#: ../includes/mstw-game-schedules-admin.php:1183
+msgid "Team Link"
+msgstr "Link zur Mannschaft"
+
+#: ../includes/mstw-game-schedules-admin.php:1184
+msgid "Team Table Logo"
+msgstr "Mannschafts-Logo für Tabelle"
+
+#: ../includes/mstw-game-schedules-admin.php:1185
+msgid "Team Slider Logo"
+msgstr "Mannschafts-Logo für Slider"
+
+#: ../includes/mstw-game-schedules-admin.php:1186
+msgid "Team Home Venue"
+msgstr "Heim-Austragungsort der Mannschaft"
+
+#: ../includes/mstw-game-schedules-admin.php:1217
+msgid "No Full Name"
+msgstr "Kein kompletter Name"
+
+#: ../includes/mstw-game-schedules-admin.php:1226
+msgid "No Short Name"
+msgstr "Kein abgekürzter Name"
+
+#: ../includes/mstw-game-schedules-admin.php:1235
+msgid "No Full Mascot"
+msgstr "Kein kompletter Maskottchen-Name"
+
+#: ../includes/mstw-game-schedules-admin.php:1244
+msgid "No Short Mascot"
+msgstr "Kein abgekürzter Maskottchen-Name"
+
+#: ../includes/mstw-game-schedules-admin.php:1253
+msgid "No Team Link"
+msgstr "Kein Link zur Mannschaft"
+
+#: ../includes/mstw-game-schedules-admin.php:1262
+msgid "No Table Logo"
+msgstr "Kein Mannschafts-Logo für Tabelle"
+
+#: ../includes/mstw-game-schedules-admin.php:1271
+msgid "No Slider Logo"
+msgstr "Kein Mannschafts-Logo für Slider"
+
+#: ../includes/mstw-game-schedules-admin.php:1280
+msgid "No Home Venue"
+msgstr "Kein Heim-Austragungsort"
+
+#: ../includes/mstw-game-schedules-admin.php:1304
+msgid "Unique Schedule ID"
+msgstr "Individuelle Spielplan-ID"
+
+#: ../includes/mstw-game-schedules-admin.php:1305
+msgid "Schedule for Team"
+msgstr "Spielplan für Mannschaft"
+
+#: ../includes/mstw-game-schedules-admin.php:1336
+msgid "No Schedule ID"
+msgstr "Keine Spielplan-ID"
+
+#: ../includes/mstw-game-schedules-admin.php:1346
+msgid "No Team for Schedule"
+msgstr "Keine Mannschaft für Spielplan"
+
+#: ../includes/mstw-game-schedules-admin.php:1449
+msgid "Save Changes"
+msgstr "\"Änderungen speichern\""
+
+#: ../includes/mstw-game-schedules-admin.php:1452
+msgid "Reset Default Values"
+msgstr "\"Auf Vorgaben zurücksetzen\""
+
+#: ../includes/mstw-game-schedules-admin.php:1453
+msgid "WARNING! Reset Default Values will do so without further warning!"
+msgstr "WARNUNG! Auf Vorgaben zurücksetzen wird ohne weitere Hinweise durchgeführt!"
+
+#: ../includes/mstw-game-schedules-admin.php:1550 ../includes/mstw-game-schedules-admin.php:1753
+msgid "Header Background Color:"
+msgstr "Hintergrundfarbe Kopfzeile:"
+
+#: ../includes/mstw-game-schedules-admin.php:1558 ../includes/mstw-game-schedules-admin.php:1777
+msgid "Header Text Color:"
+msgstr "Textfarbe Kopfzeile:"
+
+#: ../includes/mstw-game-schedules-admin.php:1567
+msgid "Table Border Color:"
+msgstr "Farbe Tabellenumrandung:"
+
+#: ../includes/mstw-game-schedules-admin.php:1576
+msgid "Odd Row Background Color:"
+msgstr "Hintergrundfarbe für ungerade Reihen:"
+
+#: ../includes/mstw-game-schedules-admin.php:1585
+msgid "Odd Row Text Color:"
+msgstr "Textfarbe für ungerade Reihen:"
+
+#: ../includes/mstw-game-schedules-admin.php:1594
+msgid "Even Row Background Color:"
+msgstr "Hintergrundfarbe für gerade Reihen:"
+
+#: ../includes/mstw-game-schedules-admin.php:1603
+msgid "Even Row Text Color:"
+msgstr "Textfarbe für gerade Reihen:"
+
+#: ../includes/mstw-game-schedules-admin.php:1612
+msgid "Home Game (row) Background Color:"
+msgstr "Hintergrundfarbe für Heimspiel-Reihen:"
+
+#: ../includes/mstw-game-schedules-admin.php:1621
+msgid "Home Game (row) Text Color:"
+msgstr "Textfarbe für Heimspiel-Reihen:"
+
+#: ../includes/mstw-game-schedules-admin.php:1656
+msgid "Game Time Text Color:"
+msgstr "Textfarbe für Spielzeit:"
+
+#: ../includes/mstw-game-schedules-admin.php:1668
+msgid "Opponent Text Color:"
+msgstr "Textfarbe für Gegner:"
+
+#: ../includes/mstw-game-schedules-admin.php:1680
+msgid "Location Text Color:"
+msgstr "Textfarbe für Austragungsort:"
+
+#: ../includes/mstw-game-schedules-admin.php:1692
+msgid "Intro Text Color:"
+msgstr "Textfarbe für Einleitung:"
+
+#: ../includes/mstw-game-schedules-admin.php:1704
+msgid "Countdown Text Color:"
+msgstr "Textfarbe für Countdown:"
+
+#: ../includes/mstw-game-schedules-admin.php:1716
+msgid "Countdown Background Color:"
+msgstr "Hintergrundfarbe für Countdown:"
+
+#: ../includes/mstw-game-schedules-admin.php:1765
+msgid "Game Block Background Color:"
+msgstr "Hintergrundfarbe für Spielblock:"
+
+#: ../includes/mstw-game-schedules-admin.php:1789
+msgid "Header Divider (line) Color:"
+msgstr "Linienfarbe für Kopfzeilen-Trenner:"
+
+#: ../includes/mstw-game-schedules-admin.php:1801
+msgid "Game Date Color:"
+msgstr "Farbe für Spieltag:"
+
+#: ../includes/mstw-game-schedules-admin.php:1813
+msgid "Opponent Color:"
+msgstr "Farbe für Gegner:"
+
+#: ../includes/mstw-game-schedules-admin.php:1825
+msgid "Game Location Color:"
+msgstr "Farbe für Austragungsort:"
+
+#: ../includes/mstw-game-schedules-admin.php:1837
+msgid "Game Time Color:"
+msgstr "Farbe für Spielzeit:"
+
+#: ../includes/mstw-game-schedules-admin.php:1849
+msgid "Game Links Color:"
+msgstr "Farbe für Spiele-Links:"
+
+#: ../includes/mstw-game-schedules-admin.php:1868
+msgid ""
+"Enter the default colors for your Schedule Table shortcodes and widgets. NOTE: "
+"These settings will override the default colors in the plugin's stylsheet."
+msgstr ""
+"Gib die Vorgabe-Farben für deine Spielplantabellen-Shortcodes und -Widgets ein. "
+"<strong>Bemerkung:</strong> Diese Einstellungen ersetzen die Vorgabe-Farben im "
+"Stylesheet des Plugins."
+
+#: ../includes/mstw-game-schedules-admin.php:1875
+msgid ""
+"Enter the default colors for your countdown timer shortcodes and widgets. NOTE: "
+"These settings will override the default colors in the plugin's stylsheet."
+msgstr ""
+"Gib die Vorgabe-Farben für deine Countdown-Shortcodes und -Widgets ein. "
+"<strong>Bemerkung:</strong> Diese Einstellungen ersetzen die Vorgabe-Farben im "
+"Stylesheet des Plugins."
+
+#: ../includes/mstw-game-schedules-admin.php:1882
+msgid ""
+"Enter the default colors for your Schedule Slider shortcodes and widgets. NOTE: "
+"These settings will override the default colors in the plugin's stylsheet."
+msgstr ""
+"Gib die Vorgabe-Farben für deine Spielplan-Slider-Shortcodes und -Widgets ein. "
+"<strong>Bemerkung:</strong> Diese Einstellungen ersetzen die Vorgabe-Farben im "
+"Stylesheet des Plugins."
+
+#: ../includes/mstw-game-schedules-admin.php:1889
+msgid ""
+"Control the display of team names & logos. NOTE: THESE SETTINGS ONLY APPLY WHEN "
+"SELECTING OPPONENTS FROM THE MSTW TEAMS DATABASE."
+msgstr ""
+"Steuert die Darstellung von Mannschaft-Namen und -Logos. <strong>Bemerkung: "
+"Diese Einstellungen werden nur angewandt, wenn die Gegner aus sem MSTW-"
+"Datenbank ausgewählt wurden.</strong>"
+
+#: ../includes/mstw-game-schedules-admin.php:1913
+msgid "Admin Page Formats"
+msgstr "Formate der Administrator-Seite"
+
+#: ../includes/mstw-game-schedules-admin.php:1925
+msgid "Admin Table Date Format:"
+msgstr "Datumsformat der Administrator-Seite:"
+
+#: ../includes/mstw-game-schedules-admin.php:1936 ../includes/mstw-game-schedules-admin.php:1960 ../includes/mstw-game-schedules-admin.php:2003 ../includes/mstw-game-schedules-admin.php:2027 ../includes/mstw-game-schedules-admin.php:2051 ../includes/mstw-game-schedules-admin.php:2094
+msgid ""
+"Enter a PHP date() format string for a custom format. You probably should know "
+"what you are doing before selecting the custom option."
+msgstr ""
+"Gib eine Zeichenkette für ein selbstdefiniertes Datumformat nach PHP date() "
+"Vorgaben. Du solltest genau wissen was du tuest, bevor du dieser Option "
+"verwendest."
+
+#: ../includes/mstw-game-schedules-admin.php:1937
+msgid "Admin Table Custom Date Format:"
+msgstr "Selbstdefiniertes Datumformat für die Administrator-Tabelle:"
+
+#: ../includes/mstw-game-schedules-admin.php:1949
+msgid "Admin Table Time Format:"
+msgstr "Datumformat für die Administrator-Tabelle:"
+
+#: ../includes/mstw-game-schedules-admin.php:1961
+msgid "Custom Admin Table Time Format:"
+msgstr "Selbstdefiniertes Zeitformat für die Administrator-Tabelle:"
+
+#: ../includes/mstw-game-schedules-admin.php:1980
+msgid "Table Shortcode & Widget Formats"
+msgstr "Formate für Tabellen-Shortcodes & Widgets"
+
+#: ../includes/mstw-game-schedules-admin.php:1992
+msgid "Schedule Table [shortcode] Date Format:"
+msgstr "Datumsformat für Spielplan-Tabelle [shortcode]:"
+
+#: ../includes/mstw-game-schedules-admin.php:2004
+msgid "Schedule Table [shortcode] Custom Date Format:"
+msgstr "Selbstdefiniertes Datumsformat für Spielplan-Tabelle [shortcode]:"
+
+#: ../includes/mstw-game-schedules-admin.php:2015
+msgid "Schedule Table [shortcode] Time Format:"
+msgstr "Zeitformat für Spielplan-Tabelle [shortcode]:"
+
+#: ../includes/mstw-game-schedules-admin.php:2028
+msgid "Admin Table Custom Time Format:"
+msgstr "Selbstdefiniertes Zeitformat für die Administrator-Tabelle:"
+
+#: ../includes/mstw-game-schedules-admin.php:2040
+msgid "Schedule Table (widget) Date Format:"
+msgstr "Datumsformat für Spielplan-Tabelle (Widget):"
+
+#: ../includes/mstw-game-schedules-admin.php:2052
+msgid "Schedule Table Widget Custom Date Format:"
+msgstr "Selbstdefiniertes Datumsformat für Spielplan-Tabelle (Widget):"
+
+#: ../includes/mstw-game-schedules-admin.php:2071
+msgid "Countdown Timer Formats"
+msgstr "Formate des Countdown-Timers"
+
+#: ../includes/mstw-game-schedules-admin.php:2083
+msgid "Countdown Timer (widget & [shortcode]) Date & Time Format:"
+msgstr "Datums- und Zeitformat des Countdown-Timers (Widget & [shortcode]):"
+
+#: ../includes/mstw-game-schedules-admin.php:2095
+msgid "Countdown Timer (widget & [shortcode]) Custom Date & Time Format:"
+msgstr ""
+"Eigendefiniertes Datums- und Zeitformat des Countdown-Timers (Widget & "
+"[shortcode]):"
+
+#: ../includes/mstw-game-schedules-admin.php:2106
+msgid "Used when game time is TBA."
+msgstr "Wird verwendet wenn die Spielzeit ist \"TBA\"."
+
+#: ../includes/mstw-game-schedules-admin.php:2107
+msgid "Countdown Timer (widget & [shortcode]) Date Format:"
+msgstr "Datumsformat des Countdown-Timers (Widget & [shortcode]):"
+
+#: ../includes/mstw-game-schedules-admin.php:2118
+msgid ""
+"Used when game time is TBA. Enter a PHP date() format string for a custom "
+"format. You probably should know what you are doing before selecting the custom "
+"option."
+msgstr ""
+"Wird verwendet wenn die Spielzeit \"TBA\" ist. Gib eine Zeichenkette für ein "
+"selbstdefiniertes Datumformat nach PHP date() Vorgaben. Du solltest genau "
+"wissen was du tuest, bevor du dieser Option verwendest."
+
+#: ../includes/mstw-game-schedules-admin.php:2119
+msgid "Countdown Timer (widget & [shortcode]) Custom Date Format:"
+msgstr "Eigendefiniertes Datumsformat des Countdown-Timers (Widget & [shortcode]):"
+
+#: ../includes/mstw-game-schedules-admin.php:2138
+msgid "Schedule Slider Formats"
+msgstr "Formate des Spielplan-Sliders"
+
+#: ../includes/mstw-game-schedules-admin.php:2151
+msgid "Schedule Slider Date Format:"
+msgstr "Datumsformat des Spielplan-Sliders:"
+
+#: ../includes/mstw-game-schedules-admin.php:2162 ../includes/mstw-game-schedules-admin.php:2186
+msgid ""
+"Enter a PHP date() format string for a custom format. You probably should know "
+"what you are doing before selecting the custom option. (Default: \"\")"
+msgstr ""
+"Gib eine Zeichenkette für ein selbstdefiniertes Datumformat nach PHP date() "
+"Vorgaben. Du solltest genau wissen was du tuest, bevor du dieser Option "
+"verwendest. (Vorgabe: \"\")"
+
+#: ../includes/mstw-game-schedules-admin.php:2163
+msgid "Schedule Slider Custom Date Format:"
+msgstr "Selbstdefiniertes Datumsformat des Spielplan-Sliders:"
+
+#: ../includes/mstw-game-schedules-admin.php:2175
+msgid "Schedule Slider Time Format:"
+msgstr "Zeitformat des Spielplan-Sliders:"
+
+#: ../includes/mstw-game-schedules-admin.php:2187
+msgid "Schedule Slider Custom Time Format:"
+msgstr "Selbstdefiniertes Zeitformat des Spielplan-Sliders:"
+
+#: ../includes/mstw-game-schedules-admin.php:2213
+msgid "Data Field and Table Column Settings"
+msgstr "Einstellungen der Daten-Felder und Tabellen-Überschriften"
+
+#: ../includes/mstw-game-schedules-admin.php:2226
+msgid "Show Date Column:"
+msgstr "Spieltag-Spalte anzeigen:"
+
+#: ../includes/mstw-game-schedules-admin.php:2228
+msgid "Show or hide the Date field/column. (Default: Show)"
+msgstr "Spieltag-Feld/Spalte anzeigen oder verstecken. (Vorgabe: anzeigen)"
+
+#: ../includes/mstw-game-schedules-admin.php:2250
+msgid "Date Column Label:"
+msgstr "Beschriftung Spieltag-Spalte:"
+
+#: ../includes/mstw-game-schedules-admin.php:2252
+msgid "Set the label/title for date data field and/or column. (Default: \"Date\")"
+msgstr ""
+"Gib die Beschriftung/Titel für Spieltag-Feld und/oder Spalte ein. (Vorgabe: "
+"\"Datum\")"
+
+#: ../includes/mstw-game-schedules-admin.php:2274
+msgid "Opponent Column Label:"
+msgstr "Beschriftung Gegner-Spalte:"
+
+#: ../includes/mstw-game-schedules-admin.php:2276
+msgid ""
+"Set label for opponent data field or column. (Default: \"Opponent\") NOTE: THE "
+"OPPONENT FIELD MUST  BE SHOWN."
+msgstr ""
+"Beschriftung für Gegner-Feld oder Spalte eingeben. (Vorgabe: \"Gegner\") "
+"<strong>Bemerkung: das Gegner-Feld muss angezeigt werden.</strong>"
+
+#: ../includes/mstw-game-schedules-admin.php:2298
+msgid "Show Location Column:"
+msgstr "Austragungsort-Spalte anzeigen:"
+
+#: ../includes/mstw-game-schedules-admin.php:2300
+msgid "Show or hide the Location field/column. (Default: Show)"
+msgstr "Austragungsort-Feld/Spalte anzeigen oder verstecken. (Vorgabe: anzeigen)"
+
+#: ../includes/mstw-game-schedules-admin.php:2322
+msgid "Location Column Label:"
+msgstr "Beschriftung Austragungsort-Spalte:"
+
+#: ../includes/mstw-game-schedules-admin.php:2324
+msgid "Set label for location data field or column. (Default: \"Location\")"
+msgstr ""
+"Beschriftung für Austragungsort-Feld oder Spalte eingeben. (Vorgabe: "
+"\"Austragungsort\")"
+
+#: ../includes/mstw-game-schedules-admin.php:2346
+msgid "Show Time/Result Column:"
+msgstr "Zeit/Ergebnis-Spalte anzeigen:"
+
+#: ../includes/mstw-game-schedules-admin.php:2348
+msgid "Show or hide the Time/Result field or column. (Default: Show)"
+msgstr ""
+"Spielzeit/Ergebnis-Feld oder Spalte anzeigen oder verstecken. (Vorgabe: "
+"anzeigen)"
+
+#: ../includes/mstw-game-schedules-admin.php:2370
+msgid "Time/Result Column Label:"
+msgstr "Beschriftung Spielzeit/Ergebnis-Spalte:"
+
+#: ../includes/mstw-game-schedules-admin.php:2372
+msgid "Set label for time/result data field or column. (Default: \"Time/Result\")"
+msgstr ""
+"Beschriftung für Spielzeit/Ergebnis-Feld oder Spalte eingeben. (Vorgabe: "
+"\"Spielzeit/Ergebnis\")"
+
+#: ../includes/mstw-game-schedules-admin.php:2394
+msgid "Show Media Column:"
+msgstr "Media-Spalte anzeigen:"
+
+#: ../includes/mstw-game-schedules-admin.php:2396
+msgid ""
+"Show a number of media fields (1-3) or hide the Media field or column. (Default:"
+" Show all 3)"
+msgstr ""
+"Zeige eine Anzahl Medien-Felder (1-3) an oder das Medien-Feld oder Spalte "
+"verstecken. (Vorgabe: alle 3 anzeigen)"
+
+#: ../includes/mstw-game-schedules-admin.php:2422
+msgid "Media Column Label:"
+msgstr "Beschriftung Media-Spalte:"
+
+#: ../includes/mstw-game-schedules-admin.php:2424
+msgid "Set label for media data field or column. (Default: \"Media Links\")"
+msgstr "Beschriftung für Medien-Feld oder Spalte eingeben (Vorgabe: \"Medien-Links\")"
+
+#: ../includes/mstw-game-schedules-admin.php:2452
+msgid "MSTW Team Database Settings"
+msgstr "Einstellungen MWST Mannschaft-Datenbasis"
+
+#: ../includes/mstw-game-schedules-admin.php:2466
+msgid "Opponent Name Format in Schedule TABLES:"
+msgstr "Namensformat für Gegner in TABELLEN:"
+
+#: ../includes/mstw-game-schedules-admin.php:2468 ../includes/mstw-game-schedules-admin.php:2495
+msgid "(Default: Full Name Only)"
+msgstr "(Vorgabe: Nur vollständiger Name)"
+
+#: ../includes/mstw-game-schedules-admin.php:2472 ../includes/mstw-game-schedules-admin.php:2499
+msgid "Short Name Only"
+msgstr "Nur abgekürzter Name"
+
+#: ../includes/mstw-game-schedules-admin.php:2473 ../includes/mstw-game-schedules-admin.php:2500
+msgid "Full Name Only"
+msgstr "Nur vollständiger Name"
+
+#: ../includes/mstw-game-schedules-admin.php:2474 ../includes/mstw-game-schedules-admin.php:2501
+msgid "Short Name & Mascot"
+msgstr "Abgekürzter Name & Maskottchen"
+
+#: ../includes/mstw-game-schedules-admin.php:2475 ../includes/mstw-game-schedules-admin.php:2502
+msgid "Full Name & Mascot"
+msgstr "Vollständiger Name & Maskottchen"
+
+#: ../includes/mstw-game-schedules-admin.php:2493
+msgid "Opponent Name Format in Schedule SLIDERS:"
+msgstr "Namensformat für Gegner in SLIDERS:"
+
+#: ../includes/mstw-game-schedules-admin.php:2518
+msgid ""
+"NOTE: this setting only applies if scheduled opponents are selected from the "
+"MSTW Teams database. . (Default: Show Name Only)"
+msgstr ""
+"BEMERKUNG: Diese Einstellungen werden nur angewandt, wenn die Gegner aus der "
+"MSTW-Datenbank ausgewählt wurden. (Vorgabe: Nur Name anzeigen)"
+
+#: ../includes/mstw-game-schedules-admin.php:2519
+msgid "Show Team Logos in Schedule TABLES:"
+msgstr "Mannschafts-Logos in Spielplan-TABELLEN anzeigen:"
+
+#: ../includes/mstw-game-schedules-admin.php:2521 ../includes/mstw-game-schedules-admin.php:2536 ../includes/mstw-game-schedules-admin.php:2552
+msgid "Show Name Only"
+msgstr "Nur Name anzeigen"
+
+#: ../includes/mstw-game-schedules-admin.php:2522 ../includes/mstw-game-schedules-admin.php:2537
+msgid "Show Logo & Name"
+msgstr "Logo & Name anzeigen"
+
+#: ../includes/mstw-game-schedules-admin.php:2523 ../includes/mstw-game-schedules-admin.php:2538
+msgid "Show Logo Only"
+msgstr "Nur Logo anzeigen"
+
+#: ../includes/mstw-game-schedules-admin.php:2533
+msgid ""
+"NOTE: this setting only applies if scheduled opponents are selected from the "
+"MSTW Teams database. (Default: Hide-Show Name Only)"
+msgstr ""
+"BEMERKUNG: Diese Einstellungen werden nur angewandt, wenn die Gegner aus der "
+"MSTW-Datenbank ausgewählt wurden. (Vorgabe: verstecken-nur Name anzeigen)"
+
+#: ../includes/mstw-game-schedules-admin.php:2534
+msgid "Show Team Logos in Schedule SLIDERS:"
+msgstr "Mannschafts-Logos in Spielplan-SLIDERS anzeigen:"
+
+#: ../includes/mstw-game-schedules-admin.php:2548
+msgid ""
+"NOTE: this setting only applies if scheduled opponents are selected from the "
+"MSTW Teams database. (Default: Name Only)"
+msgstr ""
+"BEMERKUNG: Diese Einstellungen werden nur angewandt, wenn die Gegner aus der "
+"MSTW-Datenbank ausgewählt wurden. (Vorgabe: nur Name)"
+
+#: ../includes/mstw-game-schedules-admin.php:2549
+msgid "Format for Location:"
+msgstr "Format für Austragungsort:"
+
+#: ../includes/mstw-game-schedules-admin.php:2553
+msgid "Show City, State (Name)"
+msgstr "Stadt und Land (Name) anzeigen"
+
+#: ../includes/mstw-game-schedules-admin.php:2563
+msgid ""
+"NOTE: this setting only applies if scheduled opponents are selected from the "
+"MSTW Teams database. (Default: No Link)"
+msgstr ""
+"BEMERKUNG: Diese Einstellungen werden nur angewandt, wenn die Gegner aus der "
+"MSTW-Datenbank ausgewählt wurden. (Vorgabe: kein Link)"
+
+#: ../includes/mstw-game-schedules-admin.php:2564
+msgid "Link from Location:"
+msgstr "Link zur Austragungsort:"
+
+#: ../includes/mstw-game-schedules-admin.php:2567
+msgid "No Link"
+msgstr "Kein Link"
+
+#: ../includes/mstw-game-schedules-admin.php:2568
+msgid "Link to Venue URL"
+msgstr "Link zur Homepage der Veranstalter"
+
+#: ../includes/mstw-game-schedules-admin.php:2569
+msgid "Link to Map URL"
+msgstr "Karten-Link"
+
+#: ../includes/mstw-game-schedules-admin.php:2586
+msgid ""
+"Settings to control the visibility of data fields & table columns as well as to "
+"change their labels to \"re-purpose\" the fields. "
+msgstr ""
+"Einstellungen für die Anzeige von Datenfelder und Tabellenspalten, sowie deren "
+"Beschriftungen (um neue Bedeutungen zuzuweisen) ändern."
+
+#: ../includes/mstw-game-schedules-admin.php:2596
+msgid "Enter the date-time formats for the admin pages. "
+msgstr "Gib das Datums- und Zeitformat für die Administrations-Seiten ein."
+
+#: ../includes/mstw-game-schedules-admin.php:2596 ../includes/mstw-game-schedules-admin.php:2600 ../includes/mstw-game-schedules-admin.php:2604 ../includes/mstw-game-schedules-admin.php:2608
+msgid ""
+"NOTE that if 'Custom' is selected as the format a valid PHP date() format "
+"string must be entered in the corresponding format text field."
+msgstr ""
+"BEMERKUNG: wenn 'Selbstdefiniert' als Format ausgewählt ist, muss eine legale "
+"PHP date()-Zeichenkette in das entsprechende Texteingabe-Feld eingegeben werden."
+
+#: ../includes/mstw-game-schedules-admin.php:2600
+msgid "Enter the date-time formats for the schedule tables [shortcodes] and widgets. "
+msgstr ""
+"Gib die Zeit/Datums-Formate der Spielplan-Tabelle für [Shortcodes] und Widgets "
+"ein."
+
+#: ../includes/mstw-game-schedules-admin.php:2604
+msgid "Enter the date-time formats for the countdown timer [shortcode] & widgets. "
+msgstr ""
+"Gib die Zeit/Datums-Formate des Countdown-Timers für [Shortcodes] und Widgets "
+"ein."
+
+#: ../includes/mstw-game-schedules-admin.php:2608
+msgid "Enter the date-time formats for the schedule slider [shortcode]"
+msgstr ""
+"Gib die Zeit/Datums-Formate des Spielplan-Sliders für [Shortcodes] und Widgets "
+"ein."

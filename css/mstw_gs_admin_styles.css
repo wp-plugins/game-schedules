@@ -1,0 +1,23 @@
+/* Game Schedules Admin [mstw_gs_admin_styles] CSS Document 
+ *
+ ************************************************************
+ *  THIS FILE IS THE DEFAULT FOR THE GAME SCHEDULES PLUGIN  *
+ *  SIMPLY LOADS THE MSTW LOGOS FOR THE ADMIN PAGES         *
+ ************************************************************
+ */
+ 
+#icon-mstw-tr-main-menu.icon32 {
+	background: url('<?php echo plugins_url( '/game-schedules/images/mstw-logo-32x32.png', 'team-rosters' ); ?>') transparent no-repeat;
+}
+
+#icon-scheduled_games.icon32 {
+	background: url( ' <?php echo plugins_url( '/game-schedules/images/mstw-logo-32x32.png', 'team-rosters' ); ?> ') transparent no-repeat;
+}
+
+#icon-edit.icon32-posts-scheduled_games {
+	background: url( ' <?php echo plugins_url( '/game-schedules/images/mstw-logo-32x32.png', 'team-rosters' );?> ') transparent no-repeat;
+}
+
+#menu-posts-scheduled_games .wp-menu-image {
+	background-image: url('<?php echo plugins_url( '/game-schedules/images/mstw-admin-menu-icon.png', 'team-rosters' );?> ') no-repeat 6px -17px !important;
+}
