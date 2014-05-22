@@ -3,7 +3,7 @@
 Plugin Name: Game Schedule
 Plugin URI: http://wordpress.org/extend/plugins/
 Description: The Game Schedule Plugin defines a custom type - Scheduled Games - for use in the MySportTeamWebite framework. Generations a game schedule (html table) using a shortcode.
-Version: 4.1
+Version: 4.1.1
 Author: Mark O'Donnell
 Author URI: http://shoalsummitsolutions.com
 Text Domain: mstw-loc-domain
@@ -11,7 +11,7 @@ Text Domain: mstw-loc-domain
 
 /*
 Game Schedule (Wordpress Plugin)
-Copyright (C) 2012-13 Mark O'Donnell
+Copyright (C) 2012-14 Mark O'Donnell
 Contact me at http://shoalsummitsolutions.com
 
 This program is free software: you can redistribute it and/or modify
