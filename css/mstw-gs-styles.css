@@ -154,7 +154,7 @@
 	font-weight: bold;
 	/*height: 45px;*/
 	/*line-height: 60px;*/
-	border-bottom: 2px solid #F5C517;
+	border-bottom: 2px solid #1982D1;
 	color: #041E42;
 	margin-bottom: 10px;
 }
@@ -231,7 +231,8 @@
     padding: 6px 6px;
 }
 
-/* Set the even row attributes */
+
+/* Set the even row attributes */ 
 .mstw-gs-even tr,  .mstw-gs-even td {
 	color: #000;
 	background-color: #b8cce4;
@@ -241,7 +242,7 @@
 	padding: 6px 6px;
 }
 
-/* Set the even links */
+/* Set the even links  */
 .mstw-gs-even td a,  .mstw-gs-even td a:visited, .mstw-gs-even td a:active {
     text-decoration: underline;
     /*color: #4F81BD;*/
@@ -265,14 +266,14 @@
 
 /* Set the odd links */
 .mstw-gs-odd td a,  .mstw-gs-odd td a:visited, .mstw-gs-odd td a:active {
-    /*color: #4F81BD;*/
+    /*color: #4F81BD; */
 	text-decoration: underline;
 }
 
 /* Set the odd links hover */
 .mstw-gs-odd td a:hover {
     text-decoration: none;
-    /*color: #666;*/
+    /*color: #666; */
 }
 
 /* Set the home row attributes */
@@ -290,7 +291,7 @@
     font-weight: bold!important;
 	text-decoration: none;
 }
-
+*/
 img.mstw-gs-table-logo {
 	vertical-align: middle;
 	padding-right: 5px;
@@ -347,16 +348,17 @@ img.mstw-gs-table-logo {
     text-decoration: underline;
 }
 
-mstw-gs-sw-odd td a:hover {
+.mstw-gs-sw-odd td a:hover {
     text-decoration: none;
 }
+*/
 
 /* Set the home row attributes */
 .mstw-gs-sw-home tr,  .mstw-gs-sw-home td {
 	font-weight: bold!important;
 }
 
-/* Set the home links 
+/* Set the home links */
 .mstw-gs-sw-home td a,  .mstw-gs-sw-home td a:visited, .mstw-gs-sw-home td a:active {
     font-weight: bold!important;
 	text-decoration: underline;
@@ -365,7 +367,6 @@ mstw-gs-sw-odd td a:hover {
 .mstw-gs-sw-home td a:hover {
 	text-decoration: none;
 }
-*/
 
 /******************************************************/
 /* Styles for the Countdown Timer shortcode & widget  */
