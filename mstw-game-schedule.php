@@ -1069,7 +1069,7 @@ function mstw_gs_countdown_handler( $atts ){
 	$dtg_options = get_option( 'mstw_gs_dtg_options' );
 	//$output .= '<pre>OPTIONS:' . print_r( $dtg_options, true ) . '</pre>';
 	
-	$options = array_merge( $base_options, $dtg_options );
+	$options = array_merge( $base_options, (array)$dtg_options );
 	//$output .= '<pre>OPTIONS:' . print_r( $options, true ) . '</pre>';
 	
 	// Remove all keys with empty values
@@ -2013,7 +2013,7 @@ class mstw_gs_countdown_widget extends WP_Widget {
 		// get the options set in the admin screen
 		$dtg_options = get_option( 'mstw_gs_dtg_options' );
 		$base_options = get_option( 'mstw_gs_options' );
-		$options = array_merge( $base_options, $dtg_options );
+		$options = array_merge( $base_options, (array)$dtg_options );
 		//$output = '<pre>OPTIONS:' . print_r( $options, true ) . '</pre>';
 		
 		// Remove all keys with empty values

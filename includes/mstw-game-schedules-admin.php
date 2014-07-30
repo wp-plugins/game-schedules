@@ -109,12 +109,18 @@
 	
 	function mstw_gs_enqueue_javascript( $hook_suffix ) {
 		//enqueue the color-picker script & stylesheet
-		wp_enqueue_style( 'wp-color-picker' );
-		wp_enqueue_script( 'mstw-gs-color-picker', plugins_url( 'game-schedules/js/gs-color-settings.js' ), array( 'wp-color-picker' ), false, true );
-		
+		// only if it's the settings page
+		if ( $hook_suffix == 'scheduled_games_page_mstw_gs_settings' ) {
+			wp_enqueue_style( 'wp-color-picker' );
+			wp_enqueue_script( 'mstw-gs-color-picker', plugins_url( 'game-schedules/js/gs-color-settings.js' ), array( 'wp-color-picker' ), false, true );
+		}
 		//enqueue the datepicker script & stylesheet
-		wp_enqueue_script('jquery-ui-datepicker');
-		wp_enqueue_style('jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+		// only if it's the game edit page - unfortunately post.php is the available hook
+		else if ( $hook_suffix == 'post.php' ) {
+			wp_enqueue_script( 'mstw-gs-date-picker', plugins_url( 'game-schedules/js/gs-date-settings.js' ), array( 'jquery-ui-datepicker' ), false, true );
+			//wp_enqueue_script('jquery-ui-datepicker');
+			wp_enqueue_style('jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+		}
 	}
 	
 	// ----------------------------------------------------------------

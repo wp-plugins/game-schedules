@@ -69,6 +69,11 @@ Upgrading to this version of Game Schedules should not impact any existing sched
 
 == Changelog ==
 
+= 4.2 =
+
+* Modified the loading (enqueuing) of JavaScripts. They now load only on the pages where Game Schedules needs them.
+* Continued removing non-fatal PHP notices and warnings.
+
 = 4.1.1 =
 
 * Fixed a bit of a problem with the schedule ID, the schedule title, and the schedule permalink/slug. Please read about this change in the Description and the Upgrade Notice.
