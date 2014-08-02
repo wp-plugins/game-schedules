@@ -1,7 +1,7 @@
 <?php
 /*
- * mstw-gs-utility-functions.php
- * 	Utility functions for MSTW Game Schedules Plugin (front end)
+ * mstw-ss-utility-functions.php
+ * 	Utility functions for MSTW Game Schedules & Scoreboards plug (front & back ends)
  *
  *	MSTW Wordpress Plugins
  *	Copyright (C) 2013 Mark O'Donnell
@@ -37,13 +37,16 @@
 //	0. mstw_gs_utility_fuctions_loaded: DO NOT DELETE
 //		It does nothing EXCEPT indicate whether or not the file is loaded!!
 //
+if ( !function_exists( 'mstw_gs_utility_functions_loaded' ) ) {
 	function mstw_gs_utility_functions_loaded( ) {
 		return true;
 	}
+}
 
 //---------------------------------------------------------------------------------
 //	1. mstw_gs_get_defaults -returns the mstw_gs_options[] default values
 //
+if ( !function_exists( 'mstw_gs_get_defaults' ) ) {
 	function mstw_gs_get_defaults( ) {
 		//Base defaults
 		$defaults = array(
@@ -83,10 +86,12 @@
 				
 		return $defaults;
 	}
+}
 	
 //---------------------------------------------------------------------------------
 //	2. mstw_gs_get_dtg_defaults - returns the mstw_gs_dtg_options[] default values
-//	
+//
+if ( !function_exists( 'mstw_gs_get_dtg_defaults' ) ) {	
 	function mstw_gs_get_dtg_defaults( ) {
 		//Base defaults
 		$defaults = array(
@@ -117,10 +122,12 @@
 				
 		return $defaults;
 	}
+}
 	
 //---------------------------------------------------------------------------------
 //	3. mstw_gs_get_color_defaults - returns the mstw_gs_color_options[] default values
 //	
+if ( !function_exists( 'mstw_gs_get_color_defaults' ) ) {	
 	function mstw_gs_get_color_defaults( ) {
 		//resets all the colors to blank
 		$defaults = array(
@@ -157,10 +164,12 @@
 				
 		return $defaults;
 	}
+}
 
 //---------------------------------------------------------------------------------
 //	4. mstw_gs_build_css_rule - helper function to build css rules
-//		
+//
+if ( !function_exists( 'mstw_gs_build_css_rule' ) ) {			
 	function mstw_gs_build_css_rule( $options_array, $option_name, $css_rule ) {
 		if ( isset( $options_array[$option_name] ) and !empty( $options_array[$option_name] ) ) {
 			return $css_rule . ":" . $options_array[$option_name] . "; \n";	
@@ -168,5 +177,6 @@
 		else {
 			return "";
 		}
-	}			
+	}
+}	
 ?>
