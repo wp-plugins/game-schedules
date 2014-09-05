@@ -71,6 +71,8 @@ Upgrading to this version of Game Schedules should not impact any existing sched
 
 = 4.2 =
 
+* Fixed the schedule table first and last arguments with 'now' to use the WP time rather than the server time.
+* Added a Schedule Name headed to the game tiles in the schedule slider. Supports sliders with multiple sports.
 * Modified the loading (enqueuing) of JavaScripts. They now load only on the pages where Game Schedules needs them.
 * Continued removing non-fatal PHP notices and warnings.
 
