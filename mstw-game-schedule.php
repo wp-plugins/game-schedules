@@ -354,7 +354,7 @@ function mstw_gs_delete_plugin_options() {
 		// Need to set $first_dtg and $last_dtg by converting strings
 		// OR convert $first_dtg='now' to current php DTG stamp
 		if ( $first_dtg == 'now' ) {
-			$first_dtg = time( );
+			$first_dtg = current_time( 'timestamp' ); //time( );
 		}
 		else { 
 			$first_dtg = strtotime( $first_dtg );
@@ -363,7 +363,7 @@ function mstw_gs_delete_plugin_options() {
 		
 		if ( $last_dtg == 'now' ) {
 			$sort_order = 'DESC';
-			$last_dtg = time( );
+			$last_dtg = current_time( 'timestamp' ); //time( );
 		}
 		else { 
 			$last_dtg = strtotime( $last_dtg );
@@ -1650,7 +1650,7 @@ class mstw_gs_sched_widget extends WP_Widget {
 		$sched_id = $instance['sched_id'];
 		
 		if ( $instance['sched_start_date'] == 'now' ) {
-			$first_dtg = time( );
+			$first_dtg = current_time( 'timestamp' ); //time( );
 		}
 		else {
 			$first_dtg = $instance['sched_start_date'];
