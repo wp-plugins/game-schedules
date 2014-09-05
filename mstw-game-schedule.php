@@ -82,159 +82,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 		}
 	} //end mstw_gs_requires_wp_ver()
 
-	// ----------------------------------------------------------------
-	// Add the CSS code from the settings/options to the header
-	//
-	add_filter( 'wp_head', 'mstw_gs_add_css');
-		
-	function mstw_gs_add_css( ) {
-		
-		//$options = get_option( 'mstw_gs_options' );
-		$colors = get_option( 'mstw_gs_color_options' );
-		
-		echo '<style type="text/css">';
-		
-		// SCHEDULE TABLES
-		echo ".mstw-gs-table-head th, .mstw-gs-sw-tab-head th { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_hdr_text_color', 'color' );
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_hdr_bkgd_color', 'background-color' );
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_border_color', 'border-color' );
-		echo "} \n";
-		
-		echo "tr.mstw-gs-odd, td.mstw-gs-odd, td.mstw-gs-odd a { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_odd_text_color', 'color' );
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_odd_bkgd_color', 'background-color' );
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_border_color', 'border-color' );
-		echo "} \n";
-		
-		echo ".mstw-gs-sw-odd td a, .mstw-gs-sw-odd td a:visited, .mstw-gs-sw-odd td a:active { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_odd_text_color', 'color' );
-			//echo mstw_gs_build_css_rule( $colors, 'gs_tbl_odd_bkgd_color', 'background-color' );
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_border_color', 'border-color' );
-		echo "} \n";
-		
-		echo "tr.mstw-gs-sw-odd, td.mstw-gs-sw-odd a, td.mstw-gs-sw-odd { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_odd_text_color', 'color' );
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_odd_bkgd_color', 'background-color' );
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_border_color', 'border-color' );
-		echo "} \n";
-		
-		echo ".mstw-gs-even tr, .mstw-gs-even td, .mstw-gs-even td a { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_even_text_color', 'color' );
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_even_bkgd_color', 'background-color' );
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_border_color', 'border-color' );
-		echo "} \n";
-		
-		echo ".mstw-gs-sw-even td a, .mstw-gs-sw-even td a:visited, .mstw-gs-sw-even td a:active { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_even_text_color', 'color' );
-			//echo mstw_gs_build_css_rule( $colors, 'gs_tbl_even_bkgd_color', 'background-color' );
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_border_color', 'border-color' );
-		echo "} \n";
-		
-		
-		echo "tr.mstw-gs-sw-even, td.mstw-gs-sw-even a, td.mstw-gs-sw-even { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_even_text_color', 'color' );
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_even_bkgd_color', 'background-color' );
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_border_color', 'border-color' );
-		echo "} \n";
-				
-		echo ".mstw-gs-even.mstw-gs-home td, .mstw-gs-odd.mstw-gs-home td { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_home_text_color', 'color' );
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_home_bkgd_color', 'background-color' );
-		echo "} \n";
-		
-		echo ".mstw-gs-odd.mstw-gs-home td a, .mstw-gs-even.mstw-gs-home td a { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_tbl_home_text_color', 'color' );
-		echo "} \n";
-		
-		// COUNTDOWN TIMER
-		echo ".mstw-gs-cdt-dtg { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_cdt_game_time_color', 'color' );
-		echo "} \n";
-		
-		echo ".mstw-gs-cdt-opponent, .mstw-gs-cdt-opponent a { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_cdt_opponent_color', 'color' );
-		echo "} \n";
-		
-		echo ".mstw-gs-cdt-location, .mstw-gs-cdt-location a { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_cdt_location_color', 'color' );
-		echo "} \n";
-		
-		echo ".mstw-gs-cdt-intro { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_cdt_intro_color', 'color' );
-		echo "} \n";
-		
-		echo ".mstw-gs-cdt-countdown { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_cdt_countdown_color', 'color' );
-			echo mstw_gs_build_css_rule( $colors, 'gs_cdt_countdown_bkgd_color', 'background-color' );
-		echo "} \n";
-		
-		
-		
-		// SCHEDULE SLIDER
-		echo ".gs-slider .title, .gs-slider .full-schedule-link { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_sldr_hdr_text_color', 'color' );
-		echo "} \n";
-		
-		echo ".gs-slider .full-schedule-link a { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_sldr_hdr_text_color', 'color' );
-		echo "} \n";
-		
-		echo ".gs-slider .box { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_sldr_hdr_bkgd_color', 'background-color' );
-		echo "} \n";
-		
-		echo ".gs-divider { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_sldr_hdr_divider_color', 'border-bottom-color' );
-		echo "} \n";
-		
-		echo ".gs-slider #schedule-slider { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_sldr_game_block_bkgd_color', 'background-color' );
-		echo "} \n";
-		
-		echo ".game-block .date { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_sldr_game_date_color', 'color' );
-			echo mstw_gs_build_css_rule( $colors, 'gs_sldr_game_date_color', 'border-bottom-color' );
-		echo "} \n";
-		
-		echo ".game-block .opponent, .game-block .opponent a:hover { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_sldr_game_opponent_color', 'color' );
-			echo "text-decoration: none; \n";
-		echo "} \n";
-		
-		echo ".game-block .opponent a { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_sldr_game_opponent_color', 'color' );
-			echo "text-decoration: underline; \n";
-		echo "} \n";
-		
-		echo ".game-block .location { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_sldr_game_location_color', 'color' );
-		echo "} \n";
-		
-		echo ".game-block .location a { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_sldr_game_location_color', 'color' );
-			echo "text-decoration: underline; \n";
-		echo "} \n";
-		
-		echo ".game-block .location a:hover { \n";
-			echo "text-decoration: none; \n";
-		echo "} \n";
-
-		echo ".game-block .time-result { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_sldr_game_time_color', 'color' );
-		echo "} \n";
-		
-		echo ".game-block .links, .gs-slider .game-block .links a  { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_sldr_game_links_color', 'color' );
-		echo "} \n";
-		
-		echo "#gs-slider-right-arrow, #gs-slider-left-arrow { \n";
-			echo mstw_gs_build_css_rule( $colors, 'gs_sldr_game_location_color', 'color' );
-		echo "} \n";
-
-		echo '</style>';	
-	} //end mstw_gs_add_css()
-
 
 // --------------------------------------------------------------------------------
 // Set-up Action and Filter Hooks for the Settings on the admin side
@@ -393,9 +240,11 @@ function mstw_gs_delete_plugin_options() {
 										'title'
 										),
 			//'supports' 			=> false,
-			//'capabilities'		=> array(
-			//							'edit_posts',
-			//							),
+			'capabilities'		=> array(
+										'edit_theme_options',
+										'manage_mstw_plugins',
+										'manage_mstw_schedules',
+										),
 			'labels' 			=> array(
 										'name' => __( 'Schedules', 'mstw-loc-domain' ),
 										'singular_name' => __( 'Schedule', 'mstw-loc-domain' ),
@@ -1281,7 +1130,9 @@ function mstw_gs_build_countdown( $attribs ) {
 		
 		// then merge the parameters passed to the shortcode with the result									
 		$attribs = shortcode_atts( $args, $atts );
+		$attribs['show_schedule_name'] = ( $atts['show_schedule_name'] == 1 ) ? 1 : 0;
 		//$output .= '<pre>ATTS:' . print_r( $atts, true ) . '</pre>';
+		//return $output;
 		//$output .= '<pre>ATTRIBS:' . print_r( $attribs, true ) . '</pre>';
 		//return $output;
 		
@@ -1461,7 +1312,7 @@ function mstw_gs_build_countdown( $attribs ) {
 // 	
 	function mstw_gs_build_game_block( $game, $options, $css_tag ) {
 		
-		//$options should include both the base options (mstw_gs_options and the dtg options mstw_gs_dtg_options
+		//$options should be the display settings merged with the shortcode args
 		extract( $options );
 		
 		$slider_date_format = ( $slider_date_format == 'custom' ? $custom_slider_date_format : $slider_date_format ); 
@@ -1470,9 +1321,20 @@ function mstw_gs_build_countdown( $attribs ) {
 		
 		$ret = '';
 		$ret .= "<div class='game-block'>\n";
+		
+			//game date block
 			$ret .= "<div class='date date" . $css_tag . " pad'>\n";
 				$ret .= mstw_date_loc( $slider_date_format, (int)get_post_meta( $game->ID, '_mstw_gs_unix_dtg', true ) );
 			$ret .= "</div> <!--end .date-->\n";
+			
+			//game schedule block
+			if ( $show_schedule_name ) {
+				$ret .= "<div class='game-schedule game-schedule" . $css_tag . " pad'>\n";
+					$sched_slug = get_post_meta( $game->ID, '_mstw_gs_sched_id', true );
+					$sched_obj = get_page_by_path( $sched_slug, OBJECT, 'mstw_gs_schedules' );		
+					$ret .= get_the_title( $sched_obj->ID );
+				$ret .= "</div> <!--end .game-schedule -->\n";
+			}
 			
 			$ret .= "<div class='opponent opponent" . $css_tag . " pad'>\n";
 				$ret .= mstw_gs_build_opponent_entry( $game, $options, "slider" );
