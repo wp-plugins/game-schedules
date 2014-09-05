@@ -142,7 +142,7 @@
 	background: rgba(0, 0, 0, 0);
 	width: 187px;
 	text-align: center;
-	color: #231F20;
+	color: #0A1E3F;
 }
 
 .game-block .date {
@@ -154,8 +154,22 @@
 	font-weight: bold;
 	/*height: 45px;*/
 	/*line-height: 60px;*/
-	border-bottom: 2px solid #1982D1;
-	color: #041E42;
+	border-bottom: 2px solid #FEC92B;
+	color: #0A1E3F;
+	margin-bottom: 10px;
+}
+
+.game-block .game-schedule {
+	width: 90%;
+	margin: 0 auto;
+	text-transform: uppercase;
+	font-size: 14px;
+	font-family: "Roboto Condensed",Arial;
+	font-weight: bold;
+	/*height: 45px;*/
+	/*line-height: 60px;*/
+	color: #FEC92B;
+	background-color: #0A1E3F;
 	margin-bottom: 10px;
 }
 
@@ -181,8 +195,16 @@
 	font-size: 1.3em;
 	/*height: 29px;*/
 	/*line-height: 35px;*/
-	color: #041E42;
+	color: #0A1E3F;
 	margin-bottom: 10px;
+}
+
+.game-block .opponent a {
+	color: #0A1E3F;
+}
+
+.game-block .opponent a:hover {
+	text-decoration: underline;
 }
 
 .game-block .location {
@@ -191,20 +213,28 @@
 	margin-bottom: 10px;
 }
 
+.game-block .location  a {
+	color: #0A1E3F;
+}
+
+.game-block .location  a:hover {
+	text-decoration: underline;
+}
+
 .game-block .time-result {
 	font-size: 1.2em;
-	color: #041E42;
+	color: #0A1E3F;
 	font-weight: bold;
 }
-.game-block .links, .gaem-block .links a:hover {
-	color: #0A2A50;
+.game-block .links, .game-block .links a:hover {
+	color: #0A1E3F;
 	font-size: 11px;
 	line-height: 12px;
 	text-decoration: none;
 }
 
 .game-block .links a {
-	color: #041E42;
+	color: #0A1E3F;
 	font-size: 11px;
 	text-decoration: underline;
 	line-height: 12px;
