@@ -393,11 +393,11 @@ function mstw_gs_delete_plugin_options() {
 										'title'
 										),
 			//'supports' 			=> false,
-			'capabilities'		=> array(
-										'edit_theme_options',
-										'manage_mstw_plugins',
-										'manage_mstw_schedules',
-										),
+			//'capabilities'		=> array(
+			//							'edit_theme_options',
+			//							'manage_mstw_plugins',
+			//							'manage_mstw_schedules',
+			//							),
 			'labels' 			=> array(
 										'name' => __( 'Schedules', 'mstw-loc-domain' ),
 										'singular_name' => __( 'Schedule', 'mstw-loc-domain' ),
