@@ -4,45 +4,21 @@ Donate link: http://shoalsummitsolutions.com
 Tags: sports,games,schedule,sports teams,team schedule,countdown timer  
 Requires at least: 3.3.1
 Tested up to: 3.9
-Stable tag: 4.1.1
+Stable tag: 4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Manages multiple sports team schedules. Includes shortcodes and widgets to display schedules and a countdown timer to the next game.
+THIS PLUGIN HAS BEEN REPLACED BY MSTW SCHEDULES & SCOREBOARDS.
 
 == Description ==
 
-The MSTW Game Schedules plugin manages multiple sports team schedules including: game dates and times, opponents, locations, results, and links to media (print stories or video on games). It features a countdown timer from the current time to then next game or next home game. Shortcodes and widgets are available to display schedule tables, sliders, and countdown timers.
-
-= NEW IN VERSION 4.1.1 =
-
-In previous versions, each schedule (on the Schedules admin screen) had a title and a "schedule ID". In theory, the schedule ID was supposed to be used to reference schedules in shortcodes, etc. and in WP permalink or slug format, while the title was simply informational - a nice native language title for lists and pulldowns on the admin screens. In fact, the 'slug' generated from the title, not the schedule ID, was what the program used to reference schedules. Oops! The majority of user probably never saw this issue, but those who changed the post's (schedule's) permalink probably thought things were a bit strange. This is now fixed. The schedule ID field is now used to create the schedule's permalink/slug and the fields to modify it, normally right below a post's title, have been removed. So when you upgrade you will likely have to go into your schedules screen and update each schedule ID TO MATCH THE PREVIOUS permalink/slug generated from the schedule title. If you simply enter the title into the schedule ID field, you should be fine. However if you changed the schedule's permalink/slug, you'll need to enter that. It is assumed that if you changed the schedule's permalink/slug, all this makes complete sense, and you know what needs to be done. Sorry for any inconvenience this may cause, but it needed to be straightened out to move forward with the MSTW Framework. Thank you for your patience.
-
-= Professional Support =
-
-If you would like some professional plugin support from the plugin author, say to integrate the plugin with your theme for example, you can access the support forums at ShoalSummitSolutions.com, which is a help/support site and WP professional community, where support for all the MSTW plugins is handled. If you have a simple usage question, or want to report a possible bug, feel free to use the plugin forums on this site.
-
-= Notes & Links =
-
-* The Game Schedule plugin is part of the My Sports Team Website (MSTW) framework for sports team and league websites. Others include Game Locations, Team Rosters, Coaching Staffs, and League Standings, which are all available on [WordPress.org](http://wordpress.org/extend/plugins). [Learn more about MSTW](http://shoalsummitsolutions.com/my-sports-team-website/).
-* [**See what the plugin and do for your website on the MSTW Dev Site -»**](http://dev.shoalsummitsolutions.com/)
-* [**Read the user's manual at shoalsummitsolutions.com -»**](http://shoalsummitsolutions.com/category/gs-plugin)
+The MSTW Game Schedules plugin has been replaced by the [MSTW Schedules & Scoreboards plugin](http://wordpress.org/plugins/mstw-schedules-scoreboards), and is therefore no longer supported. Please install, or upgrade to MSTW Schedules & Scoreboards, which includes all the features of this plugin plus much more. 
 
 == Installation ==
 
-**IMPORTANT!**
-
-1. *If you are upgrading, please read the upgrade notes. You shouldn't lose schedule data but you COULD easily lose and changes you've made to the plugin stylesheet.*
-2. *Upon installation make sure the WP default timezone is set correctly in the Wordpress Settings->General screen.*
-
-All the normal installation methods for WordPress plugins work:
-
-1. Go to the Plugins->Installed plugins screen in Wordpress Admin. Click on Add New. Search for Game Schedules. Install it.
-2. Download the plugin (.zip file) from WordPress.org. Go to the Plugins->Installed plugins screen in Wordpress Admin. Click on Add New. Click on the Upload link. Find the downloaded .zip file on your computer. Install it.
-3. Download the plugin (.zip file) from WordPress.org. Unzip the file. Upload the extracted plugin folder to your website's wp-content/plugins directory using an FTP client or your hosting provider's file manager app. Activate it on the Plugins->Installed plugins screen in WordPress Admin.
+**DO NOT INSTALL THIS PLUGIN. IT IS NO LONGER SUPPORTED. INSTALL [MSTW SCHEDULES & SCOREBOARDS](http://wordpress.org/plugins/mstw-schedules-scoreboards).**
 
 == Frequently Asked Questions ==
-=Should I get support through
 
 [The FAQs may be found here.](http://shoalsummitsolutions.com/gs-faq/)
 
@@ -61,11 +37,7 @@ All the normal installation methods for WordPress plugins work:
 
 == Upgrade Notice ==
 
-In previous versions, each schedule (on the Schedules admin screen) had a title and a "schedule ID". The schedule ID was supposed to be used to reference schedules in shortcodes, etc. and as WP permalink or slug, while the title was simply informational - a nice native language title for lists and pulldowns on the admin screens. In fact, the 'slug' generated from the title, not the schedule ID, was what the program used to reference schedules. Oops! The majority of user probably never saw this issue, but those who changed the post's (schedule's) permalink probably thought things were a bit strange. This is now fixed. The schedule ID field is now used to create the schedule's permalink/slug and the fields to modify it, normally right below a post's title, have been removed. So when you upgrade you will likely have to go into your schedules screen and update each schedule ID TO MATCH THE PREVIOUS permalink/slug generated from the schedule title. (If you're not sure what to enter, just look at schedule ID your working shortcodes.) If you simply enter the title into the schedule ID field, you should be fine. However if you changed the schedule's permalink/slug, you'll need to enter that. It is assumed that if you changed the schedule's permalink/slug, all this makes complete sense, and you know what needs to be done. Sorry for any inconvenience this may cause, but it needed to be straightened out to move forward with the MSTW Framework. Thank you for your patience.
-
-The current version of Game Schedules has been tested on WP 3.9 with the Twentyeleven theme. If you use older version of WordPress, good luck! If you are using a newer version, please let me know how the plugin works, especially if you encounter problems.
-
-Upgrading to this version of Game Schedules should not impact any existing schedules (modulo the issue described in the first paragraph of this section). (But backup your DB before you upgrade, just in case. :) **NOTE that it will overwrite the css folder and the plugin's stylesheet - mstw-gs-styles.css.** So if you've made modifications to the stylesheet, you may want to move them to a safe location before installing the new version of the plugin. Also, you should re-test your display settings; some may need to be reset. An effort was made to change as little as possible, but the display settings may not be 100% backward compatible.
+Do not upgrade this plugin. Install MSTW Game Schedules & Scoreboards, which has replaced it.
 
 == Changelog ==
 

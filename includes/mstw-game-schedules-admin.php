@@ -44,7 +44,7 @@
 	add_filter('name_save_pre', 'mstw_gs_save_name');
 	
 	function mstw_gs_save_name( $post_name ) {
-        if ( $_POST['post_type'] == 'mstw_gs_schedules' ) {
+        if ( isset( $_POST['post_type'] ) && ( $_POST['post_type'] == 'mstw_gs_schedules' ) ) {
 			if ( isset( $_POST['schedule_id'] ) and !empty( $_POST['schedule_id'] ) ) {
 				$post_name = sanitize_title( $_POST['schedule_id'] );
 			}
